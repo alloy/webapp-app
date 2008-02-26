@@ -1,0 +1,3 @@
+CFBundleName = "CampfireTest";
+CFBundleGetInfoString = "CampfireTest version 0.1, Copyright 2008 YOUR NAME.";
+NSHumanReadableCopyright = "Copyright 2008 YOUR NAME.";
