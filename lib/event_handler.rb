@@ -47,6 +47,7 @@ module WebApp
       #     end
       #   end
       def on_event(name, options = {}, &block)
+        options[:conditions] ||= {}
         options[:multiple_times] ||= false
       
         @event_handlers ||= []
@@ -70,14 +71,16 @@ module WebApp
         send(:page_loaded_event_handler, doc.URL.to_s, doc.title.to_s)
       end
       
-      self.class.instance_variable_get(:@event_handlers).each do |event_handler|
-        puts "Register for event: #{event_handler[:name]}"
-        doc.addEventListener___(event_handler[:name], self, true)
+      if event_handlers = self.class.instance_variable_get(:@event_handlers)
+        event_handlers.each do |event_handler|
+          puts "Register for event: #{event_handler[:name]}"
+          doc.addEventListener___(event_handler[:name], self, true)
+        end
       end
     end
     
     def handleEvent(event) # :nodoc:
-      puts "Handle event: #{event}"
+      puts "Handle event: #{event}" if $WEBAPP_DEBUG
       #puts event.relatedNode.outerHTML, ""
       
       self.class.instance_variable_get(:@event_handlers).each do |event_handler|
@@ -90,7 +93,21 @@ module WebApp
     
     def event_matches_handler?(event, handler) # :nodoc:
       attributes = event.relatedNode.attributes
-      event.objc_send(:type) == handler[:name] and handler[:options][:conditions].all? { |key, value| attributes.getNamedItem(key.to_s).value == value }
+      event.objc_send(:type) == handler[:name] and handler[:options][:conditions].all? do |key, value|
+        item = attributes.getNamedItem(key.to_s)
+        not item.nil? and item.value == value
+      end
+    end
+    
+    # Helper methods
+    
+    # Checks if this +content+ is the same as the last time.
+    # It also stores the content so it can be checked the next time.
+    def same_as_last_time?(content)
+      @last_content ||= ''
+      result = (@last_content == content)
+      @last_content = content if result == false
+      result
     end
   end
 end

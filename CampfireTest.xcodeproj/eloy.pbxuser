@@ -18,7 +18,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					243,
+					206,
 					20,
 					48,
 					43,
@@ -35,8 +35,36 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					166,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
 			PBXPerProjectTemplateStateSaveDate = 225633939;
 			PBXWorkspaceStateSaveDate = 225633939;
+		};
+		perUserProjectItems = {
+			5190E75A0D74419E000D9E53 /* PBXTextBookmark */ = 5190E75A0D74419E000D9E53 /* PBXTextBookmark */;
+			5190E75B0D74419E000D9E53 /* PBXTextBookmark */ = 5190E75B0D74419E000D9E53 /* PBXTextBookmark */;
+			5190E7CB0D74433E000D9E53 /* PBXTextBookmark */ = 5190E7CB0D74433E000D9E53 /* PBXTextBookmark */;
+			5190E7CC0D74433E000D9E53 /* PBXTextBookmark */ = 5190E7CC0D74433E000D9E53 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 5190E7130D70F10A000D9E53 /* Source Control */;
 		userBuildSettings = {
@@ -81,5 +109,48 @@
 	5190E7140D70F10A000D9E53 /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
+	};
+	5190E7560D74414F000D9E53 /* SRAutoFillManager.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {916, 9814}}";
+			sepNavSelRange = "{1384, 30}";
+			sepNavVisRange = "{2391, 557}";
+		};
+	};
+	5190E75A0D74419E000D9E53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: 'SRAutoFillUserPass' undeclared (first use in this function)";
+		fRef = 5190E7560D74414F000D9E53 /* SRAutoFillManager.m */;
+		rLen = 1;
+		rLoc = 282;
+		rType = 1;
+	};
+	5190E75B0D74419E000D9E53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5190E7560D74414F000D9E53 /* SRAutoFillManager.m */;
+		name = "SRAutoFillManager.m: 283";
+		rLen = 82;
+		rLoc = 9120;
+		rType = 0;
+		vrLen = 347;
+		vrLoc = 8937;
+	};
+	5190E7CB0D74433E000D9E53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: SRPrefDefaultKeys.h: No such file or directory";
+		fRef = 5190E7560D74414F000D9E53 /* SRAutoFillManager.m */;
+		rLen = 1;
+		rLoc = 29;
+		rType = 1;
+	};
+	5190E7CC0D74433E000D9E53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5190E7560D74414F000D9E53 /* SRAutoFillManager.m */;
+		name = "SRAutoFillManager.m: 30";
+		rLen = 30;
+		rLoc = 1384;
+		rType = 0;
+		vrLen = 557;
+		vrLoc = 2391;
 	};
 }

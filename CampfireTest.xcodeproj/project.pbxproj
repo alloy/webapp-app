@@ -22,6 +22,14 @@
 		5190E7270D730A17000D9E53 /* CTBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190E7250D730A17000D9E53 /* CTBadge.m */; };
 		5190E72A0D730A3C000D9E53 /* CTGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 5190E7280D730A3C000D9E53 /* CTGradient.h */; };
 		5190E72B0D730A3C000D9E53 /* CTGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190E7290D730A3C000D9E53 /* CTGradient.m */; };
+		5190E7320D73A45B000D9E53 /* twitter.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5190E7310D73A45B000D9E53 /* twitter.jpg */; };
+		5190E74A0D7440CD000D9E53 /* HMDTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5190E7490D7440CD000D9E53 /* HMDTFoundation.framework */; };
+		5190E74D0D7440D9000D9E53 /* HMDTFoundation.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5190E7490D7440CD000D9E53 /* HMDTFoundation.framework */; };
+		5190E7570D74414F000D9E53 /* SRAutoFillManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5190E7550D74414F000D9E53 /* SRAutoFillManager.h */; };
+		5190E7580D74414F000D9E53 /* SRAutoFillManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190E7560D74414F000D9E53 /* SRAutoFillManager.m */; };
+		5190E76C0D7441EE000D9E53 /* SRPrefDefaultKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */; };
+		5190E76D0D7441EE000D9E53 /* SRPrefDefaultKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */; };
+		5190E7C90D744333000D9E53 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5190E7C80D744333000D9E53 /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +39,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5190E74D0D7440D9000D9E53 /* HMDTFoundation.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,6 +64,13 @@
 		5190E7250D730A17000D9E53 /* CTBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTBadge.m; path = objc/CTBadge.m; sourceTree = "<group>"; };
 		5190E7280D730A3C000D9E53 /* CTGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTGradient.h; path = objc/CTGradient.h; sourceTree = "<group>"; };
 		5190E7290D730A3C000D9E53 /* CTGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTGradient.m; path = objc/CTGradient.m; sourceTree = "<group>"; };
+		5190E7310D73A45B000D9E53 /* twitter.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = twitter.jpg; sourceTree = "<group>"; };
+		5190E7490D7440CD000D9E53 /* HMDTFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HMDTFoundation.framework; path = vendor/frameworks/HMDTFoundation.framework; sourceTree = "<group>"; };
+		5190E7550D74414F000D9E53 /* SRAutoFillManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAutoFillManager.h; path = objc/SRAutoFillManager.h; sourceTree = "<group>"; };
+		5190E7560D74414F000D9E53 /* SRAutoFillManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAutoFillManager.m; path = objc/SRAutoFillManager.m; sourceTree = "<group>"; };
+		5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRPrefDefaultKeys.h; path = objc/SRPrefDefaultKeys.h; sourceTree = "<group>"; };
+		5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRPrefDefaultKeys.m; path = objc/SRPrefDefaultKeys.m; sourceTree = "<group>"; };
+		5190E7C80D744333000D9E53 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
 		E8F5E25803AEB7C803A81C6F /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; name = rb_main.rb; path = misc/rb_main.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -66,6 +82,8 @@
 			files = (
 				4DDCA70C0ACC9A6100E082CE /* Cocoa.framework in Frameworks */,
 				4DDCA70D0ACC9A6100E082CE /* RubyCocoa.framework in Frameworks */,
+				5190E74A0D7440CD000D9E53 /* HMDTFoundation.framework in Frameworks */,
+				5190E7C90D744333000D9E53 /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +100,9 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5190E7490D7440CD000D9E53 /* HMDTFoundation.framework */,
+				5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */,
+				5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */,
 			);
@@ -95,6 +116,7 @@
 				5190E7280D730A3C000D9E53 /* CTGradient.h */,
 				5190E7290D730A3C000D9E53 /* CTGradient.m */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				5190E7C80D744333000D9E53 /* Security.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -110,6 +132,7 @@
 		29B97314FDCFA39411CA2CEA /* CampfireTest */ = {
 			isa = PBXGroup;
 			children = (
+				5190E7310D73A45B000D9E53 /* twitter.jpg */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -128,6 +151,8 @@
 				E8F5E25803AEB7C803A81C6F /* rb_main.rb */,
 				5190E7240D730A17000D9E53 /* CTBadge.h */,
 				5190E7250D730A17000D9E53 /* CTBadge.m */,
+				5190E7550D74414F000D9E53 /* SRAutoFillManager.h */,
+				5190E7560D74414F000D9E53 /* SRAutoFillManager.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -163,6 +188,8 @@
 			files = (
 				5190E7260D730A17000D9E53 /* CTBadge.h in Headers */,
 				5190E72A0D730A3C000D9E53 /* CTGradient.h in Headers */,
+				5190E7570D74414F000D9E53 /* SRAutoFillManager.h in Headers */,
+				5190E76C0D7441EE000D9E53 /* SRPrefDefaultKeys.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +246,7 @@
 				514292D10CC66CDC00F9CEEF /* test in Resources */,
 				514292D20CC66CDC00F9CEEF /* vendor in Resources */,
 				514292EF0CC6823A00F9CEEF /* MainMenu.nib in Resources */,
+				5190E7320D73A45B000D9E53 /* twitter.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +260,8 @@
 				4DDCA70A0ACC9A6100E082CE /* main.m in Sources */,
 				5190E7270D730A17000D9E53 /* CTBadge.m in Sources */,
 				5190E72B0D730A3C000D9E53 /* CTGradient.m in Sources */,
+				5190E7580D74414F000D9E53 /* SRAutoFillManager.m in Sources */,
+				5190E76D0D7441EE000D9E53 /* SRPrefDefaultKeys.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +309,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -294,6 +329,11 @@
 		4DDCA7100ACC9A6100E082CE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/frameworks\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;

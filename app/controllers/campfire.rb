@@ -10,8 +10,10 @@ class Campfire < WebApp::EventHandler
     last_row = (node/'tr').last
     unless last_row['class'] =~ /timestamp_message/
       name, message = (last_row/'td').map { |element| element.inner_text }
-      growl_channel_message(@room_name, "#{name}: #{message}")
-      increase_badge_counter!
+      unless same_as_last_time?(message)
+        growl_channel_message(@room_name, "#{name}: #{message}")
+        increase_badge_counter!
+      end
     end
   end
   

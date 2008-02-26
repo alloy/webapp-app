@@ -247,7 +247,11 @@ module WebApp
         end
         
         def set_badge_value!
-          @ctbadge.badgeApplicationDockIconWithValue_insetX_y(@badge_counter, 3, 0)
+          if @badge_counter.zero?
+            OSX::NSApp.applicationIconImage = OSX::NSImage.imageNamed('NSApplicationIcon')
+          else
+            @ctbadge.badgeApplicationDockIconWithValue_insetX_y(@badge_counter, 3, 0)
+          end
         end
       end
     end
