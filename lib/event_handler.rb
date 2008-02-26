@@ -13,6 +13,8 @@ module WebApp
     
     # Returns the body of the page as a Hpridoct document.
     def page_body
+      # FIXME: check how we can get the complete document instead of only the `body`,
+      # maybe we should just get it from the WebFrame instance...?
       Hpricot(@webView.mainFrame.DOMDocument.body.outerHTML.to_s)
     end
     
@@ -66,28 +68,27 @@ module WebApp
       
       # if needed let the page loaded event handler do it's work
       if private_methods.include? 'page_loaded_event_handler'
-        # FIXME: check how we can get the complete document instead of only the `body`,
-        # maybe we should just get it from the WebFrame instance...?
         send(:page_loaded_event_handler, doc.URL.to_s, doc.title.to_s)
       end
       
       if event_handlers = self.class.instance_variable_get(:@event_handlers)
         event_handlers.each do |event_handler|
-          puts "Register for event: #{event_handler[:name]}"
+          puts "Register for event: #{event_handler[:name]}" if RUBYCOCOA_ENV == 'debug'
           doc.addEventListener___(event_handler[:name], self, true)
         end
       end
     end
     
     def handleEvent(event) # :nodoc:
-      puts "Handle event: #{event}" if $WEBAPP_DEBUG
-      #puts event.relatedNode.outerHTML, ""
+      puts "Handle event: #{event}" if RUBYCOCOA_ENV == 'debug'
+      node = event.relatedNode
       
       self.class.instance_variable_get(:@event_handlers).each do |event_handler|
-        next unless event_matches_handler?(event, event_handler)
-        # FIXME: need to make sure we don't call multiple times for the same node
-        #event_handler[:block].call(self, event, Hpricot(event.relatedNode.outerHTML.to_s)) # hpricot
-        send(event_handler[:event_handler_method], event, Hpricot(event.relatedNode.outerHTML.to_s)) # hpricot
+        # skip if it's not an event we handle or if it's the same node as last time.
+        # TODO: check if we need an option to allow multiple times the same node...
+        next unless event_matches_handler?(event, event_handler) and @last_node != node
+        @last_node = node.copy
+        send(event_handler[:event_handler_method], event, Hpricot(node.outerHTML.to_s)) # hpricot
       end
     end
     
@@ -97,17 +98,6 @@ module WebApp
         item = attributes.getNamedItem(key.to_s)
         not item.nil? and item.value == value
       end
-    end
-    
-    # Helper methods
-    
-    # Checks if this +content+ is the same as the last time.
-    # It also stores the content so it can be checked the next time.
-    def same_as_last_time?(content)
-      @last_content ||= ''
-      result = (@last_content == content)
-      @last_content = content if result == false
-      result
     end
   end
 end

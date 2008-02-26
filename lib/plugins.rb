@@ -1,5 +1,3 @@
-$WEBAPP_DEBUG = false
-
 module WebApp
   module Plugins
     class << self
@@ -49,7 +47,7 @@ module WebApp
       
       # This is the method that will make you growl!
       def growl(type, title, description)
-        WebApp::Plugins::Growl.instance.notify(type, title, description) if $WEBAPP_DEBUG or not OSX::NSApp.active?
+        WebApp::Plugins::Growl.instance.notify(type, title, description) if not OSX::NSApp.active? or RUBYCOCOA_ENV == 'debug'
       end
       
       class << self
@@ -235,7 +233,7 @@ module WebApp
         end
         
         def increase_badge_counter!
-          if $WEBAPP_DEBUG or not OSX::NSApp.active?
+          if not OSX::NSApp.active? or RUBYCOCOA_ENV == 'debug'
             @badge_counter += 1
             set_badge_value!
           end

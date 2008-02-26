@@ -5,7 +5,7 @@ class Twitter < WebApp::EventHandler
   on_event('DOMNodeInserted') do |event, node|
     if contents = (node/'tr.hentry'/'td.content')
       message = content_for(contents, 'span.entry-content')
-      unless message.nil? or same_as_last_time?(message)
+      unless message.nil?
         name = content_for(contents, 'strong/a')
         growl_tweet(name, message)
         increase_badge_counter!
