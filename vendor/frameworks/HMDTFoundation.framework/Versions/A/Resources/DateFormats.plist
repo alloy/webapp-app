@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>%a, %d %b %Y %H:%M:%S %Z</string>
+	<string>%a, %d %b %Y %H:%M:%S %z</string>
+	<string>%a, %d %b %Y %H:%M:%S</string>
+	<string>%a %d %b %Y %H:%M:%S %Z</string>
+	<string>%a %d %b %Y %H:%M:%S %z</string>
+	<string>%a %d %b %Y %H:%M:%S</string>
+	<string>%d %b %Y %H:%M:%S %Z</string>
+	<string>%d %b %Y %H:%M:%S %z</string>
+	<string>%d %b %Y %H:%M:%S</string>
+	<string>%Y-%m-%dT%H:%M:%S%z</string>
+	<string>%Y-%m-%dT%H:%M:%SZ</string>
+	<string>%Y-%m-%dT%H:%M</string>
+	<string>%a, %d %B %Y %H:%M:%S %z</string>
+	<string>%a, %d %B %Y %H:%M:%S %Z</string>
+	<string>%a, %d %B %Y %H:%M:%S</string>
+	<string>%a %d %B %Y %H:%M:%S %z</string>
+	<string>%a %d %B %Y %H:%M:%S %Z</string>
+	<string>%a %d %B %Y %H:%M:%S</string>
+	<string>%Y-%m-%d</string>
+	<string>%a, %b %d %H:%M:%S %Z %Y</string>
+	<string>%a, %b %d %H:%M:%S %z %Y</string>
+	<string>%a %b %d %H:%M:%S %Z %Y</string>
+	<string>%a %b %d %H:%M:%S %z %Y</string>
+	<string>%a, %B %d %H:%M:%S %Z %Y</string>
+	<string>%a, %B %d %H:%M:%S %z %Y</string>
+	<string>%a %B %d %H:%M:%S %Z %Y</string>
+	<string>%a %B %d %H:%M:%S %z %Y</string>
+</array>
+</plist>
