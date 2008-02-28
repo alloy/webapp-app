@@ -50,8 +50,7 @@ module WebApp
       #   end
       def on_event(name, options = {}, &block)
         options[:conditions] ||= {}
-        options[:multiple_times] ||= false
-      
+        
         @event_handlers ||= []
         
         event_handler_method = "event_handler_method_#{@event_handlers.length + 1}".to_sym
@@ -73,21 +72,37 @@ module WebApp
       
       if event_handlers = self.class.instance_variable_get(:@event_handlers)
         event_handlers.each do |event_handler|
-          puts "Register for event: #{event_handler[:name]}" if RUBYCOCOA_ENV == 'debug'
-          doc.addEventListener___(event_handler[:name], self, true)
+          url = @webView.mainFrame.dataSource.request.URL.absoluteString.to_s
+          if event_handler[:options][:url].nil? or url =~ event_handler[:options][:url]
+            puts "Register for event: #{event_handler[:name]}" if $WEBAPP_DEBUG
+            doc.addEventListener___(event_handler[:name], self, true)
+          end
         end
       end
     end
     
     def handleEvent(event) # :nodoc:
-      puts "Handle event: #{event}" if RUBYCOCOA_ENV == 'debug'
+      #puts "Handle event: #{event}" if $WEBAPP_DEBUG
       node = event.relatedNode
       
       self.class.instance_variable_get(:@event_handlers).each do |event_handler|
         # skip if it's not an event we handle or if it's the same node as last time.
         # TODO: check if we need an option to allow multiple times the same node...
-        next unless event_matches_handler?(event, event_handler) and @last_node != node
-        @last_node = node.copy
+        
+        # FIXME: Nu tijdelijk terug naar de oude situatie...
+        next unless event_matches_handler?(event, event_handler)
+        
+        # next unless event_matches_handler?(event, event_handler) and @last_node != node
+        # @last_node = node.copy
+        
+        # next unless event_matches_handler?(event, event_handler) and @last_node != node.outerHTML
+        # @last_node = node.copy.outerHTML
+        # puts "Last node was:", ''
+        # p @last_node
+        # puts 'Current node is:', ''
+        # p node.outerHTML
+        # # FIXME: Het probleem is dat er soms wel of niet whitespace bij is gekomen....
+        
         send(event_handler[:event_handler_method], event, Hpricot(node.outerHTML.to_s)) # hpricot
       end
     end
@@ -98,6 +113,17 @@ module WebApp
         item = attributes.getNamedItem(key.to_s)
         not item.nil? and item.value == value
       end
+    end
+    
+    # Helper methods
+
+    # Checks if this +content+ is the same as the last time.
+    # It also stores the content so it can be checked the next time.
+    def same_as_last_time?(content)
+      @last_content ||= ''
+      result = (@last_content == content)
+      @last_content = content if result == false
+      result
     end
   end
 end

@@ -30,6 +30,7 @@
 		5190E76C0D7441EE000D9E53 /* SRPrefDefaultKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */; };
 		5190E76D0D7441EE000D9E53 /* SRPrefDefaultKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */; };
 		5190E7C90D744333000D9E53 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5190E7C80D744333000D9E53 /* Security.framework */; };
+		51FB31B10D7632CA0098BF8E /* lib in Resources */ = {isa = PBXBuildFile; fileRef = 51FB31A90D7632CA0098BF8E /* lib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,6 +72,7 @@
 		5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRPrefDefaultKeys.h; path = objc/SRPrefDefaultKeys.h; sourceTree = "<group>"; };
 		5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRPrefDefaultKeys.m; path = objc/SRPrefDefaultKeys.m; sourceTree = "<group>"; };
 		5190E7C80D744333000D9E53 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		51FB31A90D7632CA0098BF8E /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
 		E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
 		E8F5E25803AEB7C803A81C6F /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; name = rb_main.rb; path = misc/rb_main.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +116,7 @@
 			children = (
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
 				5190E7280D730A3C000D9E53 /* CTGradient.h */,
+				51FB31A90D7632CA0098BF8E /* lib */,
 				5190E7290D730A3C000D9E53 /* CTGradient.m */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				5190E7C80D744333000D9E53 /* Security.framework */,
@@ -247,6 +250,7 @@
 				514292D20CC66CDC00F9CEEF /* vendor in Resources */,
 				514292EF0CC6823A00F9CEEF /* MainMenu.nib in Resources */,
 				5190E7320D73A45B000D9E53 /* twitter.jpg in Resources */,
+				51FB31B10D7632CA0098BF8E /* lib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

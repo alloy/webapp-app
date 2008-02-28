@@ -2,16 +2,25 @@ class Campfire < WebApp::EventHandler
   plugin :growl, :channel_message => 'Received a new channel message.'
   plugin :badge
   
+  ROOM = /\/room\/\d+$/
+  
   on_page_loaded do |url, title|
-    @room_name = title.sub(/Campfire: /, '')
+    if url =~ ROOM
+      @room_name = title.sub(/^Campfire: /, '')
+      puts "Parsed channel name: #{@room_name}" if $WEBAPP_DEBUG
+    end
   end
   
-  on_event('DOMNodeInserted', :conditions => { :id => 'chat' }) do |event, node|
+  on_event('DOMNodeInserted', :url => ROOM, :conditions => { :id => 'chat' }) do |event, node|
     last_row = (node/'tr').last
     unless last_row['class'] =~ /timestamp_message/
       name, message = (last_row/'td').map { |element| element.inner_text }
-      growl_channel_message(@room_name, "#{name}: #{message}")
-      increase_badge_counter!
+      
+      unless same_as_last_time?(message)
+        puts "#{name}: #{message}"
+        growl_channel_message(@room_name, "#{name}: #{message}")
+        increase_badge_counter!
+      end
     end
   end
   

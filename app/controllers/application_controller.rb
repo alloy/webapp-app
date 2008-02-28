@@ -1,3 +1,5 @@
+$WEBAPP_DEBUG = true
+
 class ApplicationController < Rucola::RCController
   ib_outlet :main_window
   ib_outlet :webview
@@ -10,12 +12,6 @@ class ApplicationController < Rucola::RCController
     #p OSX::NSUserDefaults.standardUserDefaults.boolForKey('autoFillUserPass')
     
     WebApp::Plugins.start
-    
-    # url = 'http://fingertips.campfirenow.com'
-    # @event_handler = Campfire.alloc.init
-    
-    #url = 'https://twitter.com//home'
-    #@event_handler = Twitter.alloc.init
     
     url = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']
     
@@ -36,13 +32,14 @@ class ApplicationController < Rucola::RCController
   
   def webView_didFinishLoadForFrame(webView, frame)
     OSX::SRAutoFillManager.sharedInstance.fillFormsWithWebView(webView)
+    puts "Page done loading." if $WEBAPP_DEBUG
     @event_handlers.each { |e| e.register_dom_observers! }
   end
   
   def webView_decidePolicyForNavigationAction_request_frame_decisionListener(webView, info, request, frame, listener)
     navigationType = info[OSX::WebActionNavigationTypeKey].intValue
     OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView) if navigationType == OSX::WebNavigationTypeFormSubmitted
-    p request.URL.absoluteString
+    puts "Request done for: #{request.URL.absoluteString}" if $WEBAPP_DEBUG
     listener.use
   end
 end

@@ -1,1 +1,7 @@
-- Apparently Campfire throws you out of a room after like 15 minutes. Pyro seems to do GET request to circumvent this.
+- WebApp: Status bar!
+- WebApp: Drag 'n Drop support?
+
+- Campfire: Apparently it throws you out of a room after ~15 minutes. Pyro seems to do GET request to circumvent this.
+- Campfire: Download growls
+- Campfire: Person entered the room growls
+- Campfire: Drag 'n Drop support?

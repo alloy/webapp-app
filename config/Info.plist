@@ -25,6 +25,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>WebAppURL</key>
-	<string>https://twitter.com//home</string>
+	<!-- <string>https://twitter.com//home</string> -->
+	<string>http://fingertips.campfirenow.com</string>
 </dict>
 </plist>
