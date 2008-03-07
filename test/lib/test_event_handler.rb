@@ -84,10 +84,8 @@ describe "EventHandler, when setting up" do
   end
 end
 
-describe "EventHandler, when a page has been loaded" do
-  before do
-    @handler = TestEventHandler.alloc.init
-    
+module EventHandlerSpecHelper
+  def stub_webview
     @webView = stub('WebView')
     
     @doc = stub('DOMDocument')
@@ -103,6 +101,27 @@ describe "EventHandler, when a page has been loaded" do
     
     @url, @title = 'http://www.example.com/home', 'home page'
     stub_url_and_title(@url, @title)
+  end
+  
+  private
+  
+  def stub_url_and_title(url, title)
+    @doc.stubs(:URL).returns(url)
+    @doc.stubs(:title).returns(title)
+    @dataSource.stubs(
+      :request => @dataSource,
+      :URL => @dataSource,
+      :absoluteString => url
+    )
+  end
+end
+
+describe "EventHandler, when a page has been loaded" do
+  include EventHandlerSpecHelper
+  
+  before do
+    @handler = TestEventHandler.alloc.init
+    stub_webview
   end
   
   it "should register event handlers with the document if options[:url] matches" do
@@ -141,18 +160,6 @@ describe "EventHandler, when a page has been loaded" do
     @handler.expects(:should_not_be_called).times(0)
     @handler.handleEvent(event)
   end
-  
-  private
-  
-  def stub_url_and_title(url, title)
-    @doc.stubs(:URL).returns(url)
-    @doc.stubs(:title).returns(title)
-    @dataSource.stubs(
-      :request => @dataSource,
-      :URL => @dataSource,
-      :absoluteString => url
-    )
-  end
 end
 
 GLOBAL_URL = /\/home$/
@@ -174,8 +181,29 @@ class GlobalUrlEventHandler < WebApp::EventHandler(GLOBAL_URL)
   def DOMNodeInserted_on_another_page(event, node); end
 end
 
+class GlobalUrlEventHandler2 < WebApp::EventHandler(GLOBAL_URL); end
+
 describe "EventHandler, with a global url specified" do
+  include EventHandlerSpecHelper
+  
+  before do
+    @handler = GlobalUrlEventHandler.alloc.init
+    stub_webview
+  end
+  
   it "should have a class instance variable which specifies the url" do
     GlobalUrlEventHandler.ivar(:global_url).should.be GLOBAL_URL
+  end
+  
+  it "should increase the count in the name of the anonymous EventHandler subclass" do
+    GlobalUrlEventHandler.name.should.not == GlobalUrlEventHandler2.name
+  end
+  
+  it "should register event handlers with the document if options[:url] matches" do
+    @doc.expects(:addEventListener___).times(1).with('DOMNodeInserted', @handler, true)
+    @handler.expects(:DOMNodeInserted_on_home_page).times(1).with(@url, @title)
+    @handler.expects(:DOMNodeInserted_on_another_page).times(0)
+    
+    @handler.register_dom_observers!
   end
 end

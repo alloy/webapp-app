@@ -1,11 +1,14 @@
 module WebApp
   class << self
     def EventHandler(url)
+      @klass_counter ||= 0
       klass = eval %{
-        class SomeClass < EventHandler
+        class WebApp::NamelessEventHandler_#{@klass_counter} < EventHandler
           class << self
-            def inherited(klass)
-              klass.global_url = global_url
+            attr_accessor :global_url
+            def inherited(subklass)
+              super
+              subklass.global_url = global_url
             end
           end
           
@@ -23,7 +26,7 @@ module WebApp
     attr_reader :badge_counter
     
     def init # :nodoc:
-      if super
+      if super_init
         @badge_counter = 0
         self
       end
@@ -37,8 +40,6 @@ module WebApp
     end
     
     class << self
-      attr_accessor :global_url
-      
       # Called whenever a page is done loading. It takes 2 arguments, which are the page +url+ and the page +title+.
       #
       # Example from the Campfire plugin:
