@@ -5,7 +5,6 @@ module WebApp
       klass = eval %{
         class WebApp::NamelessEventHandler_#{@klass_counter} < EventHandler
           class << self
-            attr_accessor :global_url
             def inherited(subklass)
               super
               subklass.global_url = global_url
@@ -21,16 +20,24 @@ module WebApp
   end
   
   class EventHandler < OSX::NSObject
+    class << self
+      attr_accessor :global_url
+    end
+    
     attr_accessor :delegate
     attr_accessor :webView
     attr_reader :badge_counter
     
-    def init # :nodoc:
-      if super_init
-        @badge_counter = 0
-        self
-      end
+    def initialize
+      @badge_counter = 0
     end
+    
+    # def init # :nodoc:
+    #   if super_init
+    #     @badge_counter = 0
+    #     self
+    #   end
+    # end
     
     # Returns the body of the page as a Hpridoct document.
     def page_body
@@ -91,13 +98,12 @@ module WebApp
       
       if event_handlers = self.class.instance_variable_get(:@event_handlers)
         event_handlers.each do |event_handler|
-          #url = @webView.mainFrame.dataSource.request.URL.absoluteString.to_s
           url = doc.URL.to_s
-          if event_handler[:options][:url].nil? or url =~ event_handler[:options][:url]
+          if (event_handler[:options][:url].nil? and self.class.global_url.nil?) or (url =~ event_handler[:options][:url]) or (url =~ self.class.global_url)
             if event_handler[:name] == 'WebAppPageDidLoad'
               send(event_handler[:event_handler_method], url, doc.title.to_s)
             else
-              puts "Register for event: #{event_handler[:name]}" if $WEBAPP_DEBUG
+              log.debug "Register for event: #{event_handler[:name]}"
               doc.addEventListener___(event_handler[:name], self, true)
             end
           end
@@ -127,7 +133,8 @@ module WebApp
         # p node.outerHTML
         # # FIXME: Het probleem is dat er soms wel of niet whitespace bij is gekomen....
         
-        send(event_handler[:event_handler_method], event, Hpricot(node.outerHTML.to_s)) # hpricot
+        #send(event_handler[:event_handler_method], event, Hpricot(node.outerHTML.to_s)) # hpricot
+        send(event_handler[:event_handler_method], event, node.outerHTML.to_s) # hpricot
       end
     end
     

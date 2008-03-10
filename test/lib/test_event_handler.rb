@@ -168,7 +168,12 @@ class GlobalUrlEventHandler < WebApp::EventHandler(GLOBAL_URL)
     any_page_did_load(url, title)
   end
   
+  on_page_loaded(GLOBAL_URL) do |url, title|
+    home_page_did_load(url, title)
+  end
+  
   on_event('DOMNodeInserted') do |event, node|
+    puts 'hiero!'
     DOMNodeInserted_on_home_page(event, node)
   end
   
@@ -176,6 +181,7 @@ class GlobalUrlEventHandler < WebApp::EventHandler(GLOBAL_URL)
     DOMNodeInserted_on_another_page(event, node)
   end
   
+  def home_page_did_load(url, title); end
   def any_page_did_load(url, title); end
   def DOMNodeInserted_on_home_page(event, node); end
   def DOMNodeInserted_on_another_page(event, node); end
@@ -200,9 +206,15 @@ describe "EventHandler, with a global url specified" do
   end
   
   it "should register event handlers with the document if options[:url] matches" do
+    url, title = 'http://www.example.com/home', 'the home page'
+    stub_url_and_title(url, title)
+    
     @doc.expects(:addEventListener___).times(1).with('DOMNodeInserted', @handler, true)
-    @handler.expects(:DOMNodeInserted_on_home_page).times(1).with(@url, @title)
-    @handler.expects(:DOMNodeInserted_on_another_page).times(0)
+    # @handler.expects(:DOMNodeInserted_on_home_page).times(1).with(url, title)
+    # @handler.expects(:DOMNodeInserted_on_another_page).times(0)
+    
+    @handler.expects(:home_page_did_load).times(1).with(url, title)
+    @handler.expects(:any_page_did_load).times(1).with(url, title)
     
     @handler.register_dom_observers!
   end
