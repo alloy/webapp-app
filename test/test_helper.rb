@@ -8,4 +8,6 @@ require 'mocha'
 require 'rucola'
 require 'rucola/test_helper'
 
+require File.expand_path('../test_case', __FILE__)
+
 require File.expand_path('../../config/boot', __FILE__)

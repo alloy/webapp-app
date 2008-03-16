@@ -30,14 +30,8 @@ module WebApp
     
     def initialize
       @badge_counter = 0
+      @registered_events_for_this_page = []
     end
-    
-    # def init # :nodoc:
-    #   if super_init
-    #     @badge_counter = 0
-    #     self
-    #   end
-    # end
     
     # Returns the body of the page as a Hpridoct document.
     def page_body
@@ -89,22 +83,19 @@ module WebApp
     end
     
     def register_dom_observers! # :nodoc:
+      @registered_events_for_this_page = [] # flush the registered events
       doc = @webView.mainFrame.DOMDocument
-      
-      # if needed let the page loaded event handler do it's work
-      # if private_methods.include? 'page_loaded_event_handler'
-      #   send(:page_loaded_event_handler, doc.URL.to_s, doc.title.to_s)
-      # end
       
       if event_handlers = self.class.instance_variable_get(:@event_handlers)
         event_handlers.each do |event_handler|
           url = doc.URL.to_s
-          if (event_handler[:options][:url].nil? and self.class.global_url.nil?) or (url =~ event_handler[:options][:url]) or (url =~ self.class.global_url)
+          
+          if for_this_url?(url, event_handler)
             if event_handler[:name] == 'WebAppPageDidLoad'
               send(event_handler[:event_handler_method], url, doc.title.to_s)
             else
-              log.debug "Register for event: #{event_handler[:name]}"
-              doc.addEventListener___(event_handler[:name], self, true)
+              log.debug "Register for event: #{event_handler[:name]}, with optional url regex: #{event_handler[:options][:url]}"
+              register_event_for_this_page(doc, event_handler)
             end
           end
         end
@@ -115,7 +106,7 @@ module WebApp
       #puts "Handle event: #{event}" if $WEBAPP_DEBUG
       node = event.relatedNode
       
-      self.class.instance_variable_get(:@event_handlers).each do |event_handler|
+      @registered_events_for_this_page.each do |event_handler|
         # skip if it's not an event we handle or if it's the same node as last time.
         # TODO: check if we need an option to allow multiple times the same node...
         
@@ -134,15 +125,8 @@ module WebApp
         # # FIXME: Het probleem is dat er soms wel of niet whitespace bij is gekomen....
         
         #send(event_handler[:event_handler_method], event, Hpricot(node.outerHTML.to_s)) # hpricot
+        log.debug "Calling event handler #{event_handler[:event_handler_method]}"
         send(event_handler[:event_handler_method], event, node.outerHTML.to_s) # hpricot
-      end
-    end
-    
-    def event_matches_handler?(event, handler) # :nodoc:
-      attributes = event.relatedNode.attributes
-      event.objc_send(:type) == handler[:name] and handler[:options][:conditions].all? do |key, value|
-        item = attributes.getNamedItem(key.to_s)
-        not item.nil? and item.value == value
       end
     end
     
@@ -155,6 +139,25 @@ module WebApp
       result = (@last_content == content)
       @last_content = content if result == false
       result
+    end
+    
+    private
+    
+    def for_this_url?(url, event_handler)
+      (event_handler[:options][:url].nil? and self.class.global_url.nil?) or (url =~ event_handler[:options][:url]) or (event_handler[:options][:url].nil? and url =~ self.class.global_url)
+    end
+    
+    def event_matches_handler?(event, handler)
+      attributes = event.relatedNode.attributes
+      event.objc_send(:type) == handler[:name] and handler[:options][:conditions].all? do |key, value|
+        item = attributes.getNamedItem(key.to_s)
+        not item.nil? and item.value == value
+      end
+    end
+    
+    def register_event_for_this_page(doc, event_handler)
+      @registered_events_for_this_page << event_handler
+      doc.addEventListener___(event_handler[:name], self, true)
     end
   end
 end
