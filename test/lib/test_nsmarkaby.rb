@@ -1,5 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
+require "lib/dom_ext"
 require "lib/nsmarkaby/nsmarkaby"
 
 describe "NSMarkaby" do
@@ -66,20 +67,15 @@ describe "NSMarkaby" do
         mab { div { h1 "Monkeys"; h2 { "Giraffes #{strong 'Miniature' }" }; h3 "Donkeys" } }
   end
   
-  def test_dom_extension
-    tbl = @mb.build { table }.to_a.first
-    rows = @mb.build do
-      tr '1'
-      tr '2'
-    end.to_a
-    tbl.appendChildren(rows)
-    
-    assert_equal '<table><tr>1</tr><tr>2</tr></table>', tbl.outerHTML.to_s
-  end
-  
   private
   
   def mab(&block)
     @mb.build(&block).to_s
+  end
+end
+
+describe "DOMElement extensions" do
+  it "should check if an element is of a specific class" do
+    
   end
 end

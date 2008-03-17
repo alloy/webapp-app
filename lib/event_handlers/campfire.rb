@@ -38,20 +38,42 @@ module Campfire
     
     on_event('DOMNodeInserted', :conditions => { :id => 'chat' }) do |event, node|
       last_row = node.lastChild
-      if Rucola::RCApp.debug? or !message_from_self?(last_row)
-        p last_row.firstChild.objc_methods.sort.grep(/text/i)
-        name, message = last_row.firstChild.textContent.split(' ').first, last_row.lastChild.textContent
+      if matches_criteria?(last_row)
+        name, message = last_row.children.item(0).textContent.split(' ').first, last_row.children.item(1).textContent
         
         log.debug "Channel message from #{name}: #{message}"
-        growl_channel_message(@room_name, "#{name}: #{message}")
         increase_badge_counter!
+        
+        p last_row
+        p last_row['class']
+        
+        if last_row.class? 'paste_message'
+          log.debug "Paste message from #{name}"
+          
+          body = last_row.to_a.last
+          code = body.to_a[0].to_a
+          
+          if code[1].class?('number_of_lines')
+            log.debug "Truncated paste. URL: ..."
+            growl_channel_message(@room_name, "#{name}: Truncated paste:\n#{message}", lambda {
+              puts 'callback!'
+              OSX::NSWorkspace.sharedWorkspace.openURL(OSX::NSURL.URLWithString('http://www.google.com'))
+            })
+          end
+        else
+          #growl_channel_message(@room_name, "#{name}: #{message}")
+          growl_channel_message(@room_name, "#{name}: Truncated paste:\n#{message}") do
+            puts 'callback!'
+            OSX::NSWorkspace.sharedWorkspace.openURL(OSX::NSURL.URLWithString('http://www.google.com'))
+          end
+        end
       end
     end
     
     private
     
-    def message_from_self?(row)
-      row['class'].split(' ').include? 'you'
+    def matches_criteria?(row)
+      row.is_a?(OSX::DOMHTMLTableRowElement) and (Rucola::RCApp.debug? or not row.class?('you')) and not row.class?('timestamp_message')
     end
   end
 end

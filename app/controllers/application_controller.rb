@@ -11,8 +11,6 @@ class ApplicationController < Rucola::RCController
     })
     #p OSX::NSUserDefaults.standardUserDefaults.boolForKey('autoFillUserPass')
     
-    WebApp::Plugins.start
-    
     url = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']
     
     @event_handlers = []
@@ -28,6 +26,8 @@ class ApplicationController < Rucola::RCController
       @event_handlers << event_handler
     end
     
+    WebApp::Plugins.start
+    
     @webview.frameLoadDelegate = self
     @webview.policyDelegate = self
     @webview.mainFrame.loadRequest OSX::NSURLRequest.requestWithURL(OSX::NSURL.URLWithString(url))
@@ -35,14 +35,13 @@ class ApplicationController < Rucola::RCController
   
   def webView_didFinishLoadForFrame(webView, frame)
     OSX::SRAutoFillManager.sharedInstance.fillFormsWithWebView(webView)
-    puts "Page done loading." if $WEBAPP_DEBUG
     @event_handlers.each { |e| e.register_dom_observers! }
   end
   
   def webView_decidePolicyForNavigationAction_request_frame_decisionListener(webView, info, request, frame, listener)
     navigationType = info[OSX::WebActionNavigationTypeKey].intValue
     OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView) if navigationType == OSX::WebNavigationTypeFormSubmitted
-    puts "Request done for: #{request.URL.absoluteString}" if $WEBAPP_DEBUG
+    log.debug "Request done for: #{request.URL.absoluteString}"
     listener.use
   end
 end

@@ -1,21 +1,5 @@
 require File.expand_path("../tags", __FILE__)
 
-class OSX::DOMNode
-  def [](key)
-    if attr = attributes.getNamedItem(key)
-      attr.value
-    end
-  end
-  
-  def []=(key, value)
-    setAttribute__(key, value)
-  end
-  
-  def appendChildren(children)
-    children.each { |elm| appendChild elm }
-  end
-end
-
 class NSMarkaby
   class AttributeBuilder
     instance_methods.each { |meth| undef_method(meth) unless meth =~ /\A__/ }

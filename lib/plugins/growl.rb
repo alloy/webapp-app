@@ -3,7 +3,8 @@ module WebApp
     module Growl
       
       # This is the method that will make you growl!
-      def growl(type, title, description, sticky = false)
+      def growl(type, title, description, sticky = false, block = nil)
+        puts 'jupsss' if block
         WebApp::Plugins::Growl.instance.notify(type, title, description, 'WebAppBringToFront', sticky) if not OSX::NSApp.active? or $WEBAPP_DEBUG
       end
       
@@ -22,21 +23,54 @@ module WebApp
         
         def start
           @registered_notifications.each do |klass, notifications|
-            klass.class_eval do
-              notifications.each do |mname, name|
-                # define the shortcut method: #growl_foo(title, description)
-                growl_mname = "growl_#{mname}".to_sym
-                define_method(growl_mname) do |title, description|
-                  growl(name, title, description)
+            # klass.class_eval do
+            #   notifications.each do |mname, name|
+            #     # define the shortcut method: #growl_foo(title, description)
+            #     growl_mname = "growl_#{mname}".to_sym
+            #     define_method(growl_mname) do |title, description|
+            #       growl(name, title, description)
+            #     end
+            #     instance_eval %{
+            #       def growl_#{growl_mname}(title, description, &block)
+            #         if block_given?
+            #           growl("#{name}", title, description, false, block)
+            #         else
+            #           growl("#{name}", title, description)
+            #         end
+            #       end
+            #     }
+            #     
+            #     # define the shortcut method: #sticky_growl_foo(title, description)
+            #     growl_mname = "sticky_growl_#{mname}".to_sym
+            #     define_method(growl_mname) do |title, description|
+            #       growl(name, title, description, true)
+            #     end
+            #   end
+            # end
+            
+            str = "class #{klass.name}\n\n"
+            notifications.each do |mname, name|
+              str += %{
+                def growl_#{mname}(title, description, &block)
+                  if block_given?
+                    growl("#{name}", title, description, false, block)
+                  else
+                    growl("#{name}", title, description)
+                  end
                 end
                 
-                # define the shortcut method: #sticky_growl_foo(title, description)
-                growl_mname = "sticky_growl_#{mname}".to_sym
-                define_method(growl_mname) do |title, description|
-                  growl(name, title, description, true)
+                def sticky_growl_#{mname}(title, description, &block)
+                  if block_given?
+                    growl("#{name}", title, description, true, block)
+                  else
+                    growl("#{name}", title, description, true)
+                  end
                 end
-              end
+              }
             end
+            str += "\n\nend"
+            puts str
+            eval str
           end
           
            # get an array of all the registered notifications.
