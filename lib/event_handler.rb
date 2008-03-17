@@ -22,6 +22,16 @@ module WebApp
   class EventHandler < OSX::NSObject
     class << self
       attr_accessor :global_url
+      
+      attr_writer :event_handlers
+      def event_handlers
+        @event_handlers ||= []
+      end
+      
+      def inherited(subklass)
+        super
+        event_handlers << subklass unless subklass.name =~ /NamelessEventHandler_/
+      end
     end
     
     attr_accessor :delegate
@@ -89,9 +99,11 @@ module WebApp
       if event_handlers = self.class.instance_variable_get(:@event_handlers)
         event_handlers.each do |event_handler|
           url = doc.URL.to_s
+          log.debug "Page loaded: #{url}"
           
           if for_this_url?(url, event_handler)
             if event_handler[:name] == 'WebAppPageDidLoad'
+              log.debug "Calling page loaded event handler: #{event_handler[:event_handler_method]}"
               send(event_handler[:event_handler_method], url, doc.title.to_s)
             else
               log.debug "Register for event: #{event_handler[:name]}, with optional url regex: #{event_handler[:options][:url]}"
@@ -125,8 +137,8 @@ module WebApp
         # # FIXME: Het probleem is dat er soms wel of niet whitespace bij is gekomen....
         
         #send(event_handler[:event_handler_method], event, Hpricot(node.outerHTML.to_s)) # hpricot
-        log.debug "Calling event handler #{event_handler[:event_handler_method]}"
-        send(event_handler[:event_handler_method], event, node.outerHTML.to_s) # hpricot
+        log.debug "Calling event handler: #{event_handler[:event_handler_method]}"
+        send(event_handler[:event_handler_method], event, node)
       end
     end
     

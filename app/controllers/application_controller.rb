@@ -16,11 +16,14 @@ class ApplicationController < Rucola::RCController
     url = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']
     
     @event_handlers = []
-    event_handler_files = Dir.glob "#{RUBYCOCOA_ROOT + 'app/event_handlers/'}/*.rb"
+    event_handler_files = Dir.glob "#{RUBYCOCOA_ROOT + 'lib/event_handlers/'}/campfire.rb"
     
     event_handler_files.each do |event_handler_file|
       require event_handler_file
-      event_handler = File.constantize(event_handler_file).alloc.init
+      #p WebApp::EventHandler::event_handlers
+      
+      #event_handler = File.constantize(event_handler_file).alloc.init
+      event_handler = Campfire::Room.alloc.init
       event_handler.webView = @webview
       @event_handlers << event_handler
     end

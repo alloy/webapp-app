@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Campfire: WebAppTestRoom</title>
+  <link href="/stylesheets/screen.css?1204172796" media="all" rel="stylesheet" type="text/css" />
+    <!--[if lte IE 6]>
+      <style type="text/css">
+        @import url("/stylesheets/screen-ie.css?1204172796");
+      </style>
+    <![endif]-->
+    <!--[if IE 7]>
+      <style type="text/css">
+        @import url("/stylesheets/screen-ie-7.css?1204172796");
+      </style>
+    <![endif]-->
+  
+    <link href="/stylesheets/chat.css?1204172796" media="screen" rel="stylesheet" type="text/css" />
+    <!--[if lte IE 6]>
+      <style type="text/css">
+        @import url("/stylesheets/chat-ie.css?1204172796");
+      </style>
+    <![endif]-->
+    <!--[if IE 7]>
+      <style type="text/css">
+        @import url("/stylesheets/chat-ie-7.css?1204172796");
+      </style>
+    <![endif]-->    
+  
+  <link href="/stylesheets/print.css?1204172796" media="print" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/grey.css?1204172796" media="screen" rel="stylesheet" title="Theme" type="text/css" />
+  <script src="/javascripts/prototype.js?1204172796" type="text/javascript"></script>
+<script src="/javascripts/effects.js?1204172796" type="text/javascript"></script>
+<script src="/javascripts/application.js?1204172796" type="text/javascript"></script>
+<script src="/javascripts/nubbins.js?1204172796" type="text/javascript"></script>
+<script src="/javascripts/campfire.js?1204172796" type="text/javascript"></script>
+<script src="/javascripts/javascript_flash_gateway.js?1204172796" type="text/javascript"></script>
+</head>
+
+<body class="chat">
+  
+  
+    <div id="corner_logo">
+      <a href="http://campfirenow.com" class="image" onclick="if (chat &amp;&amp; chat.logRequests) return chat.requestlogger.openLogWindow() &amp;&amp; false" target="_blank"><span>Campfire Group Chat</span></a>
+    </div>
+  
+  
+  
+    <div id="Header">
+      <div id="Tabs">
+        <ul id="MainTabs">
+    <li><a href="https://example.campfirenow.com/" class="">Lobby</a></li>
+  
+    
+        
+        <li><a href="https://example.campfirenow.com/room/65667" class="chat" id="room_tab-65667">Office</a></li>
+                
+        <li><a href="https://example.campfirenow.com/room/144516" class="chat current" id="room_tab-144516">WebAppTestRoom</a></li>
+        
+    
+  
+
+    <li><a href="https://example.campfirenow.com/files+transcripts" class="" style="margin-left: 8px">Files, Transcripts &amp; Search</a></li>
+  
+    <li style="float: right;" class="logout"><a href="https://example.campfirenow.com/logout">Logout</a></li>
+          <li style="float: right" class="logout"><a href="/member/edit">My account</a></li>
+      
+
+</ul>
+      </div>
+    </div>
+  
+
+  <div id="Wrapper">
+  	<div id="Container">
+      
+
+
+
+<iframe id="upload_target" name="upload_target" style="width:0;height:0" src="" frameborder="0"></iframe>
+
+<div class="Left">
+  <div class="col">
+    <div id="chat-wrapper">
+      <div id="todays_transcript" style="display: none">
+        
+          See messages from 
+          <a href="https://example.campfirenow.com/room/144516/transcript/message/56163086" id="todays_transcript_link" target="_blank">earlier today</a>
+        
+      </div>
+
+      <table class="chat">
+        <tbody id="chat">
+          <tr class="timestamp_message message" id="message_56163086" style="">
+  <td class="date"><span>Mar 16</span></td>
+  <td class="time"><div> 4:00 PM</div></td>
+</tr>
+
+<tr class="enter_message message user_202171" id="message_56163087" style="">
+  <td class="person">Eloy D.</td>
+  <td class="body"><div>has entered the room</div></td>
+</tr>
+        </tbody>
+      </table>
+      <style type="text/css">#chat td.body div {}</style>
+    </div>
+  </div>
+  <div id="last_message" class="bottom">&nbsp;</div>
+</div>
+
+<div class="speak">
+  <div id="tooltip" style="display: none"></div>
+  <div id="clipper">
+    <div>
+      <form id="chat_form">
+        <table><tr>
+          <td class="input"><textarea id="input"></textarea></td>
+          <td>
+            <div id="chat_controls">
+              <input type="submit" id="send" value="Send message" />
+            </div>
+          </td>
+        </tr></table>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="Sidebar" class="member_user">
+  <div id="SidebarTop">
+  <div id="sounds">
+    <div class="link_with_spinner" id="toggle_sounds"><div class="spinner" id="toggle_sounds_spinner" style="display: none">&nbsp;</div><a href="#" id="toggle_sounds_link" onclick="[&quot;toggle_sounds_spinner&quot;, &quot;toggle_sounds_link&quot;].each(Element.toggle); new Ajax.Request('https://example.campfirenow.com/room/144516/toggle_sounds', {asynchronous:true, evalScripts:true, onComplete:function(request){[&quot;toggle_sounds_spinner&quot;, &quot;toggle_sounds_link&quot;].each(Element.toggle)}}); chat.speaker.focus(); return false;"><img alt="Sound-on" src="/images/sound-on.gif?1204172796" title="Turn sound off" /></a></div>
+  </div>
+
+  <div id="Title">
+    <div id="room_title">
+  <h1 id="room_name">WebAppTestRoom</h1>
+  
+      <h2 id="topic">
+        Test room van Eloy
+        <span class="edit_topic"><a href="#" onclick="Element.show('edit_topic_form'); Element.hide('topic'); return false;">Edit</a></span>
+      </h2>
+</div>
+
+<div style="display: none" id="edit_topic_form">
+  <form action="https://example.campfirenow.com/room/144516/change_topic" method="post" onsubmit="[&quot;edit_topic_form_spinner&quot;, &quot;edit_topic_form_buttons&quot;].each(Element.toggle); new Ajax.Updater('Title', 'https://example.campfirenow.com/room/144516/change_topic', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;">
+    <textarea cols="40" id="room_topic" name="room[topic]" rows="20" style="width: 225px; height: 40px; margin-bottom: 3px;">Test room van Eloy</textarea>
+  
+    <div class="spinner" id="edit_topic_form_spinner" style="display: none">&nbsp;</div>
+    <div id="edit_topic_form_buttons">
+      <input name="commit" type="submit" value="Save" /> or 
+      <a class="admin" href="#" onclick="Element.show('topic'); Element.hide('edit_topic_form'); return false;">Cancel</a>
+    </div>
+  </form>
+</div>
+
+  </div>
+</div>
+
+
+
+
+  <form action="https://example.campfirenow.com/search" id="search_form" method="post">
+    <table><tr><td class="term">
+      <input id="term" name="term" type="text" />
+      <input id="return_to_room_id" name="return_to_room_id" type="hidden" value="144516" />
+    </td><td class="submit">
+      <input name="commit" type="submit" value="Search" />
+    </td></tr></table>
+  </form>
+
+
+<div class="participants">
+  <div id="room_locking">
+    <h3>
+  <span class="room_actions">
+        <span id="locking_control">
+      <span id="locking_link"><a href="#" onclick="if (confirm('Are you sure you want to lock this room?')) {  Element.hide(this); Element.show('toggle_locking_link_status') ; new Ajax.Request('https://example.campfirenow.com/room/144516/lock', {asynchronous:true, evalScripts:true}); }; return false;">Lock room</a></span> 
+      <img alt="" height="5" id="toggle_locking_link_status" src="/images/dots-white.gif?1204172796" style="display: none" width="21" /> |
+    </span>
+        <span id="leave_link"><a href="https://example.campfirenow.com/room/144516/leave" onclick="chat.poller.stop();var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;f.submit();; return false;">Leave</a></span>
+    <span id="logout_link">| <a href="https://example.campfirenow.com/logout">Logout</a></span>
+  </span>
+  Who's here?
+</h3>
+
+  </div>
+
+  <div id="participants">
+    <ul class="participant-list" id="participant_list-144516">
+    <li class="user nubbin_region" id="user_202171">
+      
+      <span class="name">Eloy Duran</span>
+      
+    </li>
+</ul>
+
+  </div>
+</div>
+
+  <div id="guest_access">
+    <div id="guest_access_control" >
+
+	<h3>
+		<span id="toggle_guest_access_link" class="room_actions">
+		  		  <a href="#" onclick="if (confirm('Are you sure you want to turn guest access on?')) {  Element.hide(this); Element.show('toggle_guest_access_status') ; new Ajax.Request('https://example.campfirenow.com/room/144516/toggle_guest_access', {asynchronous:true, evalScripts:true}); }; return false;">Turn it on</a>
+		  <div class="spinner" id="toggle_guest_access_status" style="display: none">&nbsp;</div>
+		</span>
+		Guest access is off <span>(<a href="http://campfirenow.com/help#mgdifference" target="_blank">?</a>)</span>
+	</h3>
+
+
+</div>
+
+  </div>
+
+<div class="files" id="files">
+  <h3 id="files_header">
+    <span id="files_header_action" class="room_actions">
+      <a class="toggle show_hide_toggler_uploader" href="#" id="upload_file_link" onclick="$('uploader').showHide.toggle(); return false;">Upload a file</a>
+    </span>
+
+    <span id="files_title"></span>
+    <span style="font-size: 10px;">(<a href="https://example.campfirenow.com/files+transcripts">all</a>)</span>
+  </h3>
+
+  <div id="upload_limit_warning">
+    <p style="font-size: 11px">
+      <span style="background-color: yellow; padding: 1px;">This account is over its upload limit.</span>
+      Ask <a href="mailto:thijs@fngtps.com">Thijs</a> to upgrade the account.
+    </p>
+  </div>
+
+  <div class="show_hide_wrapper"><div class=" showhide" id="uploader" style="display: none"><div id="upload_form">
+  <div id="upload_form_contents">
+    <form action="https://example.campfirenow.com/upload.cgi/room/144516/uploads/new" enctype="multipart/form-data" id="upload_form_tag" method="post" target="upload_target">
+      <p class="file_size_warning">Choose a file less than 10<abbr>MB</abbr> in size.</p>
+      <p><input id="upload" name="upload" type="file" /></p>
+      <p class="submit">
+        <input name="commit" onclick="chat.uploader.start(); return false" type="submit" value="Upload" /> or 
+        <a class="admin show_hide_toggler_uploader" href="#" onclick="$('uploader').showHide.toggle(); return false;">Cancel</a>
+      </p>
+    </form>
+  </div>
+  <div id="upload_form_progress" style="display:none">
+    <img alt="Progress_bar" src="/images/progress_bar.gif?1204172796" />
+    <p id="upload_form_status"></p>
+  </div>
+</div>
+</div><script type="text/javascript">
+//<![CDATA[
+new ShowHide('uploader', {"beforeToggle": function(showHide) {chat.uploader.reset()}})
+//]]>
+</script></div>
+
+  <ul id="file_list">
+    
+ 
+
+<script type="text/javascript">
+  Element.update('files_title', '&nbsp;');
+  Element.addClassName('files_header_action', 'empty');
+</script>
+
+  </ul>
+</div>
+
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+new PeriodicalExecuter(function() {new Ajax.Request('https://example.campfirenow.com/room/144516/tabs', {asynchronous:true, evalScripts:true})}, 60)
+//]]>
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+  window.chat = new Campfire.Chat({"messageHistory": 100, "speakURL": "https://example.campfirenow.com/room/144516/speak", "soundsEnabled": true, "timestamp": 1205679670, "pollURL": "/poll.fcgi", "transcriptElement": "chat", "scrollToBottom": true, "membershipKey": "f1c47a56308ace1f", "speakElement": "input", "userID": 202171, "participantList": "participant_list-144516", "debug": false, "lastCacheID": 0, "messageTemplate": "\u003Ctr class=\"message text_message you pending\" id=\"message_#{id}\" style=\"\"\u003E\n  \u003Ctd class=\"person\"\u003E\u003Cspan\u003EEloy D.\u003C/span\u003E\u003C/td\u003E\n  \u003Ctd class=\"body\"\u003E\u003Cdiv\u003E#{body}\u003C/div\u003E\u003C/td\u003E\n\u003C/tr\u003E\n"});
+/* ]]> */
+</script>
+
+    </div>
+  </div>
+
+
+</body>
+</html>
