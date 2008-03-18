@@ -33,4 +33,14 @@ class OSX::DOMElement
       super
     end
   end
+  
+  # Performs an xpath query and returns the results in an array.
+  def search(query)
+    result = ownerDocument.evaluate_contextNode_resolver_type_inResult(query, self, nil, OSX::DOM_ANY_TYPE, nil)
+    ary = []
+    while node = result.iterateNext
+      ary << node
+    end
+    ary
+  end
 end

@@ -94,24 +94,28 @@ module WebApp
     
     def register_dom_observers! # :nodoc:
       @registered_events_for_this_page = [] # flush the registered events
-      doc = @webView.mainFrame.DOMDocument
+      @document = @webView.mainFrame.DOMDocument
       
       if event_handlers = self.class.instance_variable_get(:@event_handlers)
         event_handlers.each do |event_handler|
-          url = doc.URL.to_s
+          url = @document.URL.to_s
           log.debug "Page loaded: #{url}"
           
           if for_this_url?(url, event_handler)
             if event_handler[:name] == 'WebAppPageDidLoad'
               log.debug "Calling page loaded event handler: #{event_handler[:event_handler_method]}"
-              send(event_handler[:event_handler_method], url, doc.title.to_s)
+              send(event_handler[:event_handler_method], url, @document.title.to_s)
             else
               log.debug "Register for event: #{event_handler[:name]}, with optional url regex: #{event_handler[:options][:url]}"
-              register_event_for_this_page(doc, event_handler)
+              register_event_for_this_page(@document, event_handler)
             end
           end
         end
       end
+    end
+    
+    def document
+      @document
     end
     
     def handleEvent(event) # :nodoc:

@@ -82,6 +82,8 @@ describe "Campfire::Room, when running" do
   end
   
   it "should open a paste in the browser if it was truncated and the growl message is clicked" do
+    Rucola::Log.instance.level = 0
+    
     row_node = build do
       tr.message_123456! :class => "paste_message message user_123456" do
         td.person { span "Eloy D." }
@@ -111,6 +113,8 @@ describe "Campfire::Room, when running" do
     end
     
     @chat.appendChild(row_node)
+    Rucola::Log.instance.level = 9
+    
   end
   
   private

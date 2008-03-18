@@ -14,8 +14,6 @@ require File.expand_path('../../config/boot', __FILE__)
 
 require "lib/nsmarkaby/nsmarkaby"
 
-#Rucola::Log.instance.level = 0
-
 # Otherwise the WebView rendering won't work.
 Thread.new { OSX.CFRunLoopRun }
 

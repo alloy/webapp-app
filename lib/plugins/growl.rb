@@ -4,8 +4,7 @@ module WebApp
       
       # This is the method that will make you growl!
       def growl(type, title, description, sticky = false, block = nil)
-        puts 'jupsss' if block
-        WebApp::Plugins::Growl.instance.notify(type, title, description, 'WebAppBringToFront', sticky) if not OSX::NSApp.active? or $WEBAPP_DEBUG
+        WebApp::Plugins::Growl.notify(type, title, description, sticky, block) if not OSX::NSApp.active? or Rucola::RCApp.debug?
       end
       
       # FIXME: Why doesn't the window get key and order front...
@@ -23,31 +22,6 @@ module WebApp
         
         def start
           @registered_notifications.each do |klass, notifications|
-            # klass.class_eval do
-            #   notifications.each do |mname, name|
-            #     # define the shortcut method: #growl_foo(title, description)
-            #     growl_mname = "growl_#{mname}".to_sym
-            #     define_method(growl_mname) do |title, description|
-            #       growl(name, title, description)
-            #     end
-            #     instance_eval %{
-            #       def growl_#{growl_mname}(title, description, &block)
-            #         if block_given?
-            #           growl("#{name}", title, description, false, block)
-            #         else
-            #           growl("#{name}", title, description)
-            #         end
-            #       end
-            #     }
-            #     
-            #     # define the shortcut method: #sticky_growl_foo(title, description)
-            #     growl_mname = "sticky_growl_#{mname}".to_sym
-            #     define_method(growl_mname) do |title, description|
-            #       growl(name, title, description, true)
-            #     end
-            #   end
-            # end
-            
             str = "class #{klass.name}\n\n"
             notifications.each do |mname, name|
               str += %{
@@ -69,7 +43,6 @@ module WebApp
               }
             end
             str += "\n\nend"
-            puts str
             eval str
           end
           
@@ -88,9 +61,25 @@ module WebApp
           @growl_bridge
         end
         
+        def callbacks
+          @callbacks ||= {}
+        end
+        
+        def notify(type, title, description, sticky, block)
+          log.debug "Send growl notification. Block: #{block}"
+          callbacks[block.object_id.to_s] = block unless block.nil?
+          instance.notify(type, title, description, block.object_id.to_s, sticky)
+        end
+        
         def growl_onClicked(sender, context)
-          puts "Growl notification clicked: #{context}" if $WEBAPP_DEBUG
-          WebApp::Plugins::Growl::BRING_TO_FRONT.call
+          log.debug "Growl notification clicked: #{context}"
+          
+          if context == 'WebAppBringToFront'
+            WebApp::Plugins::Growl::BRING_TO_FRONT.call
+          else
+            callbacks[context.to_s].call
+            callbacks[context.to_s] = nil
+          end
         end
       end
       

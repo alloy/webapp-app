@@ -62,6 +62,21 @@ describe "DOM Extensions" do
     div_node.to_a.should == [div_node.children.item(0), div_node.children.item(1)]
   end
   
+  it "should be possible to search with xpath" do
+    div_node = build do
+      div do
+        p.bar 'foo'
+        p 'bar'
+        span do
+          p 'baz'
+        end
+      end
+    end
+    
+    div_node.search('p[@class="bar"]').length.should.be 1
+    div_node.search('p').length.should.be 2
+  end
+  
   private
   
   def build(&block)
