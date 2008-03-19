@@ -81,9 +81,35 @@ describe "Campfire::Room, when running" do
     @chat.appendChild(row_node)
   end
   
-  it "should open a paste in the browser if it was truncated and the growl message is clicked" do
-    Rucola::Log.instance.level = 0
+  it "should not open a paste in the browser if it wasn't truncated" do
+    row_node = build do
+      tr.message_123456! :class => "paste_message message user_123456" do
+        td.person { span "Eloy D." }
+        td.body do
+          div do
+            a :href => '/room/123456/paste/123456'
+            
+            br
+            
+            pre do
+              code do
+                'some code'
+              end
+            end
+          end
+        end
+      end
+    end
     
+    handler.expects(:increase_badge_counter!)
+    handler.expects(:growl_channel_message).with do |room, message|
+      room == 'WebAppTestRoom' and message == "Eloy pasted: some code"
+    end
+    
+    @chat.appendChild(row_node)
+  end
+  
+  it "should open a paste in the browser if it was truncated and the growl message is clicked" do
     row_node = build do
       tr.message_123456! :class => "paste_message message user_123456" do
         td.person { span "Eloy D." }
@@ -113,7 +139,6 @@ describe "Campfire::Room, when running" do
     end
     
     @chat.appendChild(row_node)
-    Rucola::Log.instance.level = 9
   end
   
   private
