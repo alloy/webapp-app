@@ -43,4 +43,5 @@ class OSX::DOMElement
     end
     ary
   end
+  alias_method :/, :search
 end

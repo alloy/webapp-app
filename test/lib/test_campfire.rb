@@ -108,13 +108,17 @@ describe "Campfire::Room, when running" do
     end
     
     handler.expects(:increase_badge_counter!)
-    handler.expects(:growl_channel_message).with do |room, message, proc|
-      room == 'WebAppTestRoom' and message == "Eloy: Truncated paste:\n86 more linessome code" and proc.is_a?(Proc)
+    handler.expects(:growl_channel_message).with do |room, message|
+      room == 'WebAppTestRoom' and message == "Eloy: Truncated paste."
     end
     
-    @chat.appendChild(row_node)
-    Rucola::Log.instance.level = 9
+    WebApp::Plugins::Growl.instance.expects(:notify)
     
+    lambda {
+      @chat.appendChild(row_node)
+    }.should.differ("WebApp::Plugins::Growl.callbacks.length", +1)
+    
+    Rucola::Log.instance.level = 9
   end
   
   private

@@ -80,8 +80,8 @@ module Campfire
           if body.search('span[@class="number_of_lines"]').empty?
             log.debug "Normal paste"
           else
-            base_url = document.URL.to_s.scan(/(https*:\/\/.*?)\//).to_s
-            url = OSX::NSURL.URLWithString("#{base_url}#{body.search('a').first['href']}")
+            document.URL.to_s.scan(/(https*:\/\/.*?)\//)
+            url = OSX::NSURL.URLWithString("#{$1}#{body.search('a').first['href']}")
             log.debug "Truncated paste. URL: #{url.absoluteString}"
             
             growl_channel_message(@room_name, "#{name}: Truncated paste.") do

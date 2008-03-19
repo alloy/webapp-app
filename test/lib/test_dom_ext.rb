@@ -75,6 +75,7 @@ describe "DOM Extensions" do
     
     div_node.search('p[@class="bar"]').length.should.be 1
     div_node.search('p').length.should.be 2
+    (div_node / 'span/p').length.should.be 1
   end
   
   private

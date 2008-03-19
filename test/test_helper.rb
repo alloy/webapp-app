@@ -49,3 +49,19 @@ module EventHandlerTestHelper
   end
 end
 Test::Unit::TestCase.send(:include, EventHandlerTestHelper)
+
+class Test::Spec::Should
+  def differ(str, difference = 1)
+    before = eval(str)
+    @object.call
+    eval(str).should == before + difference
+  end
+end
+
+class Test::Spec::ShouldNot
+  def differ(str)
+    before = eval(str)
+    @object.call
+    eval(str).should == before
+  end
+end
