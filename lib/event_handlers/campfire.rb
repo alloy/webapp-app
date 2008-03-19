@@ -21,7 +21,6 @@ module Campfire
         
         increase_badge_counter!
         
-        elem
         if tr.class? 'paste_message'
           log.debug "Paste message from #{name}"
           body = (tr / 'td[@class="body"]/div').first
