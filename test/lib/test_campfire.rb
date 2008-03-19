@@ -112,12 +112,7 @@ describe "Campfire::Room, when running" do
       room == 'WebAppTestRoom' and message == "Eloy: Truncated paste."
     end
     
-    WebApp::Plugins::Growl.instance.expects(:notify)
-    
-    lambda {
-      @chat.appendChild(row_node)
-    }.should.differ("WebApp::Plugins::Growl.callbacks.length", +1)
-    
+    @chat.appendChild(row_node)
     Rucola::Log.instance.level = 9
   end
   

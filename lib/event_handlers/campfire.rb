@@ -12,9 +12,9 @@
 #   end
 #   
 #   on_event('DOMNodeInserted', :url => ROOM, :conditions => { :id => 'chat' }) do |event, node|
-#     last_row = (node/'tr').last
-#     unless last_row['class'] =~ /timestamp_message/
-#       name, message = (last_row/'td').map { |element| element.inner_text }
+#     tr = (node/'tr').last
+#     unless tr['class'] =~ /timestamp_message/
+#       name, message = (tr/'td').map { |element| element.inner_text }
 #       
 #       unless same_as_last_time?(message)
 #         puts "#{name}: #{message}"
@@ -37,26 +37,24 @@ module Campfire
     end
     
     on_event('DOMNodeInserted', :conditions => { :id => 'chat' }) do |event, node|
-      last_row = node.lastChild
-      if matches_criteria?(last_row)
-        #name, message = last_row.children.item(0).textContent.split(' ').first, last_row.children.item(1).textContent
-        name, message = last_row.search('td').map { |tr| tr.textContent }
+      tr = node.lastChild
+      if matches_criteria?(tr)
+        #name, message = tr.children.item(0).textContent.split(' ').first, tr.children.item(1).textContent
+        name, message = (tr / 'td').map { |td| td.textContent }
         name = name.split(' ').first
-        
-        p name, message
         
         log.debug "Channel message from #{name}: #{message}"
         increase_badge_counter!
         
         # growl_channel_message(@room_name, "#{name}: #{message}")
         
-        # p last_row
-        # p last_row['class']
+        # p tr
+        # p tr['class']
         
-        # if last_row.class? 'paste_message'
+        # if tr.class? 'paste_message'
         #   log.debug "Paste message from #{name}"
         #   
-        #   body = last_row.to_a.last
+        #   body = tr.to_a.last
         #   code = body.to_a[0].to_a
         #   
         #   if code[1].class?('number_of_lines')
@@ -73,15 +71,14 @@ module Campfire
         #   end
         # end
         
-        if last_row.class? 'paste_message'
+        if tr.class? 'paste_message'
           log.debug "Paste message from #{name}"
-          body = last_row.search('td[@class="body"]/div').first
+          body = (tr / 'td[@class="body"]/div').first
           
-          if body.search('span[@class="number_of_lines"]').empty?
+          if (body / 'span[@class="number_of_lines"]').empty?
             log.debug "Normal paste"
           else
-            document.URL.to_s.scan(/(https*:\/\/.*?)\//)
-            url = OSX::NSURL.URLWithString("#{$1}#{body.search('a').first['href']}")
+            url = OSX::NSURL.URLWithString("#{base_url}#{ (body / 'a').first['href'] }")
             log.debug "Truncated paste. URL: #{url.absoluteString}"
             
             growl_channel_message(@room_name, "#{name}: Truncated paste.") do
@@ -95,6 +92,10 @@ module Campfire
     end
     
     private
+    
+    def base_url
+      @base_url ||= document.URL.to_s.scan(/(https*:\/\/.*?)\//)[0][0]
+    end
     
     def matches_criteria?(row)
       row.is_a?(OSX::DOMHTMLTableRowElement) and (Rucola::RCApp.debug? or not row.class?('you')) and not row.class?('timestamp_message')
