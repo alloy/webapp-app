@@ -143,11 +143,12 @@ describe "Campfire::Room, when running" do
     @chat.appendChild(row_node)
   end
   
-  it "should be able to detect if a message is directed at the user" do
-    handler.send(:message_directed_at_me?, 'Eloy: Bla bla bla.').should.be true
-    handler.send(:message_directed_at_me?, 'Eloy Duran: Bla bla bla.').should.be true
-    handler.send(:message_directed_at_me?, 'Eloy, Bla bla bla.').should.be true
-    handler.send(:message_directed_at_me?, 'eloy Bla bla bla.').should.be true
+  it "should be able to detect if a message includes the name of the user" do
+    handler.send(:message_about_or_at_me?, 'Eloy: Bla bla bla.').should.be true
+    handler.send(:message_about_or_at_me?, 'Eloy Duran: Bla bla bla.').should.be true
+    handler.send(:message_about_or_at_me?, 'Eloy, Bla bla bla.').should.be true
+    handler.send(:message_about_or_at_me?, 'eloy Bla bla bla.').should.be true
+    handler.send(:message_about_or_at_me?, 'Bla eloy bla.').should.be true
   end
   
   it "should use a sticky growl if a message is directed at the user" do

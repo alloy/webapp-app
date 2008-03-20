@@ -45,8 +45,8 @@ module Campfire
             
           end
         else
-          if message_directed_at_me?(message)
-            log.debug "Channel message directed at you from #{name}: #{message}"
+          if message_about_or_at_me?(message)
+            log.debug "Channel message directed at or about you from #{name}: #{message}"
             sticky_growl_channel_message(@room_name, "#{name}: #{message}")
             
             # Check if the message only contains a link.
@@ -75,8 +75,8 @@ module Campfire
       row.is_a?(OSX::DOMHTMLTableRowElement) and (Rucola::RCApp.debug? or not row.class?('you')) and not row.class?('timestamp_message')
     end
     
-    def message_directed_at_me?(message)
-      !!(message.to_s =~ /^#{@first_name}/i)
+    def message_about_or_at_me?(message)
+      message.downcase.include? @first_name.downcase
     end
     
     def growl_channel_message_and_open_url(message, url)
