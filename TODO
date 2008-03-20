@@ -1,7 +1,9 @@
 - WebApp: Status bar!
 - WebApp: Drag 'n Drop support?
 
+- Growl: The default Bring WebApp to the front callback doesn't work anymore.
+
 - Campfire: Apparently it throws you out of a room after ~15 minutes. Pyro seems to do GET request to circumvent this.
 - Campfire: Download growls
-- Campfire: Person entered the room growls
+- Campfire: Person entered the room growls, but don't increase the badge counter!
 - Campfire: Drag 'n Drop support?
