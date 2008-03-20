@@ -36,7 +36,7 @@ describe "Campfire::Room, when running" do
   end
   
   it "should parse the name of the user by getting the last enter message after the first room page has been loaded" do
-    assigns(:username).should == 'Eloy Duran'
+    [assigns(:first_name), assigns(:last_name)].should == %w{ Eloy Duran }
   end
   
   it "should detect that a new message has been posted in the channel" do
@@ -143,21 +143,26 @@ describe "Campfire::Room, when running" do
     @chat.appendChild(row_node)
   end
   
+  it "should be able to detect if a message is directed at the user" do
+    handler.send(:message_directed_at_me?, 'Eloy: Bla bla bla.').should.be true
+    handler.send(:message_directed_at_me?, 'Eloy Duran: Bla bla bla.').should.be true
+    handler.send(:message_directed_at_me?, 'Eloy, Bla bla bla.').should.be true
+    handler.send(:message_directed_at_me?, 'eloy Bla bla bla.').should.be true
+  end
   
-  
-  # it "should use a sticky growl if a message is directed at the user" do
-  #   row_node = build do
-  #     tr.message_123456! :class => "text_message message user_123456" do
-  #       td.person { span "Someone E." }
-  #       td.body { div "Eloy: I'm talking to you!" }
-  #     end
-  #   end
-  #   
-  #   handler.expects(:growl_channel_message).times(0)
-  #   handler.expects(:increase_badge_counter!).times(0)
-  #   
-  #   @chat.appendChild(row_node)
-  # end
+  it "should use a sticky growl if a message is directed at the user" do
+    row_node = build do
+      tr.message_123456! :class => "text_message message user_123456" do
+        td.person { span "Someone E." }
+        td.body { div "Eloy: I'm talking to you!" }
+      end
+    end
+    
+    handler.expects(:sticky_growl_channel_message).times(1)
+    handler.expects(:increase_badge_counter!).times(1)
+    
+    @chat.appendChild(row_node)
+  end
   
   private
   

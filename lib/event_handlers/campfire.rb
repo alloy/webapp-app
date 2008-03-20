@@ -11,9 +11,12 @@ module Campfire
     
     # Get the username.
     on_page_loaded do |url, title|
-      if @username.nil?
-        user_id = document.find('#chat tr').last['class'].to_s.scan(/user_\d+/).first
-        @username = document.find(:first, "##{user_id} span").textContent.to_s
+      if @first_name.nil?
+        if row = document.find('#chat tr').last
+          user_id = row['class'].to_s.scan(/user_\d+/).first
+          @first_name, @last_name = document.find(:first, "##{user_id} span").textContent.to_s.split(' ')
+          log.debug "Parsed username: #{@first_name} #{@last_name}"
+        end
       end
     end
     
@@ -46,8 +49,13 @@ module Campfire
             
           end
         else
-          log.debug "Channel message from #{name}: #{message}"
-          growl_channel_message(@room_name, "#{name}: #{message}")
+          if message_directed_at_me?(message)
+            log.debug "Channel message directed at you from #{name}: #{message}"
+            sticky_growl_channel_message(@room_name, "#{name}: #{message}")
+          else
+            log.debug "Channel message from #{name}: #{message}"
+            growl_channel_message(@room_name, "#{name}: #{message}")
+          end
         end
       end
     end
@@ -60,6 +68,10 @@ module Campfire
     
     def matches_criteria?(row)
       row.is_a?(OSX::DOMHTMLTableRowElement) and (Rucola::RCApp.debug? or not row.class?('you')) and not row.class?('timestamp_message')
+    end
+    
+    def message_directed_at_me?(message)
+      !!(message.to_s =~ /^#{@first_name}/i)
     end
   end
 end
