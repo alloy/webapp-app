@@ -47,18 +47,22 @@ class OSX::DOMElement
     options = { :limit => :all }
     options.merge!(args.pop) if args.last.is_a? Hash
     
-    case args.first
-    when String
-      if args.length == 1
-        query = args.first
-      else
-        raise ArgumentError
-      end
-    when Symbol
-      if args.length == 1
-        options[:limit] = args.first
-      elsif args.length == 2
-        options[:limit], query = args
+    unless args.empty?
+      case args.first
+      when String
+        if args.length == 1
+          query = args.first
+        else
+          raise ArgumentError
+        end
+      when Symbol
+        if args.length == 1
+          options[:limit] = args.first
+        elsif args.length == 2 and args.last.is_a?(String)
+          options[:limit], query = args
+        else
+          raise ArgumentError
+        end
       else
         raise ArgumentError
       end
@@ -72,8 +76,6 @@ class OSX::DOMElement
       find_with_css(options.delete(:css), options)
     end
   end
-  
-  private
   
   def find_with_xpath(query, options = {})
     options[:limit] ||= :all

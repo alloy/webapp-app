@@ -156,9 +156,9 @@ describe "DOM Extensions" do
     result.should.be.instance_of OSX::DOMHTMLParagraphElement
     result.innerText.should == 'baz1'
     
-    # lambda {
-    #   div_node.find_with_css('p', :limit => :limit)
-    # }.should.raise(ArgumentError)
+    lambda { div_node.find('p', 'span') }.should.raise(ArgumentError)
+    lambda { div_node.find(:first, :all) }.should.raise(ArgumentError)
+    lambda { div_node.find({}, {}) }.should.raise(ArgumentError)
   end
   
   private
