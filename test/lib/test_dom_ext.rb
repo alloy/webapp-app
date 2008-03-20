@@ -161,6 +161,12 @@ describe "DOM Extensions" do
     lambda { div_node.find({}, {}) }.should.raise(ArgumentError)
   end
   
+  it "should also be possible to use the #find method on a document" do
+    @webView.mainFrame.DOMDocument.should.respond_to :find
+    @webView.mainFrame.DOMDocument.should.respond_to :find_with_css
+    @webView.mainFrame.DOMDocument.should.respond_to :find_with_xpath
+  end
+  
   private
   
   def build(&block)
