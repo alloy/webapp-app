@@ -35,6 +35,10 @@ describe "Campfire::Room, when running" do
     assigns(:room_name).should == 'WebAppTestRoom'
   end
   
+  it "should parse the name of the user by getting the last enter message after the first room page has been loaded" do
+    assigns(:username).should == 'Eloy Duran'
+  end
+  
   it "should detect that a new message has been posted in the channel" do
     row_node = build do
       tr.message_123456! :class => "text_message message user_123456" do
@@ -138,6 +142,22 @@ describe "Campfire::Room, when running" do
     
     @chat.appendChild(row_node)
   end
+  
+  
+  
+  # it "should use a sticky growl if a message is directed at the user" do
+  #   row_node = build do
+  #     tr.message_123456! :class => "text_message message user_123456" do
+  #       td.person { span "Someone E." }
+  #       td.body { div "Eloy: I'm talking to you!" }
+  #     end
+  #   end
+  #   
+  #   handler.expects(:growl_channel_message).times(0)
+  #   handler.expects(:increase_badge_counter!).times(0)
+  #   
+  #   @chat.appendChild(row_node)
+  # end
   
   private
   

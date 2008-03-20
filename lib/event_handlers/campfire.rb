@@ -3,9 +3,18 @@ module Campfire
     plugin :growl, :channel_message => 'Received a new channel message.'
     plugin :badge
     
+    # Get the room name.
     on_page_loaded do |url, title|
       @room_name = title.sub(/^Campfire: /, '')
       log.debug "Parsed channel name: #{@room_name}"
+    end
+    
+    # Get the username.
+    on_page_loaded do |url, title|
+      if @username.nil?
+        user_id = document.find('#chat tr').last['class'].to_s.scan(/user_\d+/).first
+        @username = document.find(:first, "##{user_id} span").textContent.to_s
+      end
     end
     
     # - Also truncate the paste message even more if it has been tuncated so the growls don't get too big.
