@@ -20,9 +20,6 @@ module Campfire
       end
     end
     
-    # - Also truncate the paste message even more if it has been tuncated so the growls don't get too big.
-    # - Check if a message was directed at 'me' and make the growl sticky.
-    # - If a message only contains a link, make clicking the growl open the link in a browser.
     on_event('DOMNodeInserted', :conditions => { :id => 'chat' }) do |event, node|
       tr = node.lastChild
       
@@ -35,12 +32,11 @@ module Campfire
         if tr.class? 'paste_message'
           body = tr.find(:first, 'td.body div')
           
+          # Check if it was a truncated paste.
           if body.find(:first, 'span.number_of_lines')
-            url = OSX::NSURL.URLWithString("#{base_url}#{ body.find(:first, 'a')['href'] }")
-            log.debug "Truncated paste. from #{name}. URL: #{url.absoluteString}"
-            growl_channel_message(@room_name, "#{name}: Truncated paste.") do
-              OSX::NSWorkspace.sharedWorkspace.openURL(url)
-            end
+            url = "#{base_url}#{ body.find(:first, 'a')['href'] }"
+            log.debug "Truncated paste. from #{name}. URL: #{url}"
+            growl_channel_message_and_open_url("#{name}: Truncated paste.", url)
             
           else
             paste = body.find(:first, 'pre code').innerHTML
@@ -52,7 +48,16 @@ module Campfire
           if message_directed_at_me?(message)
             log.debug "Channel message directed at you from #{name}: #{message}"
             sticky_growl_channel_message(@room_name, "#{name}: #{message}")
+            
+            # Check if the message only contains a link.
+          elsif a = tr.find(:first, "td.body a")
+            url = a['href']
+            message = "#{name}: #{url}"
+            log.debug "URL only message from #{message}"
+            growl_channel_message_and_open_url(message, url)
+            
           else
+            # Normal channel message.
             log.debug "Channel message from #{name}: #{message}"
             growl_channel_message(@room_name, "#{name}: #{message}")
           end
@@ -72,6 +77,12 @@ module Campfire
     
     def message_directed_at_me?(message)
       !!(message.to_s =~ /^#{@first_name}/i)
+    end
+    
+    def growl_channel_message_and_open_url(message, url)
+      growl_channel_message(@room_name, message) do
+        OSX::NSWorkspace.sharedWorkspace.openURL(OSX::NSURL.URLWithString(url))
+      end
     end
   end
 end

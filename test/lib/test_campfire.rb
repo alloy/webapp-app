@@ -138,7 +138,7 @@ describe "Campfire::Room, when running" do
     end
     
     handler.expects(:increase_badge_counter!)
-    handler.expects(:growl_channel_message).with('WebAppTestRoom', "Eloy: Truncated paste.")
+    handler.expects(:growl_channel_message_and_open_url).with("Eloy: Truncated paste.", "#{BASE_URL}/room/123456/paste/123456")
     
     @chat.appendChild(row_node)
   end
@@ -160,6 +160,24 @@ describe "Campfire::Room, when running" do
     
     handler.expects(:sticky_growl_channel_message).times(1)
     handler.expects(:increase_badge_counter!).times(1)
+    
+    @chat.appendChild(row_node)
+  end
+  
+  it "should open a link in the browser if a growl is clicked for a url only message" do
+    url = "http://example.com/12345/bla?q=ja%20ja"
+    
+    row_node = build do
+      tr.message_123456! :class => "text_message message user_123456" do
+        td.person { span "Someone E." }
+        td.body do
+          a({ :href => url, :target => '_blank' }, url)
+        end
+      end
+    end
+    
+    handler.expects(:growl_channel_message_and_open_url).with("Someone: #{url}", url)
+    handler.expects(:increase_badge_counter!)
     
     @chat.appendChild(row_node)
   end
