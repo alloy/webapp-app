@@ -45,6 +45,7 @@ module EventHandlerTestHelper
   def load_page(url, source)
     webView.mainFrame.loadHTMLString_baseURL(source, OSX::NSURL.URLWithString(url))
     sleep 0.25 while webView.loading?
+    sleep 1
     handler.register_dom_observers!
   end
 end

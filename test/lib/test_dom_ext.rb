@@ -68,14 +68,97 @@ describe "DOM Extensions" do
         p.bar 'foo'
         p 'bar'
         span do
-          p 'baz'
+          p 'baz1'
+          p.baz 'baz2'
         end
       end
     end
     
-    div_node.search('p[@class="bar"]').length.should.be 1
-    div_node.search('p').length.should.be 2
-    (div_node / 'span/p').length.should.be 1
+    result = div_node.find_with_xpath('p[@class="bar"]')
+    result.should.be.instance_of Array
+    result.length.should.be 1
+    
+    result = div_node.find_with_xpath('p', :limit => :all)
+    result.should.be.instance_of Array
+    result.length.should.be 2
+    
+    result = div_node.find_with_xpath('p', :limit => :first)
+    result.should.be.instance_of OSX::DOMHTMLParagraphElement
+    result.innerText.should == 'foo'
+    
+    lambda {
+      div_node.find_with_xpath('p', :limit => :limit)
+    }.should.raise(ArgumentError)
+  end
+  
+  it "should be possible to search with css" do
+    div_node = build do
+      div do
+        p.bar 'foo'
+        p 'bar'
+        span do
+          p 'baz1'
+          p.baz 'baz2'
+        end
+      end
+    end
+    
+    result = div_node.find_with_css('p.bar')
+    result.should.be.instance_of Array
+    result.length.should.be 1
+    
+    result = div_node.find_with_css('span p', :limit => :all)
+    result.should.be.instance_of Array
+    result.length.should.be 2
+    
+    result = div_node.find_with_css('p', :limit => :all)
+    result.should.be.instance_of Array
+    result.length.should.be 4
+    
+    result = div_node.find_with_css('p', :limit => :first)
+    result.should.be.instance_of OSX::DOMHTMLParagraphElement
+    result.innerText.should == 'foo'
+    
+    lambda {
+      div_node.find_with_css('p', :limit => :limit)
+    }.should.raise(ArgumentError)
+  end
+  
+  it "should be possible to search to use the find() shortcut" do
+    div_node = build do
+      div do
+        p.bar 'foo'
+        p 'bar'
+        span do
+          p 'baz1'
+          p.baz 'baz2'
+        end
+      end
+    end
+    
+    result = div_node.find('p.bar')
+    result.should.be.instance_of Array
+    result.length.should.be 1
+    
+    result = div_node.find('span p')
+    result.should.be.instance_of Array
+    result.length.should.be 2
+    
+    result = div_node.find(:first, 'span p')
+    result.should.be.instance_of OSX::DOMHTMLParagraphElement
+    result.innerText.should == 'baz1'
+    
+    result = div_node.find(:xpath => 'span/p')
+    result.should.be.instance_of Array
+    result.length.should.be 2
+    
+    result = div_node.find(:first, :xpath => 'span/p')
+    result.should.be.instance_of OSX::DOMHTMLParagraphElement
+    result.innerText.should == 'baz1'
+    
+    # lambda {
+    #   div_node.find_with_css('p', :limit => :limit)
+    # }.should.raise(ArgumentError)
   end
   
   private

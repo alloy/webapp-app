@@ -1,5 +1,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
+#Rucola::Log.instance.level = 0
+
 require "lib/event_handlers/campfire"
 
 BASE_HOST = 'example.campfirenow.com'
@@ -102,9 +104,7 @@ describe "Campfire::Room, when running" do
     end
     
     handler.expects(:increase_badge_counter!)
-    handler.expects(:growl_channel_message).with do |room, message|
-      room == 'WebAppTestRoom' and message == "Eloy pasted: some code"
-    end
+    handler.expects(:growl_channel_message).with('WebAppTestRoom', 'Eloy pasted: some code')
     
     @chat.appendChild(row_node)
   end
@@ -134,9 +134,7 @@ describe "Campfire::Room, when running" do
     end
     
     handler.expects(:increase_badge_counter!)
-    handler.expects(:growl_channel_message).with do |room, message|
-      room == 'WebAppTestRoom' and message == "Eloy: Truncated paste."
-    end
+    handler.expects(:growl_channel_message).with('WebAppTestRoom', "Eloy: Truncated paste.")
     
     @chat.appendChild(row_node)
   end

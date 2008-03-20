@@ -14,6 +14,15 @@ class OSX::DOMNode
   end
 end
 
+class OSX::DOMNodeList
+  # Returns the nodes in the list in an array.
+  def to_a
+    ary = []
+    (0..(length - 1)).each { |idx| ary << item(idx) }
+    ary
+  end
+end
+
 class OSX::DOMElement
   # Returns true or false indicating wether or not an element includes the given class.
   def class?(klass)
@@ -34,14 +43,67 @@ class OSX::DOMElement
     end
   end
   
-  # Performs an xpath query and returns the results in an array.
-  def search(query)
-    result = ownerDocument.evaluate_contextNode_resolver_type_inResult(query, self, nil, OSX::DOM_ANY_TYPE, nil)
-    ary = []
-    while node = result.iterateNext
-      ary << node
+  def find(*args)
+    options = { :limit => :all }
+    options.merge!(args.pop) if args.last.is_a? Hash
+    
+    case args.first
+    when String
+      if args.length == 1
+        query = args.first
+      else
+        raise ArgumentError
+      end
+    when Symbol
+      if args.length == 1
+        options[:limit] = args.first
+      elsif args.length == 2
+        options[:limit], query = args
+      else
+        raise ArgumentError
+      end
     end
-    ary
+    
+    options[:css] ||= query unless options[:xpath]
+    
+    if options[:xpath]
+      find_with_xpath(options.delete(:xpath), options)
+    else
+      find_with_css(options.delete(:css), options)
+    end
   end
-  alias_method :/, :search
+  
+  private
+  
+  def find_with_xpath(query, options = {})
+    options[:limit] ||= :all
+    
+    case options[:limit]
+    when :all
+      result = ownerDocument.evaluate_contextNode_resolver_type_inResult(query, self, nil, OSX::DOM_ANY_TYPE, nil)
+      ary = []
+      while node = result.iterateNext
+        ary << node
+      end
+      ary
+    when :first
+      ownerDocument.evaluate_contextNode_resolver_type_inResult(query, self, nil, OSX::DOM_ANY_TYPE, nil).iterateNext
+    else
+      raise ArgumentError, "Non valid argument for options[:limit] was supplied: ':#{options[:limit]}'. Should be :all or :first."
+    end
+  end
+  
+  def find_with_css(query, options = {})
+    options[:limit] ||= :all
+    
+    case options[:limit]
+    when :all
+      querySelectorAll(query).to_a
+    when :first
+      querySelector(query)
+    else
+      raise ArgumentError, "Non valid argument for options[:limit] was supplied: ':#{options[:limit]}'. Should be :all or :first."
+    end
+  end
+  
 end
