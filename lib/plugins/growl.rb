@@ -66,9 +66,9 @@ module WebApp
         end
         
         def notify(type, title, description, sticky, block)
-          log.debug "Send growl notification. Block: #{block}"
+          log.debug "Send growl notification. Block: #{block || 'WebAppBringToFront'}"
           callbacks[block.object_id.to_s] = block unless block.nil?
-          instance.notify(type, title, description, block.object_id.to_s, sticky)
+          instance.notify(type, title, description, (block.nil? ? 'WebAppBringToFront' : block.object_id.to_s), sticky)
         end
         
         def growl_onClicked(sender, context)
