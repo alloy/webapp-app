@@ -11,7 +11,7 @@ class ApplicationController < Rucola::RCController
     })
     #p OSX::NSUserDefaults.standardUserDefaults.boolForKey('autoFillUserPass')
     
-    url = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']
+    @url = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']
     
     @event_handlers = []
     event_handler_files = Dir.glob "#{RUBYCOCOA_ROOT + 'lib/event_handlers/'}/campfire.rb"
@@ -30,7 +30,7 @@ class ApplicationController < Rucola::RCController
     
     @webview.frameLoadDelegate = self
     @webview.policyDelegate = self
-    @webview.mainFrame.loadRequest OSX::NSURLRequest.requestWithURL(OSX::NSURL.URLWithString(url))
+    @webview.mainFrame.loadRequest OSX::NSURLRequest.requestWithURL(OSX::NSURL.URLWithString(@url))
   end
   
   def webView_didFinishLoadForFrame(webView, frame)
@@ -39,9 +39,22 @@ class ApplicationController < Rucola::RCController
   end
   
   def webView_decidePolicyForNavigationAction_request_frame_decisionListener(webView, info, request, frame, listener)
-    navigationType = info[OSX::WebActionNavigationTypeKey].intValue
-    OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView) if navigationType == OSX::WebNavigationTypeFormSubmitted
     log.debug "Request done for: #{request.URL.absoluteString}"
-    listener.use
+    case info[OSX::WebActionNavigationTypeKey].intValue
+    when OSX::WebNavigationTypeFormSubmitted
+      OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView)
+      listener.use
+    when OSX::WebNavigationTypeLinkClicked
+      #if request.URL.absoluteString.to_s.sub(/^https*:\/\//, '') =~ /^#{@url.to_s.sub(/^https*:\/\//, '')}/
+        listener.use
+      # else
+      #   listener.ignore
+      #   OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
+      # end
+    when OSX::WebNavigationTypeOther
+      listener.use
+    else
+      listener.ignore
+    end
   end
 end
