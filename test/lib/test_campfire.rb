@@ -47,7 +47,7 @@ describe "Campfire::Room, when running" do
       end
     end
     
-    handler.expects(:growl_channel_message).with('WebAppTestRoom', "Eloy: Hello world!")
+    handler.expects(:growl_message).with('WebAppTestRoom', "Eloy: Hello world!")
     handler.expects(:increase_badge_counter!)
     
     @chat.appendChild(row_node)
@@ -56,7 +56,7 @@ describe "Campfire::Room, when running" do
   it "should only handle nodes which are table row nodes" do
     div_node = build { div "whatever" }
     
-    handler.expects(:growl_channel_message).times(0)
+    handler.expects(:growl_message).times(0)
     handler.expects(:increase_badge_counter!).times(0)
     
     @chat.appendChild(div_node)
@@ -70,7 +70,7 @@ describe "Campfire::Room, when running" do
       end
     end
     
-    handler.expects(:growl_channel_message).times(0)
+    handler.expects(:growl_message).times(0)
     handler.expects(:increase_badge_counter!).times(0)
     
     @chat.appendChild(row_node)
@@ -81,7 +81,7 @@ describe "Campfire::Room, when running" do
       tr.message_123456! :class => "timestamp_message message"
     end
     
-    handler.expects(:growl_channel_message).times(0)
+    handler.expects(:growl_message).times(0)
     handler.expects(:increase_badge_counter!).times(0)
     
     @chat.appendChild(row_node)
@@ -108,7 +108,7 @@ describe "Campfire::Room, when running" do
     end
     
     handler.expects(:increase_badge_counter!)
-    handler.expects(:growl_channel_message).with('WebAppTestRoom', 'Eloy pasted: some code')
+    handler.expects(:growl_message).with('WebAppTestRoom', 'Eloy pasted: some code')
     
     @chat.appendChild(row_node)
   end
@@ -138,7 +138,7 @@ describe "Campfire::Room, when running" do
     end
     
     handler.expects(:increase_badge_counter!)
-    handler.expects(:growl_channel_message_and_open_url).with("Eloy: Truncated paste.", "#{BASE_URL}/room/123456/paste/123456")
+    handler.expects(:growl_message_and_open_url).with("Eloy: Truncated paste.", "#{BASE_URL}/room/123456/paste/123456")
     
     @chat.appendChild(row_node)
   end
@@ -159,7 +159,7 @@ describe "Campfire::Room, when running" do
       end
     end
     
-    handler.expects(:sticky_growl_channel_message).times(1)
+    handler.expects(:sticky_growl_message_about_me).times(1)
     handler.expects(:increase_badge_counter!).times(1)
     
     @chat.appendChild(row_node)
@@ -177,7 +177,7 @@ describe "Campfire::Room, when running" do
       end
     end
     
-    handler.expects(:growl_channel_message_and_open_url).with("Someone: #{url}", url)
+    handler.expects(:growl_message_and_open_url).with("Someone: #{url}", url)
     handler.expects(:increase_badge_counter!)
     
     @chat.appendChild(row_node)

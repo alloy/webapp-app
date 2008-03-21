@@ -1,6 +1,6 @@
 module Campfire
   class Room < WebApp::EventHandler(/\/room\/\d+$/)
-    plugin :growl, :channel_message => 'Received a new channel message.'
+    plugin :growl, :message => 'Message received', :message_about_me => 'Message about/targeted at me'
     plugin :badge
     
     # Get the room name.
@@ -36,30 +36,30 @@ module Campfire
           if body.find(:first, 'span.number_of_lines')
             url = "#{base_url}#{ body.find(:first, 'a')['href'] }"
             log.debug "Truncated paste. from #{name}. URL: #{url}"
-            growl_channel_message_and_open_url("#{name}: Truncated paste.", url)
+            growl_message_and_open_url("#{name}: Truncated paste.", url)
             
           else
             paste = body.find(:first, 'pre code').innerHTML
             log.debug "Normal paste from #{name}: #{paste}"
-            growl_channel_message(@room_name, "#{name} pasted: #{paste}")
+            growl_message(@room_name, "#{name} pasted: #{paste}")
             
           end
         else
           if message_about_or_at_me?(message)
             log.debug "Channel message directed at or about you from #{name}: #{message}"
-            sticky_growl_channel_message(@room_name, "#{name}: #{message}")
+            sticky_growl_message_about_me(@room_name, "#{name}: #{message}")
             
             # Check if the message only contains a link.
           elsif a = tr.find(:first, "td.body a")
             url = a['href']
             message = "#{name}: #{url}"
             log.debug "URL only message from #{message}"
-            growl_channel_message_and_open_url(message, url)
+            growl_message_and_open_url(message, url)
             
           else
             # Normal channel message.
             log.debug "Channel message from #{name}: #{message}"
-            growl_channel_message(@room_name, "#{name}: #{message}")
+            growl_message(@room_name, "#{name}: #{message}")
           end
         end
       end
@@ -79,8 +79,8 @@ module Campfire
       message.downcase.include? @first_name.downcase
     end
     
-    def growl_channel_message_and_open_url(message, url)
-      growl_channel_message(@room_name, message) do
+    def growl_message_and_open_url(message, url)
+      growl_message(@room_name, message) do
         OSX::NSWorkspace.sharedWorkspace.openURL(OSX::NSURL.URLWithString(url))
       end
     end
