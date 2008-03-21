@@ -40,21 +40,13 @@ class ApplicationController < Rucola::RCController
   
   def webView_decidePolicyForNavigationAction_request_frame_decisionListener(webView, info, request, frame, listener)
     log.debug "Request done for: #{request.URL.absoluteString}"
-    case info[OSX::WebActionNavigationTypeKey].intValue
-    when OSX::WebNavigationTypeFormSubmitted
-      OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView)
-      listener.use
-    when OSX::WebNavigationTypeLinkClicked
-      #if request.URL.absoluteString.to_s.sub(/^https*:\/\//, '') =~ /^#{@url.to_s.sub(/^https*:\/\//, '')}/
-        listener.use
-      # else
-      #   listener.ignore
-      #   OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
-      # end
-    when OSX::WebNavigationTypeOther
-      listener.use
-    else
-      listener.ignore
-    end
+    navigationType = info[OSX::WebActionNavigationTypeKey].intValue
+    OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView) if navigationType == OSX::WebNavigationTypeFormSubmitted
+    listener.use
+  end
+  
+  def webView_decidePolicyForNewWindowAction_request_newFrameName_decisionListener(webView, info, request, newFrameName, listener)
+    listener.ignore
+    OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
   end
 end
