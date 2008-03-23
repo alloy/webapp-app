@@ -16,6 +16,8 @@ class ApplicationController < Rucola::RCController
       'autoFillUserPass' => true
     })
     
+    @main_window.title = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL'].to_s.scan(/https*:\/\/(.*?)\/*$/)[0][0]
+    
     setup_tabView!
     setup_tabBarController!
     
