@@ -11,8 +11,6 @@ class ApplicationController < Rucola::RCController
       'autoFillUserPass' => true
     })
     
-    WebApp::Plugins.start
-    
     setup_tabView!
     setup_tabBarController!
     
@@ -23,6 +21,7 @@ class ApplicationController < Rucola::RCController
   def addWebViewTab(sender = nil)
     @webViewControllers << WebViewController.alloc.init
     @tabView.addTabViewItem @webViewControllers.last.tabViewItem
+    WebApp::Plugins.start
   end
   
   def tabView_didCloseTabViewItem(tabView, tabViewItem)
