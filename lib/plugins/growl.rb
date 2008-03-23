@@ -4,6 +4,7 @@ module WebApp
       
       # This is the method that will make you growl!
       def growl(type, title, description, sticky = false, block = nil)
+        block = bring_app_and_tab_to_the_front_proc if block.nil?
         WebApp::Plugins::Growl.notify(type, title, description, sticky, block) if not OSX::NSApp.active? or Rucola::RCApp.debug?
       end
       
@@ -78,7 +79,7 @@ module WebApp
             WebApp::Plugins::Growl::BRING_TO_FRONT.call
           else
             callbacks[context.to_s].call
-            callbacks[context.to_s] = nil
+            #callbacks[context.to_s] = nil
           end
         end
       end

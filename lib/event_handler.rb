@@ -86,6 +86,13 @@ module WebApp
       end
     end
     
+    def bring_app_and_tab_to_the_front_proc
+      @bring_app_and_tab_to_the_front ||= Proc.new do
+        OSX::NSApp.activateIgnoringOtherApps(true)
+        @webViewController.tabViewItem.tabView.selectTabViewItem(@webViewController.tabViewItem)
+      end
+    end
+    
     def register_dom_observers! # :nodoc:
       @registered_events_for_this_page = [] # flush the registered events
       @document = @webView.mainFrame.DOMDocument
