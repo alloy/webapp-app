@@ -14,6 +14,7 @@ class WebViewController < OSX::NSObject
       
       @webView.frameLoadDelegate = self
       @webView.policyDelegate = self
+      @webView.setUIDelegate(self)
       @webView.mainFrame.loadRequest OSX::NSURLRequest.requestWithURL(OSX::NSURL.URLWithString(@url))
       
       self
@@ -39,6 +40,20 @@ class WebViewController < OSX::NSObject
   def webView_decidePolicyForNewWindowAction_request_newFrameName_decisionListener(webView, info, request, newFrameName, listener)
     listener.ignore
     OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
+  end
+  
+  def webView_runOpenPanelForFileButtonWithResultListener(webView, listener)
+    panel = OSX::NSOpenPanel.openPanel
+    panel.allowsMultipleSelection = false
+    panel.canChooseFiles = true
+    panel.canChooseDirectories = false
+    result = panel.runModalForTypes(nil)
+    
+    if result == OSX::NSOKButton
+      listener.chooseFilename(panel.filenames.first)
+    else
+      listener.cancel
+    end
   end
   
   private
