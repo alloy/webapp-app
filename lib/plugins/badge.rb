@@ -15,7 +15,7 @@ module WebApp
         end
         
         def start
-          @global_badge = GlobalBadge.alloc.init
+          @global_badge ||= GlobalBadge.alloc.init
         end
         
         def instance
@@ -24,7 +24,6 @@ module WebApp
       end
       
       class GlobalBadge < OSX::NSObject
-        # FIXME: For some reason this gets instantiated multiple times, should make it a real singleton
         def init
           if super_init
             @ctbadge = OSX::CTBadge.alloc.init
