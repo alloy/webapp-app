@@ -23,10 +23,13 @@ class WebViewController < OSX::NSObject
   def webView_didFinishLoadForFrame(webView, frame)
     OSX::SRAutoFillManager.sharedInstance.fillFormsWithWebView(webView)
     @event_handlers.each { |e| e.register_dom_observers! }
+    self.isProcessing = false
   end
   
   def webView_decidePolicyForNavigationAction_request_frame_decisionListener(webView, info, request, frame, listener)
     log.debug "Request done for: #{request.URL.absoluteString}"
+    self.isProcessing = true
+    
     navigationType = info[OSX::WebActionNavigationTypeKey].intValue
     OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView) if navigationType == OSX::WebNavigationTypeFormSubmitted
     listener.use
