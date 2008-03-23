@@ -2,51 +2,47 @@ $WEBAPP_DEBUG = true
 
 class ApplicationController < Rucola::RCController
   ib_outlet :main_window
-  ib_outlet :webview
+  ib_outlet :tabView
+  ib_outlet :tabBarController
   
   def awakeFromNib
     # Make sure that SRAutoFillManager stores/retrieves usernames & passwords.
     OSX::NSUserDefaults.standardUserDefaults.registerDefaults({
       'autoFillUserPass' => true
     })
-    #p OSX::NSUserDefaults.standardUserDefaults.boolForKey('autoFillUserPass')
-    
-    @url = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']
-    
-    @event_handlers = []
-    event_handler_files = Dir.glob "#{RUBYCOCOA_ROOT + 'lib/event_handlers/'}/campfire.rb"
-    
-    event_handler_files.each do |event_handler_file|
-      require event_handler_file
-      #p WebApp::EventHandler::event_handlers
-      
-      #event_handler = File.constantize(event_handler_file).alloc.init
-      event_handler = Campfire::Room.alloc.init
-      event_handler.webView = @webview
-      @event_handlers << event_handler
-    end
     
     WebApp::Plugins.start
     
-    @webview.frameLoadDelegate = self
-    @webview.policyDelegate = self
-    @webview.mainFrame.loadRequest OSX::NSURLRequest.requestWithURL(OSX::NSURL.URLWithString(@url))
+    setup_tabView!
+    setup_tabBarController!
+    
+    @webViewControllers = []
+    addWebViewTab
   end
   
-  def webView_didFinishLoadForFrame(webView, frame)
-    OSX::SRAutoFillManager.sharedInstance.fillFormsWithWebView(webView)
-    @event_handlers.each { |e| e.register_dom_observers! }
+  def addWebViewTab(sender = nil)
+    @webViewControllers << WebViewController.alloc.init
+    @tabView.addTabViewItem @webViewControllers.last.tabViewItem
   end
   
-  def webView_decidePolicyForNavigationAction_request_frame_decisionListener(webView, info, request, frame, listener)
-    log.debug "Request done for: #{request.URL.absoluteString}"
-    navigationType = info[OSX::WebActionNavigationTypeKey].intValue
-    OSX::SRAutoFillManager.sharedInstance.registerFormsWithWebView(webView) if navigationType == OSX::WebNavigationTypeFormSubmitted
-    listener.use
+  def tabView_didCloseTabViewItem(tabView, tabViewItem)
+    @webViewControllers.reject! { |wvc| wvc.tabViewItem == tabViewItem }
   end
   
-  def webView_decidePolicyForNewWindowAction_request_newFrameName_decisionListener(webView, info, request, newFrameName, listener)
-    listener.ignore
-    OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
+  private
+  
+  def setup_tabView!
+    @tabView.removeTabViewItem(@tabView.tabViewItemAtIndex(0))
+    @tabView.delegate = @tabBarController
+  end
+  
+  def setup_tabBarController!
+    @tabBarController.tabView = @tabView
+    @tabBarController.setStyleNamed('Unified')
+    @tabBarController.delegate = self
+    @tabBarController.showAddTabButton = true
+    button = @tabBarController.addTabButton
+    button.target = self
+    button.action = :addWebViewTab
   end
 end

@@ -43,13 +43,6 @@ module WebApp
       @registered_events_for_this_page = []
     end
     
-    # Returns the body of the page as a Hpridoct document.
-    def page_body
-      # FIXME: check how we can get the complete document instead of only the `body`,
-      # maybe we should just get it from the WebFrame instance...?
-      Hpricot(@webView.mainFrame.DOMDocument.body.outerHTML.to_s)
-    end
-    
     class << self
       # Called whenever a page is done loading. It takes 2 arguments, which are the page +url+ and the page +title+.
       #

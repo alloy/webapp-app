@@ -18,6 +18,8 @@
 		514292D10CC66CDC00F9CEEF /* test in Resources */ = {isa = PBXBuildFile; fileRef = 514292CA0CC66CDC00F9CEEF /* test */; };
 		514292D20CC66CDC00F9CEEF /* vendor in Resources */ = {isa = PBXBuildFile; fileRef = 514292CC0CC66CDC00F9CEEF /* vendor */; };
 		514292EF0CC6823A00F9CEEF /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 514292ED0CC6823A00F9CEEF /* MainMenu.nib */; };
+		517444A20D96B6D70029B58A /* PSMTabBarControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 517444A10D96B6D70029B58A /* PSMTabBarControl.framework */; };
+		517444A50D96B6E00029B58A /* PSMTabBarControl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 517444A10D96B6D70029B58A /* PSMTabBarControl.framework */; };
 		5190E7260D730A17000D9E53 /* CTBadge.h in Headers */ = {isa = PBXBuildFile; fileRef = 5190E7240D730A17000D9E53 /* CTBadge.h */; };
 		5190E7270D730A17000D9E53 /* CTBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190E7250D730A17000D9E53 /* CTBadge.m */; };
 		5190E72A0D730A3C000D9E53 /* CTGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 5190E7280D730A3C000D9E53 /* CTGradient.h */; };
@@ -41,6 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				517444A50D96B6E00029B58A /* PSMTabBarControl.framework in Copy Frameworks */,
 				5190E74D0D7440D9000D9E53 /* HMDTFoundation.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -62,6 +65,7 @@
 		514292CA0CC66CDC00F9CEEF /* test */ = {isa = PBXFileReference; lastKnownFileType = folder; path = test; sourceTree = "<group>"; };
 		514292CC0CC66CDC00F9CEEF /* vendor */ = {isa = PBXFileReference; lastKnownFileType = folder; path = vendor; sourceTree = "<group>"; };
 		514292EE0CC6823A00F9CEEF /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = misc/English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		517444A10D96B6D70029B58A /* PSMTabBarControl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PSMTabBarControl.framework; path = vendor/frameworks/PSMTabBarControl.framework; sourceTree = "<group>"; };
 		5190E7240D730A17000D9E53 /* CTBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTBadge.h; path = objc/CTBadge.h; sourceTree = "<group>"; };
 		5190E7250D730A17000D9E53 /* CTBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTBadge.m; path = objc/CTBadge.m; sourceTree = "<group>"; };
 		5190E7280D730A3C000D9E53 /* CTGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTGradient.h; path = objc/CTGradient.h; sourceTree = "<group>"; };
@@ -88,6 +92,7 @@
 				4DDCA70D0ACC9A6100E082CE /* RubyCocoa.framework in Frameworks */,
 				5190E74A0D7440CD000D9E53 /* HMDTFoundation.framework in Frameworks */,
 				5190E7C90D744333000D9E53 /* Security.framework in Frameworks */,
+				517444A20D96B6D70029B58A /* PSMTabBarControl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				5190E7490D7440CD000D9E53 /* HMDTFoundation.framework */,
+				517444A10D96B6D70029B58A /* PSMTabBarControl.framework */,
 				5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */,
 				5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -301,6 +307,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
@@ -310,6 +317,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Release;
 		};
@@ -320,8 +328,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -340,8 +350,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/frameworks\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
