@@ -36,6 +36,7 @@ module WebApp
     
     attr_accessor :delegate
     attr_accessor :webView
+    attr_accessor :webViewController
     attr_reader :badge_counter
     
     def initialize

@@ -5,7 +5,7 @@ module WebApp
       # Increases the badge counter on the applications dock icon unless the app is already visible.
       def increase_badge_counter!
         # TODO: also keep a counter here, so later on when we have tabs we can keep a count per tab.
-        # (@badge_counter ||= 0) += 1
+        webViewController.objectCount += 1
         WebApp::Plugins::Badge.instance.increase_badge_counter!
       end
       
@@ -24,39 +24,38 @@ module WebApp
       end
       
       class GlobalBadge < OSX::NSObject
+        # FIXME: For some reason this gets instantiated multiple times, should make it a real singleton
         def init
           if super_init
-            @badge_counter = 0
             @ctbadge = OSX::CTBadge.alloc.init
-            
-            OSX::NSNotificationCenter.defaultCenter.objc_send(
-              :addObserver, self,
-                 :selector, :applicationDidBecomeActive,
-                     :name, OSX::NSApplicationDidBecomeActiveNotification,
-                   :object, nil
-            )
-            
+            OSX::NSApp.delegate.counterDelegate = self
             self
           end
         end
         
+        def total_count
+          OSX::NSApp.delegate.webViewControllers.inject(0) { |sum, wvc| sum += wvc.objectCount }
+        end
+        
+        def selected_items_count
+          OSX::NSApp.delegate.tabBarController.tabView.selectedTabViewItem.webViewController.objectCount
+        end
+        
         def increase_badge_counter!
-          if not OSX::NSApp.active? or $WEBAPP_DEBUG
-            @badge_counter += 1
-            set_badge_value!
+          if not OSX::NSApp.active? or Rucola::RCApp.debug?
+            set_badge_value total_count
           end
         end
         
-        def applicationDidBecomeActive(notification)
-          @badge_counter = 0
-          set_badge_value!
+        def set_current_badge_value!
+          set_badge_value total_count
         end
         
-        def set_badge_value!
-          if @badge_counter.zero?
+        def set_badge_value(value)
+          if value.zero?
             OSX::NSApp.applicationIconImage = OSX::NSImage.imageNamed('NSApplicationIcon')
           else
-            @ctbadge.badgeApplicationDockIconWithValue_insetX_y(@badge_counter, 3, 0)
+            @ctbadge.badgeApplicationDockIconWithValue_insetX_y(value, 3, 0)
           end
         end
       end

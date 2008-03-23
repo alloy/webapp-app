@@ -1,6 +1,6 @@
 class WebViewController < OSX::NSObject
   kvc_accessor :isProcessing, :icon, :iconName, :objectCount
-  attr_reader :tabViewItem
+  attr_reader :webView, :tabViewItem, :objectController
   
   def init
     if super_init
@@ -51,9 +51,7 @@ class WebViewController < OSX::NSObject
   end
   
   def create_tab_view_item!
-    @tabViewItem = OSX::NSTabViewItem.alloc.initWithIdentifier(@objectController)
-    @tabViewItem.label = "Loading..."
-    @tabViewItem.view = @webView
+    @tabViewItem = OSX::WebViewTabItem.alloc.initWithWebViewController(self)
   end
   
   def setup_event_handlers!
@@ -73,6 +71,7 @@ class WebViewController < OSX::NSObject
     
     require Rucola::RCApp.root_path + "/lib/event_handlers/campfire.rb"
     event_handler = Campfire::Room.alloc.init
+    event_handler.webViewController = self
     event_handler.webView = @webView
     @event_handlers << event_handler
   end
