@@ -23,6 +23,7 @@ class WebViewController < OSX::NSObject
   def webView_didFinishLoadForFrame(webView, frame)
     OSX::SRAutoFillManager.sharedInstance.fillFormsWithWebView(webView)
     @event_handlers.each { |e| e.register_dom_observers! }
+    @tabViewItem.label = @webView.mainFrameTitle
     self.isProcessing = false
   end
   
@@ -51,7 +52,7 @@ class WebViewController < OSX::NSObject
   
   def create_tab_view_item!
     @tabViewItem = OSX::NSTabViewItem.alloc.initWithIdentifier(@objectController)
-    @tabViewItem.label = "Bla: #{object_id}"
+    @tabViewItem.label = "Loading..."
     @tabViewItem.view = @webView
   end
   
