@@ -2,6 +2,8 @@ module WebApp
   class << self
     def EventHandler(url)
       @klass_counter ||= 0
+      @klass_counter += 1
+      
       klass = eval %{
         class WebApp::NamelessEventHandler_#{@klass_counter} < EventHandler
           class << self

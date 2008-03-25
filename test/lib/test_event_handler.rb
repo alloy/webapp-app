@@ -218,6 +218,7 @@ describe "EventHandler, with a global url specified" do
   
   it "should increase the count in the name of the anonymous EventHandler subclass" do
     GlobalUrlEventHandler.name.should.not == GlobalUrlEventHandler2.name
+    GlobalUrlEventHandler.superclass.name.should.not == GlobalUrlEventHandler2.superclass.name
   end
   
   it "should register event handlers with the document if options[:url] matches" do
