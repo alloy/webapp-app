@@ -1,6 +1,8 @@
 module Campfire
   class Room < WebApp::EventHandler(/\/room\/\d+$/)
-    plugin :growl, :message => 'Message received', :message_about_me => 'Message about/targeted at me'
+    plugin :growl, :message => 'Message received',
+                   :message_about_me => 'Message about/targeted at me',
+                   :entered_or_left => 'Enter/leave message'
     plugin :badge
     
     # Get the room name.
@@ -27,39 +29,46 @@ module Campfire
         name, message = tr.find('td').map { |td| td.textContent }
         name = name.split(' ').first
         
-        increase_badge_counter!
-        
-        if tr.class? 'paste_message'
-          body = tr.find(:first, 'td.body div')
+        if tr.class? 'enter_message'
+          log.debug "Someone entered the room: #{name}"
+          growl_entered_or_left(@room_name, "#{name} #{message}")
+          # Don't increase the counter.
           
-          # Check if it was a truncated paste.
-          if body.find(:first, 'span.number_of_lines')
-            url = "#{base_url}#{ body.find(:first, 'a')['href'] }"
-            log.debug "Truncated paste. from #{name}. URL: #{url}"
-            growl_message_and_open_url("#{name}: Truncated paste.", url)
-            
-          else
-            paste = body.find(:first, 'pre code').innerHTML
-            log.debug "Normal paste from #{name}: #{paste}"
-            growl_message(@room_name, "#{name} pasted: #{paste}")
-            
-          end
         else
-          if message_about_or_at_me?(message)
-            log.debug "Channel message directed at or about you from #{name}: #{message}"
-            sticky_growl_message_about_me(@room_name, "#{name}: #{message}")
+          increase_badge_counter!
+          
+          if tr.class? 'paste_message'
+            body = tr.find(:first, 'td.body div')
             
-            # Check if the message only contains a link.
-          elsif a = tr.find(:first, "td.body a")
-            url = a['href']
-            message = "#{name}: #{url}"
-            log.debug "URL only message from #{message}"
-            growl_message_and_open_url(message, url)
-            
+            # Check if it was a truncated paste.
+            if body.find(:first, 'span.number_of_lines')
+              url = "#{base_url}#{ body.find(:first, 'a')['href'] }"
+              log.debug "Truncated paste. from #{name}. URL: #{url}"
+              growl_message_and_open_url("#{name}: Truncated paste.", url)
+              
+            else
+              paste = body.find(:first, 'pre code').innerHTML
+              log.debug "Normal paste from #{name}: #{paste}"
+              growl_message(@room_name, "#{name} pasted: #{paste}")
+              
+            end
           else
-            # Normal channel message.
-            log.debug "Channel message from #{name}: #{message}"
-            growl_message(@room_name, "#{name}: #{message}")
+            if message_about_or_at_me?(message)
+              log.debug "Channel message directed at or about you from #{name}: #{message}"
+              sticky_growl_message_about_me(@room_name, "#{name}: #{message}")
+              
+              # Check if the message only contains a link.
+            elsif a = tr.find(:first, "td.body a")
+              url = a['href']
+              message = "#{name}: #{url}"
+              log.debug "URL only message from #{message}"
+              growl_message_and_open_url(message, url)
+              
+            else
+              # Normal channel message.
+              log.debug "Channel message from #{name}: #{message}"
+              growl_message(@room_name, "#{name}: #{message}")
+            end
           end
         end
       end

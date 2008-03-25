@@ -183,6 +183,34 @@ describe "Campfire::Room, when running" do
     @chat.appendChild(row_node)
   end
   
+  it "should send a enter/leave growl message when people enter the room" do
+    row_node = build do
+      tr.message_123456! :class => "enter_message message user_123456" do
+        td.person { span "Someone E." }
+        td.body { div "has entered the room" }
+      end
+    end
+    
+    handler.expects(:growl_entered_or_left).with("WebAppTestRoom", "Someone has entered the room")
+    handler.expects(:increase_badge_counter!).times(0)
+    
+    @chat.appendChild(row_node)
+  end
+  
+  it "should send a enter/leave growl message when people leave the room" do
+    row_node = build do
+      tr.message_123456! :class => "kick_message message user_123456" do
+        td.person { span "Someone E." }
+        td.body { div "has left the room" }
+      end
+    end
+    
+    handler.expects(:growl_entered_or_left).with("WebAppTestRoom", "Someone has left the room")
+    handler.expects(:increase_badge_counter!).times(0)
+    
+    @chat.appendChild(row_node)
+  end
+  
   private
   
   def build(&block)
