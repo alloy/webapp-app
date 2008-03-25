@@ -16,8 +16,10 @@ module Campfire
       if @first_name.nil?
         if row = document.find('#chat tr').last
           user_id = row['class'].to_s.scan(/user_\d+/).first
-          @first_name, @last_name = document.find(:first, "##{user_id} span").textContent.to_s.split(' ')
-          log.debug "Parsed username: #{@first_name} #{@last_name}"
+          if username = document.find(:first, "##{user_id} span")
+            @first_name, @last_name = username.textContent.to_s.split(' ')
+            log.debug "Parsed username: #{@first_name} #{@last_name}"
+          end
         end
       end
     end
@@ -29,17 +31,17 @@ module Campfire
         name, message = tr.find('td').map { |td| td.textContent }
         name = name.split(' ').first
         
-        # if tr.class? 'enter_message'
-        #   log.debug "Someone entered the room: #{name}"
-        #   growl_entered_or_left(@room_name, "#{name} #{message}")
-        #   # Don't increase the counter.
-        #   
-        # elsif tr.class? 'kick_message'
-        #   log.debug "Someone left the room: #{name}"
-        #   growl_entered_or_left(@room_name, "#{name} #{message}")
-        #   # Don't increase the counter.
-        #   
-        # else
+        if tr.class? 'enter_message'
+          log.debug "Someone entered the room: #{name}"
+          growl_entered_or_left(@room_name, "#{name} #{message}")
+          # Don't increase the counter.
+          
+        elsif tr.class? 'kick_message'
+          log.debug "Someone left the room: #{name}"
+          growl_entered_or_left(@room_name, "#{name} #{message}")
+          # Don't increase the counter.
+          
+        else
           increase_badge_counter!
           
           if tr.class? 'paste_message'
@@ -75,7 +77,7 @@ module Campfire
               growl_message(@room_name, "#{name}: #{message}")
             end
           end
-        #end
+        end
       end
     end
     

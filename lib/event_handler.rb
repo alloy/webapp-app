@@ -38,10 +38,16 @@ module WebApp
     attr_accessor :webView
     attr_accessor :webViewController
     attr_reader :badge_counter
+    attr_reader :bring_app_and_tab_to_the_front
     
     def initialize
       @badge_counter = 0
       @registered_events_for_this_page = []
+      @bring_app_and_tab_to_the_front = Proc.new do
+        OSX::NSApp.activateIgnoringOtherApps(true)
+        log.debug "From bring app to the front proc: #{webViewController.inspect}"
+        webViewController.tabViewItem.tabView.selectTabViewItem(webViewController.tabViewItem)
+      end
     end
     
     class << self
@@ -86,12 +92,12 @@ module WebApp
       end
     end
     
-    def bring_app_and_tab_to_the_front_proc
-      @bring_app_and_tab_to_the_front ||= Proc.new do
-        OSX::NSApp.activateIgnoringOtherApps(true)
-        @webViewController.tabViewItem.tabView.selectTabViewItem(@webViewController.tabViewItem)
-      end
-    end
+    # def bring_app_and_tab_to_the_front_proc
+    #   @bring_app_and_tab_to_the_front ||= Proc.new do
+    #     OSX::NSApp.activateIgnoringOtherApps(true)
+    #     @webViewController.tabViewItem.tabView.selectTabViewItem(@webViewController.tabViewItem)
+    #   end
+    # end
     
     def register_dom_observers! # :nodoc:
       @registered_events_for_this_page = [] # flush the registered events
