@@ -29,17 +29,17 @@ module Campfire
         name, message = tr.find('td').map { |td| td.textContent }
         name = name.split(' ').first
         
-        if tr.class? 'enter_message'
-          log.debug "Someone entered the room: #{name}"
-          growl_entered_or_left(@room_name, "#{name} #{message}")
-          # Don't increase the counter.
-          
-        elsif tr.class? 'kick_message'
-          log.debug "Someone left the room: #{name}"
-          growl_entered_or_left(@room_name, "#{name} #{message}")
-          # Don't increase the counter.
-          
-        else
+        # if tr.class? 'enter_message'
+        #   log.debug "Someone entered the room: #{name}"
+        #   growl_entered_or_left(@room_name, "#{name} #{message}")
+        #   # Don't increase the counter.
+        #   
+        # elsif tr.class? 'kick_message'
+        #   log.debug "Someone left the room: #{name}"
+        #   growl_entered_or_left(@room_name, "#{name} #{message}")
+        #   # Don't increase the counter.
+        #   
+        # else
           increase_badge_counter!
           
           if tr.class? 'paste_message'
@@ -75,7 +75,7 @@ module Campfire
               growl_message(@room_name, "#{name}: #{message}")
             end
           end
-        end
+        #end
       end
     end
     
