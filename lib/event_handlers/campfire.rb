@@ -1,9 +1,9 @@
 module Campfire
   class Room < WebApp::EventHandler(/\/room\/\d+$/)
+    plugin :badge
     plugin :growl, :message => 'Message received',
                    :message_about_me => 'Message about/targeted at me',
                    :entered_or_left => 'Enter/leave message'
-    plugin :badge
     
     # Get the room name.
     on_page_loaded do |url, title|
@@ -31,6 +31,11 @@ module Campfire
         
         if tr.class? 'enter_message'
           log.debug "Someone entered the room: #{name}"
+          growl_entered_or_left(@room_name, "#{name} #{message}")
+          # Don't increase the counter.
+          
+        elsif tr.class? 'kick_message'
+          log.debug "Someone left the room: #{name}"
           growl_entered_or_left(@room_name, "#{name} #{message}")
           # Don't increase the counter.
           
