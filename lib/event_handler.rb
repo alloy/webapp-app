@@ -132,38 +132,10 @@ module WebApp
       node = event.relatedNode
       
       @registered_events_for_this_page.each do |event_handler|
-        # skip if it's not an event we handle or if it's the same node as last time.
-        # TODO: check if we need an option to allow multiple times the same node...
-        
-        # FIXME: Nu tijdelijk terug naar de oude situatie...
         next unless event_matches_handler?(event, event_handler)
-        
-        # next unless event_matches_handler?(event, event_handler) and @last_node != node
-        # @last_node = node.copy
-        
-        # next unless event_matches_handler?(event, event_handler) and @last_node != node.outerHTML
-        # @last_node = node.copy.outerHTML
-        # puts "Last node was:", ''
-        # p @last_node
-        # puts 'Current node is:', ''
-        # p node.outerHTML
-        # # FIXME: Het probleem is dat er soms wel of niet whitespace bij is gekomen....
-        
-        #send(event_handler[:event_handler_method], event, Hpricot(node.outerHTML.to_s)) # hpricot
         log.debug "Calling event handler: #{event_handler[:event_handler_method]}"
         send(event_handler[:event_handler_method], event, node)
       end
-    end
-    
-    # Helper methods
-
-    # Checks if this +content+ is the same as the last time.
-    # It also stores the content so it can be checked the next time.
-    def same_as_last_time?(content)
-      @last_content ||= ''
-      result = (@last_content == content)
-      @last_content = content if result == false
-      result
     end
     
     private
