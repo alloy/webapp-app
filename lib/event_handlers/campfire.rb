@@ -9,6 +9,7 @@ module Campfire
     on_page_loaded do |url, title|
       @room_name = title.sub(/^Campfire: /, '')
       log.debug "Parsed channel name: #{@room_name}"
+      webViewController.tabViewItem.label = @room_name
     end
     
     # Get the username.

@@ -24,7 +24,7 @@ class WebViewController < OSX::NSObject
   def webView_didFinishLoadForFrame(webView, frame)
     OSX::SRAutoFillManager.sharedInstance.fillFormsWithWebView(webView)
     @event_handlers.each { |e| e.register_dom_observers! }
-    @tabViewItem.label = @webView.mainFrameTitle
+    @tabViewItem.label = @webView.mainFrameTitle if @tabViewItem.label == 'Loading...'
     self.isProcessing = false
   end
   
