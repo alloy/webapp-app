@@ -4,8 +4,18 @@ module WebApp
       
       # This is the method that will make you growl!
       def growl(type, title, description, sticky = false, block = nil)
-        block = bring_app_and_tab_to_the_front if block.nil?
-        WebApp::Plugins::Growl.notify(type, title, description, sticky, block) if not OSX::NSApp.active? or Rucola::RCApp.debug?
+        if not OSX::NSApp.active? or Rucola::RCApp.debug?
+          block_object_id = nil
+          if block.nil?
+            block_object_id = @bring_app_and_tab_to_the_front.object_id
+            register_callback(@bring_app_and_tab_to_the_front)
+          else
+            block_object_id = block.object_id
+            register_callback(block)
+          end
+          log.debug "Send #{ "sticky " if sticky }growl notification. Block: #{block_object_id}"
+          WebApp::Plugins::Growl.instance.notify(type, title, description, block_object_id, sticky)
+        end
       end
       
       class << self
@@ -63,23 +73,15 @@ module WebApp
           @callbacks ||= {}
         end
         
-        def notify(type, title, description, sticky, block)
-          log.debug "Send #{ "sticky " if sticky }growl notification. Block: #{block}"
-          callbacks[block.object_id.to_s] = block
-          instance.notify(type, title, description, block.object_id.to_s, sticky)
-        end
-        
         def growl_onClicked(sender, context)
           log.debug "Growl notification clicked: #{context}"
-          callbacks[context.to_s].call
-          #callbacks[context.to_s] = nil
+          OSX::NSNotificationCenter.defaultCenter.postNotificationName_object('WebAppCallbackNotification', context)
         end
       end
       
       # Created by Satoshi Nakagawa.
       # You can redistribute it and/or modify it under the Ruby's license or the GPL2.
       class GrowlBridge < OSX::NSObject
-        #include OSX
         attr_accessor :delegate
         
         GROWL_IS_READY = "Lend Me Some Sugar; I Am Your Neighbor!"

@@ -266,3 +266,28 @@ describe "EventHandler, with a global url specified" do
     @handler.handleEvent(event)
   end
 end
+
+describe "EventHandler, when handling callbacks" do
+  before do
+    @handler = TestEventHandler.alloc.init
+    
+    @proc = Proc.new {}
+    @handler.send(:register_callback, @proc)
+  end
+  
+  it "should add a callback to a hash of callbacks" do
+    @handler.ivar(:callbacks)[@proc.object_id].should.be @proc
+  end
+  
+  it "should call a callback if a callback notification has been received" do
+    notification = OSX::NSNotification.notificationWithName_object_userInfo('WebAppCallbackNotification', @proc.object_id.to_s, nil)
+    @proc.expects(:call)
+    @handler.callback_notification_handler(notification)
+  end
+  
+  it "should not do anything if a callback notification for another event handler has been received" do
+    notification = OSX::NSNotification.notificationWithName_object_userInfo('WebAppCallbackNotification', 123456789.to_s, nil)
+    @proc.expects(:call).times(0)
+    @handler.callback_notification_handler(notification)
+  end
+end

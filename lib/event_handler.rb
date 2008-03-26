@@ -40,11 +40,14 @@ module WebApp
     attr_accessor :webView
     attr_accessor :webViewController
     attr_reader :badge_counter
-    attr_reader :bring_app_and_tab_to_the_front
     
     def initialize
+      @callbacks = {}
       @badge_counter = 0
       @registered_events_for_this_page = []
+      
+      OSX::NSNotificationCenter.defaultCenter.addObserver_selector_name_object(self, :callback_notification_handler, 'WebAppCallbackNotification', nil)
+      
       @bring_app_and_tab_to_the_front = Proc.new do
         OSX::NSApp.activateIgnoringOtherApps(true)
         log.debug "From bring app to the front proc: #{webViewController.inspect}"
@@ -94,13 +97,6 @@ module WebApp
       end
     end
     
-    # def bring_app_and_tab_to_the_front_proc
-    #   @bring_app_and_tab_to_the_front ||= Proc.new do
-    #     OSX::NSApp.activateIgnoringOtherApps(true)
-    #     @webViewController.tabViewItem.tabView.selectTabViewItem(@webViewController.tabViewItem)
-    #   end
-    # end
-    
     def register_dom_observers! # :nodoc:
       @registered_events_for_this_page = [] # flush the registered events
       @document = @webView.mainFrame.DOMDocument
@@ -138,6 +134,12 @@ module WebApp
       end
     end
     
+    def callback_notification_handler(notification)
+      if callback = @callbacks[notification.object.to_i]
+        callback.call
+      end
+    end
+    
     private
     
     def for_this_url?(url, event_handler)
@@ -155,6 +157,10 @@ module WebApp
     def register_event_for_this_page(doc, event_handler)
       @registered_events_for_this_page << event_handler
       doc.addEventListener___(event_handler[:name], self, true)
+    end
+    
+    def register_callback(callback)
+      @callbacks[callback.object_id] = callback
     end
   end
 end
