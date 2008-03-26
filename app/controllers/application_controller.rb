@@ -25,8 +25,12 @@ class ApplicationController < Rucola::RCController
     addWebViewTab
   end
   
-  def addWebViewTab(sender = nil)
-    @webViewControllers << WebViewController.alloc.init
+  def addWebViewTab(url = nil)
+    if url.is_a? OSX::NSURL
+      @webViewControllers << WebViewController.alloc.initWithURL(url)
+    else
+      @webViewControllers << WebViewController.alloc.init
+    end
     @tabView.addTabViewItem @webViewControllers.last.tabViewItem
     WebApp::Plugins.start
   end

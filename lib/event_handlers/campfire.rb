@@ -1,9 +1,23 @@
 module Campfire
+  class Lobby < WebApp::EventHandler
+    on_page_loaded(/https*:\/\/.+?\/$/) do |url, title|
+      # Hide the room tabs
+      document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }
+      # Make the room links open a new tab
+      document.find('table.lobby div.room a').each { |link| link['target'] = '_open_in_new_tab' }
+    end
+  end
+  
   class Room < WebApp::EventHandler(/\/room\/\d+$/)
     plugin :badge
     plugin :growl, :message => 'Message received',
                    :message_about_me => 'Message about/targeted at me',
                    :entered_or_left => 'Enter/leave message'
+    
+    on_page_loaded do |url, title|
+      # Hide the room tabs
+      document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }
+    end
     
     # Get the room name.
     on_page_loaded do |url, title|

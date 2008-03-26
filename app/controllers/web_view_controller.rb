@@ -4,7 +4,7 @@ class WebViewController < OSX::NSObject
   
   def init
     if super_init
-      @url = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']
+      @url = OSX::NSURL.URLWithString(OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']) if @url.nil?
       
       @webView = OSX::WebView.alloc.init
       
@@ -15,10 +15,15 @@ class WebViewController < OSX::NSObject
       @webView.frameLoadDelegate = self
       @webView.policyDelegate = self
       @webView.setUIDelegate(self)
-      @webView.mainFrame.loadRequest OSX::NSURLRequest.requestWithURL(OSX::NSURL.URLWithString(@url))
+      @webView.mainFrame.loadRequest OSX::NSURLRequest.requestWithURL(@url)
       
       self
     end
+  end
+  
+  def initWithURL(url)
+    @url = url
+    init
   end
   
   def webView_didFinishLoadForFrame(webView, frame)
@@ -38,8 +43,12 @@ class WebViewController < OSX::NSObject
   end
   
   def webView_decidePolicyForNewWindowAction_request_newFrameName_decisionListener(webView, info, request, newFrameName, listener)
-    listener.ignore
-    OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
+    if newFrameName == '_open_in_new_tab'
+      OSX::NSApp.delegate.addWebViewTab(request.URL)
+    else
+      listener.ignore
+      OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
+    end
   end
   
   def webView_runOpenPanelForFileButtonWithResultListener(webView, listener)
@@ -85,10 +94,12 @@ class WebViewController < OSX::NSObject
     # end
     
     require Rucola::RCApp.root_path + "/lib/event_handlers/campfire.rb"
-    event_handler = Campfire::Room.alloc.init
-    event_handler.webViewController = self
-    event_handler.webView = @webView
-    @event_handlers << event_handler
+    [Campfire::Lobby, Campfire::Room].each do |event_handler_class|
+      event_handler = event_handler_class.alloc.init
+      event_handler.webViewController = self
+      event_handler.webView = @webView
+      @event_handlers << event_handler
+    end
   end
   
 end
