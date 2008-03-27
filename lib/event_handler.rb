@@ -135,12 +135,10 @@ module WebApp
     end
     
     def callback_notification_handler(notification)
-      p @callbacks
       if callback = @callbacks[notification.object.to_i]
-        puts "CALLBACK called! #{callback}"
         callback.call
+        # FIXME: How are we going to clean the other unused procs...?
         @callbacks[notification.object.to_i] = nil unless callback == @bring_app_and_tab_to_the_front
-        p @callbacks
       end
     end
     
