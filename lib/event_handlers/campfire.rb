@@ -107,6 +107,7 @@ module Campfire
     end
     
     def message_about_or_at_me?(message)
+      return false if @first_name.nil?
       message.downcase.include? @first_name.downcase
     end
     

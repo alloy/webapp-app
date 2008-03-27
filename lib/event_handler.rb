@@ -125,7 +125,7 @@ module WebApp
     
     def handleEvent(event) # :nodoc:
       #puts "Handle event: #{event}" if $WEBAPP_DEBUG
-      node = event.relatedNode
+      node = event.relatedNode #.copy
       
       @registered_events_for_this_page.each do |event_handler|
         next unless event_matches_handler?(event, event_handler)
@@ -135,8 +135,12 @@ module WebApp
     end
     
     def callback_notification_handler(notification)
+      p @callbacks
       if callback = @callbacks[notification.object.to_i]
+        puts "CALLBACK called! #{callback}"
         callback.call
+        @callbacks[notification.object.to_i] = nil unless callback == @bring_app_and_tab_to_the_front
+        p @callbacks
       end
     end
     

@@ -23,6 +23,7 @@ class ApplicationController < Rucola::RCController
     
     @webViewControllers = []
     addWebViewTab
+    #$RUBYCOCOA_DEBUG = true
   end
   
   def addWebViewTab(url = nil)
