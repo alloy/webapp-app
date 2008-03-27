@@ -61,7 +61,8 @@ module WebApp
           end
           notification_names.flatten!
           
-          @growl_bridge = GrowlBridge.alloc.initWithDelegate(self)
+          @growl_bridge = GrowlBridge.sharedInstance
+          @growl_bridge.delegate = self
           @growl_bridge.start(:Campfire, notification_names, notification_names)
         end
         
@@ -89,11 +90,23 @@ module WebApp
         GROWL_NOTIFICATION_TIMED_OUT = "GrowlTimedOut!"
         GROWL_KEY_CLICKED_CONTEXT = "ClickedContext"
         
-        def initWithDelegate(delegate)
-          init
-          @delegate = delegate
-          self
+        def self.sharedInstance
+          @instance ||= alloc.init
         end
+        
+        def init
+          if super_init
+            puts 'GROWL INSTANTIATED!'
+            self
+          end
+        end
+        
+        # def initWithDelegate(delegate)
+        #   puts 'GROWL INSTANTIATED!'
+        #   init
+        #   @delegate = delegate
+        #   self
+        # end
         
         def start(appname, notifications, default_notifications=nil, appicon=nil)
           @appname = appname
