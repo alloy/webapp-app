@@ -94,12 +94,12 @@ module WebApp
           @instance ||= alloc.init
         end
         
-        def init
-          if super_init
-            puts 'GROWL INSTANTIATED!'
-            self
-          end
-        end
+        # def init
+        #   if super_init
+        #     puts 'GROWL INSTANTIATED!'
+        #     self
+        #   end
+        # end
         
         # def initWithDelegate(delegate)
         #   puts 'GROWL INSTANTIATED!'
