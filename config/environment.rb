@@ -3,7 +3,7 @@ Rucola::Initializer.run do |config|
   # over these settings.  
   #
   # Load any custom Objective-C frameworks
-  config.objc_frameworks = %w(webkit)
+  config.objc_frameworks = %w(WebKit)
   #
   # Use active_record bindings
   # config.use_active_record = true
