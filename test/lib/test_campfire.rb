@@ -1,8 +1,15 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-#Rucola::Log.instance.level = 0
+Rucola::Log.instance.level = 0
 
 require "lib/event_handlers/campfire"
+
+# This is a stupid fix for the problem that the super_foo syntax is broken when OSX._ignore_ns_override is set to true.
+class OSX::NSObject
+  def super_init
+    true
+  end
+end
 
 BASE_HOST = 'example.campfirenow.com'
 BASE_URL = "https://#{BASE_HOST}"
@@ -26,7 +33,10 @@ describe "Campfire::Room, when running" do
   tests Campfire::Room
   
   def after_setup
-    load_page "#{BASE_URL}/room/144516", html_for_fixture('campfire_room')
+    url = "#{BASE_URL}/room/144516"
+    
+    assigns(:webViewController, WebViewController.alloc.initWithURL(OSX::NSURL.URLWithString(url)))
+    load_page url, html_for_fixture('campfire_room')
     
     @chat = element('chat')
   end
