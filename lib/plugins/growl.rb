@@ -61,9 +61,12 @@ module WebApp
           end
           notification_names.flatten!
           
-          @growl_bridge = GrowlBridge.sharedInstance
-          @growl_bridge.delegate = self
-          @growl_bridge.start(:Campfire, notification_names, notification_names)
+          if @growl_bridge.nil?
+            @growl_bridge = GrowlBridge.sharedInstance
+            @growl_bridge.delegate = self
+            # FIXME: hardcoded the application name.
+            @growl_bridge.start(:Campfire, notification_names, notification_names)
+          end
         end
         
         def instance

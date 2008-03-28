@@ -4,7 +4,6 @@ module WebApp
       
       # Increases the badge counter on the applications dock icon unless the app is already visible.
       def increase_badge_counter!
-        # TODO: also keep a counter here, so later on when we have tabs we can keep a count per tab.
         webViewController.objectCount += 1
         WebApp::Plugins::Badge.instance.increase_badge_counter!
       end
