@@ -29,12 +29,10 @@ module Campfire
     # Get the username.
     on_page_loaded do |url, title|
       if @first_name.nil?
-        if row = document.find('#chat tr').last
-          user_id = row['class'].to_s.scan(/user_\d+/).first
-          if username = document.find(:first, "##{user_id} span")
-            @first_name, @last_name = username.textContent.to_s.split(' ')
-            log.debug "Parsed username: #{@first_name} #{@last_name}"
-          end
+        user_id = document.find('script').last.innerHTML.to_s.match(/"userID": (\d+)/)[1]
+        if username = document.find(:first, "#user_#{user_id} span")
+          @first_name, @last_name = username.textContent.to_s.split(' ')
+          log.debug "Parsed username: #{@first_name} #{@last_name}"
         end
       end
     end
