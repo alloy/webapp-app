@@ -1,11 +1,4 @@
-- WebApp: Tabs!
-- WebApp: File select buttons should open a File select dialog.
 - WebApp: Status bar!
 - WebApp: Drag 'n Drop support?
 
-- Growl: Enter/kick messages should be a different type of message.
-
-- Campfire: Apparently it throws you out of a room after ~15 minutes. Pyro seems to do GET request to circumvent this. First need tabs.
-- Campfire: Download growls
-- Campfire: Person entered the room growls, but don't increase the badge counter!
 - Campfire: Drag 'n Drop support?
