@@ -63,7 +63,7 @@ module Campfire
             
             # Check if it was a truncated paste.
             if body.find(:first, 'span.number_of_lines')
-              url = "#{base_url}#{ body.find(:first, 'a')['href'] }"
+              url = base_url + body.find(:first, 'a')['href']
               log.debug "Truncated paste. from #{name}. URL: #{url}"
               growl_message_and_open_url("#{name}: Truncated paste.", url)
               
