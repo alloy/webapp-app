@@ -6,7 +6,7 @@ class WebViewController < OSX::NSObject
     if super_init
       @url = OSX::NSURL.URLWithString(OSX::NSBundle.mainBundle.infoDictionary['WebAppURL']) if @url.nil?
       
-      @webView = OSX::WebView.alloc.init
+      @webView = WebViewWithDragAndDrop.alloc.initWithDragDelegate(self)
       
       setup_tab_bar_item_values!
       create_tab_view_item!
@@ -63,6 +63,14 @@ class WebViewController < OSX::NSObject
     else
       listener.cancel
     end
+  end
+  
+  # def webView_dragDestinationActionMaskForDraggingInfo(webView, draggingInfo)
+  #   OSX::WebDragDestinationActionNone
+  # end
+  
+  def webView_didReceiveDroppedFiles(webView, files)
+    @event_handlers.each { |event_handler| event_handler.handle_files_dropped_event(files) }
   end
   
   private

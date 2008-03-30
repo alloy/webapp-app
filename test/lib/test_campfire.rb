@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-Rucola::Log.instance.level = 0
+#Rucola::Log.instance.level = 0
 
 require "lib/event_handlers/campfire"
 
@@ -8,6 +8,15 @@ require "lib/event_handlers/campfire"
 class OSX::NSObject
   def super_init
     true
+  end
+end
+
+unless defined? OSX::SRAutoFillManager
+  class OSX::SRAutoFillManager
+    def self.sharedInstance
+      @instance ||= new
+    end
+    def fillFormsWithWebView(webView); end
   end
 end
 
@@ -154,11 +163,11 @@ describe "Campfire::Room, when running" do
   end
   
   it "should be able to detect if a message includes the name of the user" do
-    handler.send(:message_about_or_at_me?, 'Eloy: Bla bla bla.').should.be true
-    handler.send(:message_about_or_at_me?, 'Eloy Duran: Bla bla bla.').should.be true
-    handler.send(:message_about_or_at_me?, 'Eloy, Bla bla bla.').should.be true
-    handler.send(:message_about_or_at_me?, 'eloy Bla bla bla.').should.be true
-    handler.send(:message_about_or_at_me?, 'Bla eloy bla.').should.be true
+    handler.send(:message_about_me?, 'Eloy: Bla bla bla.').should.be true
+    handler.send(:message_about_me?, 'Eloy Duran: Bla bla bla.').should.be true
+    handler.send(:message_about_me?, 'Eloy, Bla bla bla.').should.be true
+    handler.send(:message_about_me?, 'eloy Bla bla bla.').should.be true
+    handler.send(:message_about_me?, 'Bla eloy bla.').should.be true
   end
   
   it "should use a sticky growl if a message is directed at the user" do

@@ -14,6 +14,10 @@ module Campfire
                    :message_about_me => 'Message about/targeted at me',
                    :entered_or_left => 'Enter/leave message'
     
+    on_files_dropped do |files|
+      p files
+    end
+    
     on_page_loaded do |url, title|
       # Hide the room tabs
       document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }

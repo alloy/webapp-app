@@ -66,7 +66,15 @@ module WebApp
       #     end
       #   end
       def on_page_loaded(url = nil, &block)
-        on_event('WebAppPageDidLoad', :url => url, &block)
+        options = {}
+        options[:url] = url unless url.nil?
+        on_event('WebAppPageDidLoad', options, &block)
+      end
+      
+      def on_files_dropped(url = nil, &block)
+        options = {}
+        options[:url] = url unless url.nil?
+        on_event('WebAppFilesDropped', options, &block)
       end
       
       # Register a callback for a DOMEvent. It takes 2 arguments, which are the even +name+ and an optional +options+ hash.
@@ -124,20 +132,28 @@ module WebApp
     end
     
     def handleEvent(event) # :nodoc:
-      #puts "Handle event: #{event}" if $WEBAPP_DEBUG
-      node = event.relatedNode #.copy
-      
       @registered_events_for_this_page.each do |event_handler|
-        next unless event_matches_handler?(event, event_handler)
-        log.debug "Calling event handler: #{event_handler[:event_handler_method]}"
-        send(event_handler[:event_handler_method], event, node)
+        if event.is_a? Hash
+          next unless event[:name] == event_handler[:name]
+          log.debug "Calling files dropped event handler: #{event_handler[:event_handler_method]}"
+          send(event_handler[:event_handler_method], event[:files])
+        else
+          next unless event_matches_handler?(event, event_handler)
+          log.debug "Calling event handler: #{event_handler[:event_handler_method]}"
+          send(event_handler[:event_handler_method], event, event.relatedNode)
+        end
       end
+    end
+    
+    def handle_files_dropped_event(files)
+      handleEvent :name => 'WebAppFilesDropped', :files => files
     end
     
     def callback_notification_handler(notification)
       if callback = @callbacks[notification.object.to_i]
         callback.call
         # FIXME: How are we going to clean the other unused procs...?
+        # By using the grol onTimeout callback!
         @callbacks[notification.object.to_i] = nil unless callback == @bring_app_and_tab_to_the_front
       end
     end

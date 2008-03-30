@@ -291,3 +291,36 @@ describe "EventHandler, when handling callbacks" do
     @handler.callback_notification_handler(notification)
   end
 end
+
+class FilesDroppedEventHandler < WebApp::EventHandler
+  on_files_dropped do |files|
+    files_dropped(files)
+  end
+  
+  def files_dropped(files); end
+end
+
+describe "EventHandler, when handling drag and dropped files" do
+  include EventHandlerSpecHelper
+  
+  before do
+    @handler = FilesDroppedEventHandler.alloc.init
+    stub_webview
+    @handler.register_dom_observers!
+    @files = ['/some/file.rb']
+  end
+  
+  it "should add a WebAppFilesDropped event handler to the list of registered events to handle" do
+    FilesDroppedEventHandler.instance_variable_get(:@event_handlers).any? { |eh| eh[:name] == 'WebAppFilesDropped' }.should.be true
+  end
+  
+  it "should handle a file dropped event" do
+    @handler.expects(:files_dropped).with(@files)
+    @handler.handleEvent :name => 'WebAppFilesDropped', :files => @files
+  end
+  
+  it "should be possible to easily send a files dropped event" do
+    @handler.expects(:files_dropped).with(@files)
+    @handler.handle_files_dropped_event(@files)
+  end
+end
