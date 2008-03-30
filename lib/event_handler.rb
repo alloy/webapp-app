@@ -131,6 +131,10 @@ module WebApp
       @document
     end
     
+    def element(id)
+      @document.getElementById(id)
+    end
+    
     def handleEvent(event) # :nodoc:
       @registered_events_for_this_page.each do |event_handler|
         if event.is_a? Hash

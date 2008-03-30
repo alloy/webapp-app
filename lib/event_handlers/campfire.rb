@@ -15,7 +15,8 @@ module Campfire
                    :entered_or_left => 'Enter/leave message'
     
     on_files_dropped do |files|
-      p files
+      input = element('upload')
+      #p input.objc_methods.grep(/filename/i)
     end
     
     on_page_loaded do |url, title|
