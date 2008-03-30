@@ -74,7 +74,7 @@ module Campfire
               
             end
           else
-            if message_about_or_at_me?(message)
+            if message_about_me?(message)
               log.debug "Channel message directed at or about you from #{name}: #{message}"
               sticky_growl_message_about_me(@room_name, "#{name}: #{message}")
               
@@ -105,7 +105,7 @@ module Campfire
       row.is_a?(OSX::DOMHTMLTableRowElement) and (Rucola::RCApp.debug? or not row.class?('you')) and not row.class?('timestamp_message')
     end
     
-    def message_about_or_at_me?(message)
+    def message_about_me?(message)
       return false if @first_name.nil?
       message.downcase.include? @first_name.downcase
     end
