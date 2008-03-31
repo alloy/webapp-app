@@ -15,8 +15,8 @@ module Campfire
                    :entered_or_left => 'Enter/leave message'
     
     on_files_dropped do |files|
-      input = element('upload')
-      #p input.objc_methods.grep(/filename/i)
+      #upload :url => 'http://blabla.example.com/room/12345/uploads', :name => 'name', :file => files.first
+      upload :form => '#upload_form_tag', :file => files.first
     end
     
     on_page_loaded do |url, title|

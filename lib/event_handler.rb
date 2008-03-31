@@ -127,14 +127,6 @@ module WebApp
       end
     end
     
-    def document
-      @document
-    end
-    
-    def element(id)
-      @document.getElementById(id)
-    end
-    
     def handleEvent(event) # :nodoc:
       @registered_events_for_this_page.each do |event_handler|
         if event.is_a? Hash
@@ -160,6 +152,33 @@ module WebApp
         # By using the grol onTimeout callback!
         @callbacks[notification.object.to_i] = nil unless callback == @bring_app_and_tab_to_the_front
       end
+    end
+    
+    # Helpers
+    
+    def document
+      @document
+    end
+    
+    def element(id)
+      @document.getElementById(id)
+    end
+    
+    def upload(options)
+      raise ArgumentError, "You need to specify a :file" unless options[:file]
+      
+      if options[:url] and options[:name]
+      elsif options[:form]
+        log.debug "Will try to parse the url and name from the form with selector: #{options[:form]}"
+        form = document.find(:first, options[:form])
+        url = form['action']
+        name = form.find('input').select {  |input| input['type'] == 'file' }.first['name']
+      else
+        raise ArgumentError, "Should specify a CSS selector for :form or alternatively :url and :name"
+      end
+      
+      @uploader_instance = Uploader.alloc.initWithURL_name_file_delegate(url, name, options[:file], self)
+      @uploader_instance.upload!
     end
     
     private
