@@ -13,38 +13,20 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>addWebViewTab</key>
-				<string>id</string>
-				<key>openPreferences</key>
-				<string>id</string>
-			</dict>
 			<key>CLASS</key>
-			<string>ApplicationController</string>
+			<string>CampfireRoomPreferencesController</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>main_window</key>
-				<string>id</string>
-				<key>tabBarController</key>
-				<string>id</string>
-				<key>tabView</key>
-				<string>id</string>
-				<key>webview</key>
-				<string>id</string>
-			</dict>
 			<key>SUPERCLASS</key>
-			<string>RCController</string>
+			<string>RCWindowController</string>
 		</dict>
 		<dict>
 			<key>CLASS</key>
-			<string>RCController</string>
+			<string>RCWindowController</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
-			<string>NSObject</string>
+			<string>NSWindowController</string>
 		</dict>
 	</array>
 	<key>IBVersion</key>

@@ -165,14 +165,14 @@ describe "Campfire::Room, when running" do
   it "should be able to detect if a message includes any of the highlighted words" do
     handler.send(:includes_highlight_word?, 'foo bar baz').should.be false
     
-    handler.preferences[:highlight_words] = ['bar']
+    handler.preferences[:highlight_words] = 'bar bal'
     handler.send(:includes_highlight_word?, 'foo bar baz').should.be true
     handler.send(:includes_highlight_word?, 'foo bAr baz').should.be true
     handler.send(:includes_highlight_word?, 'foo barr baz').should.be false
   end
   
   it "should use a sticky growl if a message includes one of the highlighted words" do
-    handler.preferences[:highlight_words] = ['eloy']
+    handler.preferences[:highlight_words] = 'eloy'
     
     row_node = build do
       tr.message_123456! :class => "text_message message user_123456" do

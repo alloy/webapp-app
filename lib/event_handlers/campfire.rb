@@ -9,7 +9,7 @@ module Campfire
   end
   
   class Room < WebApp::EventHandler(/\/room\/\d+$/)
-    default_preferences :highlight_words => []
+    default_preferences :highlight_words => ''
     
     plugin :badge
     plugin :growl, :message => 'Message received',
@@ -123,7 +123,7 @@ module Campfire
     
     def includes_highlight_word?(message)
       msg = message.to_s.downcase
-      preferences[:highlight_words].any? { |hw| msg =~ /\b#{hw.downcase}\b/ }
+      preferences[:highlight_words].split(' ').any? { |hw| msg =~ /\b#{hw.downcase}\b/ }
     end
     
     def growl_message_and_open_url(message, url)
