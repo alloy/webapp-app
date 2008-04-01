@@ -30,13 +30,32 @@ class Uploader < OSX::NSObject
     request.setHTTPBody(post_data)
     
     OSX::NSURLConnection.alloc.initWithRequest_delegate(request, self)
+    self
   end
   
   def connectionDidFinishLoading(connection)
-    @delegate.connectionDidFinishLoading(connection)
+    # check the arity!
+    #@when_done.call(connection)
+    @when_done.call
+    
+    #@delegate.connectionDidFinishLoading(connection)
   end
   
   def connection_didFailWithError(connection, error)
-    @delegate.connection_didFailWithError(connection, error)
+    # check the arity!
+    #@when_error.call(connection, error)
+    @when_error.call
+    
+    #@delegate.connection_didFailWithError(connection, error)
+  end
+  
+  def when_done(&block)
+    @when_done = block
+    self
+  end
+  
+  def when_error(&block)
+    @when_error = block
+    self
   end
 end

@@ -177,8 +177,8 @@ module WebApp
         raise ArgumentError, "Should specify a CSS selector for :form or alternatively :url and :name"
       end
       
-      @uploader_instance = Uploader.alloc.initWithURL_name_file_delegate(url, name, options[:file], self)
-      @uploader_instance.upload!
+      uploader_instance = Uploader.alloc.initWithURL_name_file_delegate(url, name, options[:file], self)
+      uploader_instance.upload!
     end
     
     private

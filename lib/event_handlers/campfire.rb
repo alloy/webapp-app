@@ -15,8 +15,21 @@ module Campfire
                    :entered_or_left => 'Enter/leave message'
     
     on_files_dropped do |files|
-      #upload :url => 'http://blabla.example.com/room/12345/uploads', :name => 'name', :file => files.first
-      upload :form => '#upload_form_tag', :file => files.first
+      uploader = upload(:form => '#upload_form_tag', :file => files.first)
+      
+      uploader.when_done do
+        log.debug "Upload finished!"
+        element('uploader').style.display = 'none'
+        element('upload_form_contents').style.display = 'inline'
+        element('upload_form_progress').style.display = 'none'
+        
+      end.when_error do
+        log.debug "Upload failed"
+      end
+      
+      element('upload_form_contents').style.display = 'none'
+      element('upload_form_progress').style.display = 'inline'
+      element('uploader').style.display = 'inline'
     end
     
     on_page_loaded do |url, title|
