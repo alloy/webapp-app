@@ -103,6 +103,10 @@ module WebApp
         define_method(event_handler_method, &block)
         private event_handler_method
       end
+      
+      def default_preferences(preferences)
+        OSX::NSUserDefaults.standardUserDefaults.registerDefaults(preferences)
+      end
     end
     
     def register_dom_observers! # :nodoc:
@@ -179,6 +183,10 @@ module WebApp
       
       uploader_instance = Uploader.alloc.initWithURL_name_file_delegate(url, name, options[:file], self)
       uploader_instance.upload!
+    end
+    
+    def preferences
+      OSX::NSUserDefaults.standardUserDefaults
     end
     
     private

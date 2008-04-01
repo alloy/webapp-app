@@ -9,9 +9,11 @@ module Campfire
   end
   
   class Room < WebApp::EventHandler(/\/room\/\d+$/)
+    default_preferences :highlight_words => []
+    
     plugin :badge
     plugin :growl, :message => 'Message received',
-                   :message_about_me => 'Message about/targeted at me',
+                   :message_includes_highlight => 'Message includes one of the highlight words',
                    :entered_or_left => 'Enter/leave message'
     
     on_files_dropped do |files|
@@ -19,17 +21,13 @@ module Campfire
       
       uploader.when_done do
         log.debug "Upload finished!"
-        element('uploader').style.display = 'none'
-        element('upload_form_contents').style.display = 'inline'
-        element('upload_form_progress').style.display = 'none'
-        
+        hide_progress_bar
       end.when_error do
         log.debug "Upload failed"
+        hide_progress_bar
       end
       
-      element('upload_form_contents').style.display = 'none'
-      element('upload_form_progress').style.display = 'inline'
-      element('uploader').style.display = 'inline'
+      show_progress_bar
     end
     
     on_page_loaded do |url, title|
@@ -92,9 +90,9 @@ module Campfire
               
             end
           else
-            if message_about_me?(message)
-              log.debug "Channel message directed at or about you from #{name}: #{message}"
-              sticky_growl_message_about_me(@room_name, "#{name}: #{message}")
+            if includes_highlight_word?(message)
+              log.debug "Channel message includes one of the highlight words. #{name}: #{message}"
+              sticky_growl_message_includes_highlight(@room_name, "#{name}: #{message}")
               
               # Check if the message only contains a link.
             elsif a = tr.find(:first, "td.body a")
@@ -123,15 +121,27 @@ module Campfire
       row.is_a?(OSX::DOMHTMLTableRowElement) and (Rucola::RCApp.debug? or not row.class?('you')) and not row.class?('timestamp_message')
     end
     
-    def message_about_me?(message)
-      return false if @first_name.nil?
-      message.downcase.include? @first_name.downcase
+    def includes_highlight_word?(message)
+      msg = message.to_s.downcase
+      preferences[:highlight_words].any? { |hw| msg =~ /\b#{hw.downcase}\b/ }
     end
     
     def growl_message_and_open_url(message, url)
       growl_message(@room_name, message) do
         OSX::NSWorkspace.sharedWorkspace.openURL(OSX::NSURL.URLWithString(url))
       end
+    end
+    
+    def hide_progress_bar
+      element('uploader').style.display = 'none'
+      element('upload_form_contents').style.display = 'inline'
+      element('upload_form_progress').style.display = 'none'
+    end
+    
+    def show_progress_bar
+      element('upload_form_contents').style.display = 'none'
+      element('upload_form_progress').style.display = 'inline'
+      element('uploader').style.display = 'inline'
     end
   end
 end

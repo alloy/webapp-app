@@ -107,7 +107,7 @@ describe "EventHandler, when setting up" do
     @handler.private_methods.should.include mname
     options[:name].should == 'WebAppPageDidLoad'
     options[:event_handler_method].should == mname.to_sym
-    options[:options].should == { :url => nil, :conditions => {}}
+    options[:options].should == { :conditions => {}}
   end
   
   it "should define event handler instance methods" do
@@ -322,5 +322,30 @@ describe "EventHandler, when handling drag and dropped files" do
   it "should be possible to easily send a files dropped event" do
     @handler.expects(:files_dropped).with(@files)
     @handler.handle_files_dropped_event(@files)
+  end
+end
+
+class PreferencesEventHandler < WebApp::EventHandler
+  default_preferences :hightlight_words => []
+end
+
+describe "EventHandler, when handling preferences" do
+  before do
+    @defaults = OSX::NSUserDefaults.standardUserDefaults
+    @handler = PreferencesEventHandler.alloc.init
+  end
+  
+  it "should be able to register default user preferences" do
+    @defaults[:hightlight_words].should == []
+  end
+  
+  it "should be possible to get the preferences in an instance" do
+    @handler.preferences[:hightlight_words].should == []
+  end
+  
+  it "should be possible to set a new value for a user preference" do
+    value = %w{ nou moe }
+    @handler.preferences[:hightlight_words] = value
+    @handler.preferences[:hightlight_words].should == value
   end
 end

@@ -162,23 +162,26 @@ describe "Campfire::Room, when running" do
     @chat.appendChild(row_node)
   end
   
-  it "should be able to detect if a message includes the name of the user" do
-    handler.send(:message_about_me?, 'Eloy: Bla bla bla.').should.be true
-    handler.send(:message_about_me?, 'Eloy Duran: Bla bla bla.').should.be true
-    handler.send(:message_about_me?, 'Eloy, Bla bla bla.').should.be true
-    handler.send(:message_about_me?, 'eloy Bla bla bla.').should.be true
-    handler.send(:message_about_me?, 'Bla eloy bla.').should.be true
+  it "should be able to detect if a message includes any of the highlighted words" do
+    handler.send(:includes_highlight_word?, 'foo bar baz').should.be false
+    
+    handler.preferences[:highlight_words] = ['bar']
+    handler.send(:includes_highlight_word?, 'foo bar baz').should.be true
+    handler.send(:includes_highlight_word?, 'foo bAr baz').should.be true
+    handler.send(:includes_highlight_word?, 'foo barr baz').should.be false
   end
   
-  it "should use a sticky growl if a message is directed at the user" do
+  it "should use a sticky growl if a message includes one of the highlighted words" do
+    handler.preferences[:highlight_words] = ['eloy']
+    
     row_node = build do
       tr.message_123456! :class => "text_message message user_123456" do
         td.person { span "Someone E." }
-        td.body { div "Eloy: I'm talking to you!" }
+        td.body { div "I'm talking to you Eloy!" }
       end
     end
     
-    handler.expects(:sticky_growl_message_about_me).times(1)
+    handler.expects(:sticky_growl_message_includes_highlight).times(1)
     handler.expects(:increase_badge_counter!).times(1)
     
     @chat.appendChild(row_node)
