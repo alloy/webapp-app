@@ -1,4 +1,5 @@
-- WebApp: Status bar!
-- WebApp: Drag 'n Drop support?
+- WebApp: Status bar?
 
-- Campfire: Drag 'n Drop support?
+- Integrate crash reporter
+- rewrite. Eg: #1234 => http://svn.example.com/r1234/trunk/
+- Make sure the application icon is always drawed 128x128
