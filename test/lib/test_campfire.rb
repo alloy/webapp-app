@@ -169,6 +169,10 @@ describe "Campfire::Room, when running" do
     handler.send(:includes_highlight_word?, 'foo bar baz').should.be true
     handler.send(:includes_highlight_word?, 'foo bAr baz').should.be true
     handler.send(:includes_highlight_word?, 'foo barr baz').should.be false
+    
+    handler.preferences[:highlight_words] = "je m'apelle église".to_ns
+    handler.send(:includes_highlight_word?, 'foo église baz').should.be true
+    handler.send(:includes_highlight_word?, 'foo eglise baz').should.be false
   end
   
   it "should use a sticky growl if a message includes one of the highlighted words" do

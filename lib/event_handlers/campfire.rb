@@ -1,3 +1,5 @@
+$KCODE = 'u'
+
 module Campfire
   class Lobby < WebApp::EventHandler
     on_page_loaded(/https*:\/\/.+?\/$/) do |url, title|
@@ -122,7 +124,7 @@ module Campfire
     end
     
     def includes_highlight_word?(message)
-      msg = message.to_s.downcase
+      msg = message.downcase.to_s
       preferences[:highlight_words].split(' ').any? { |hw| msg =~ /\b#{hw.downcase}\b/ }
     end
     
