@@ -27,6 +27,7 @@ class WebViewController < OSX::NSObject
   end
   
   def webView_didFinishLoadForFrame(webView, frame)
+    log.debug "Page loaded: #{webView.mainFrameURL}"
     OSX::SRAutoFillManager.sharedInstance.fillFormsWithWebView(webView)
     @event_handlers.each { |e| e.register_dom_observers! }
     @tabViewItem.label = @webView.mainFrameTitle if @tabViewItem.label == 'Loading...'
@@ -43,10 +44,13 @@ class WebViewController < OSX::NSObject
   end
   
   def webView_decidePolicyForNewWindowAction_request_newFrameName_decisionListener(webView, info, request, newFrameName, listener)
-    if newFrameName == '_open_in_new_tab'
+    listener.ignore
+    case newFrameName
+    when '_open_in_new_tab' # FIXME: This creates a new window, but for some reason also instantiates a new tab..
       OSX::NSApp.delegate.addWebViewTab(request.URL)
+    when '_close_tab'
+      OSX::NSApp.delegate.removeWebViewTab(tabViewItem)
     else
-      listener.ignore
       OSX::NSWorkspace.sharedWorkspace.openURL(request.URL)
     end
   end

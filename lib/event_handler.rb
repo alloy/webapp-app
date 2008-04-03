@@ -116,7 +116,6 @@ module WebApp
       if event_handlers = self.class.instance_variable_get(:@event_handlers)
         event_handlers.each do |event_handler|
           url = @document.URL.to_s
-          log.debug "Page loaded: #{url}"
           
           if for_this_url?(url, event_handler)
             if event_handler[:name] == 'WebAppPageDidLoad'

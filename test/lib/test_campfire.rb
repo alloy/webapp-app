@@ -238,6 +238,13 @@ describe "Campfire::Room, when running" do
     @chat.appendChild(row_node)
   end
   
+  it "should modify the 'leave' link to actually follow the link and have a target set to '_close_tab'" do
+    link = document.find(:first, '#leave_link a')
+    link['href'].to_s.should.match /leave$/
+    link['target'].to_s.should == '_close_tab'
+    link['onclick'].to_s.should.not.match /return false;$/
+  end
+  
   private
   
   def build(&block)

@@ -5,8 +5,14 @@ module Campfire
     on_page_loaded(/https*:\/\/.+?\/$/) do |url, title|
       # Hide the room tabs
       document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }
+      
+      # FIXME: This creates one webview controller plus webview too much.
       # Make the room links open a new tab
-      document.find('table.lobby div.room a').each { |link| link['target'] = '_open_in_new_tab' }
+      # document.find('table.lobby div.room a').each do |link|
+      #   link['target'] = '_open_in_new_tab'
+      #   #link['onclick'] = 'alert("blabla"); alert(window.WebAppEventHandler); window.WebAppEventHandler.openInNewTab_(this.href); return false;'
+      #   #link['onclick'] = 'var handler = window.WebAppEventHandler; handler.openInNewTab(this.href); return false;'
+      # end
     end
   end
   
@@ -35,6 +41,12 @@ module Campfire
     on_page_loaded do |url, title|
       # Hide the room tabs
       document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }
+      
+      # Make the 'leave' link close the tab
+      if link = document.find(:first, '#leave_link a')
+        link['onclick'] = link['onclick'].sub(/return false;$/, '')
+        link['target']  = '_close_tab'
+      end
     end
     
     # Get the room name.
