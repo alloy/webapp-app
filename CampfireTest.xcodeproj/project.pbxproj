@@ -33,8 +33,8 @@
 		5190E76C0D7441EE000D9E53 /* SRPrefDefaultKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */; };
 		5190E76D0D7441EE000D9E53 /* SRPrefDefaultKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */; };
 		5190E7C90D744333000D9E53 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5190E7C80D744333000D9E53 /* Security.framework */; };
-		51DD3F750D9321DA0034A2BE /* campfire.png in Resources */ = {isa = PBXBuildFile; fileRef = 51DD3F740D9321DA0034A2BE /* campfire.png */; };
 		51FB31B10D7632CA0098BF8E /* lib in Resources */ = {isa = PBXBuildFile; fileRef = 51FB31A90D7632CA0098BF8E /* lib */; };
+		637A10600DA52C9E0044208F /* campfire.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 637A105F0DA52C9E0044208F /* campfire.tiff */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,8 +79,8 @@
 		5190E76A0D7441EE000D9E53 /* SRPrefDefaultKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRPrefDefaultKeys.h; path = objc/SRPrefDefaultKeys.h; sourceTree = "<group>"; };
 		5190E76B0D7441EE000D9E53 /* SRPrefDefaultKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRPrefDefaultKeys.m; path = objc/SRPrefDefaultKeys.m; sourceTree = "<group>"; };
 		5190E7C80D744333000D9E53 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
-		51DD3F740D9321DA0034A2BE /* campfire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = campfire.png; sourceTree = "<group>"; };
 		51FB31A90D7632CA0098BF8E /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		637A105F0DA52C9E0044208F /* campfire.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = campfire.tiff; sourceTree = "<group>"; };
 		E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
 		E8F5E25803AEB7C803A81C6F /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; name = rb_main.rb; path = misc/rb_main.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,8 +165,8 @@
 				5190E7240D730A17000D9E53 /* CTBadge.h */,
 				5190E7250D730A17000D9E53 /* CTBadge.m */,
 				5190E7550D74414F000D9E53 /* SRAutoFillManager.h */,
-				51DD3F740D9321DA0034A2BE /* campfire.png */,
 				5190E7560D74414F000D9E53 /* SRAutoFillManager.m */,
+				637A105F0DA52C9E0044208F /* campfire.tiff */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -262,7 +262,7 @@
 				514292EF0CC6823A00F9CEEF /* MainMenu.nib in Resources */,
 				5190E7320D73A45B000D9E53 /* twitter.jpg in Resources */,
 				51FB31B10D7632CA0098BF8E /* lib in Resources */,
-				51DD3F750D9321DA0034A2BE /* campfire.png in Resources */,
+				637A10600DA52C9E0044208F /* campfire.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

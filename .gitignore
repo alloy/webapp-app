@@ -1,3 +1,4 @@
 build
-eloy.*
 .DS_Store
+CampfireTest.xcodeproj/*.mode1v3
+CampfireTest.xcodeproj/*.pbxuser
