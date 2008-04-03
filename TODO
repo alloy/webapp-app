@@ -1,5 +1,9 @@
 - WebApp: Status bar?
+- WebApp: Dragging a file should not make the drag icon go away.
+- WebApp: Should still be possible to drag links on textfields.
 
+- Campfire: Zip a directory or multiple files before uploading.
+- Campfire: Add a "excludes" highlight textfield.
 - Integrate crash reporter
 - rewrite. Eg: #1234 => http://svn.example.com/r1234/trunk/
-- Make sure the application icon is always drawed 128x128
+- Make sure the application icon is always drawn 128x128
