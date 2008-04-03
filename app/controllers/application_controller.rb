@@ -28,13 +28,11 @@ class ApplicationController < Rucola::RCController
   def addWebViewTab(url = nil)
     if url.is_a? OSX::NSURL
       @webViewControllers << WebViewController.alloc.initWithURL(url)
-      @webViewControllers << WebViewController.alloc.initWithURL(url)
     else
       @webViewControllers << WebViewController.alloc.init
     end
     @tabView.addTabViewItem @webViewControllers.last.tabViewItem
     WebApp::Plugins.start
-    #p @webViewControllers # Fixme, a new tab is instantiated even though it won't be used.
   end
   
   def applicationDidBecomeActive(notification)

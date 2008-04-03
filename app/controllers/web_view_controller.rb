@@ -46,7 +46,7 @@ class WebViewController < OSX::NSObject
   def webView_decidePolicyForNewWindowAction_request_newFrameName_decisionListener(webView, info, request, newFrameName, listener)
     listener.ignore
     case newFrameName
-    when '_open_in_new_tab' # FIXME: This creates a new window, but for some reason also instantiates a new tab..
+    when '_open_in_new_tab'
       OSX::NSApp.delegate.addWebViewTab(request.URL)
     when '_close_tab'
       OSX::NSApp.delegate.removeWebViewTab(tabViewItem)

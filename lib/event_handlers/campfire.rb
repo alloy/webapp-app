@@ -6,13 +6,10 @@ module Campfire
       # Hide the room tabs
       document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }
       
-      # FIXME: This creates one webview controller plus webview too much.
       # Make the room links open a new tab
-      # document.find('table.lobby div.room a').each do |link|
-      #   link['target'] = '_open_in_new_tab'
-      #   #link['onclick'] = 'alert("blabla"); alert(window.WebAppEventHandler); window.WebAppEventHandler.openInNewTab_(this.href); return false;'
-      #   #link['onclick'] = 'var handler = window.WebAppEventHandler; handler.openInNewTab(this.href); return false;'
-      # end
+      document.find('table.lobby div.room a').each do |link|
+        link['target'] = '_open_in_new_tab'
+      end
     end
   end
   
