@@ -2,7 +2,9 @@ require File.expand_path('../../test_helper', __FILE__)
 
 #Rucola::Log.instance.level = 0
 
-require "lib/event_handlers/campfire"
+require "event_handlers/all"
+require "event_handlers/lobby"
+require "event_handlers/room"
 
 # This is a stupid fix for the problem that the super_foo syntax is broken when OSX._ignore_ns_override is set to true.
 class OSX::NSObject
@@ -260,6 +262,6 @@ describe "Campfire::Room, when running" do
   end
   
   def html_for_fixture(name)
-    File.read(File.expand_path("../fixtures/#{name}.html", __FILE__))
+    File.read(File.expand_path("../../fixtures/#{name}.html", __FILE__))
   end
 end

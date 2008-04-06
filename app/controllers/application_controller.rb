@@ -1,5 +1,4 @@
 $WEBAPP_DEBUG = true
-require Rucola::RCApp.root_path + "/lib/event_handlers/campfire.rb" unless defined? Campfire::Room
 
 class ApplicationController < Rucola::RCController
   ib_outlet :main_window
@@ -28,6 +27,19 @@ class ApplicationController < Rucola::RCController
       prefs = OSX::WebPreferences.standardPreferences
       prefs.userStyleSheetEnabled = true
       prefs.userStyleSheetLocation = OSX::NSURL.fileURLWithPath(stylesheet_path)
+    end
+    
+    ["#{Rucola::RCApp.root_path}/bundles/", Rucola::RCApp.application_support_path].each do |bundles|
+      # Load all event handlers
+      Dir.glob("#{bundles}/*.wabundle/event_handlers/*.rb").each do |event_handler|
+        require event_handler
+      end
+      
+      # Load all controllers
+      Dir.glob("#{bundles}/*.wabundle/controllers/*.rb").each do |controller|
+        require controller
+        #p File.constantize(controller)
+      end
     end
     
     @webViewControllers = []
@@ -64,8 +76,8 @@ class ApplicationController < Rucola::RCController
   end
   
   def openPreferences
-    @campfire_room_preferences_controller ||= CampfireRoomPreferencesController.alloc.init
-    @campfire_room_preferences_controller.showWindow(self)
+    @campfire_preferences_controller ||= CampfirePreferencesController.alloc.init
+    @campfire_preferences_controller.showWindow(self)
   end
   
   private
