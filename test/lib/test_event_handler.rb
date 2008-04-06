@@ -379,6 +379,9 @@ describe "EventHandler, when defining css override rules" do
   
   it "should write the css rules to a tmp stylesheet" do
     Rucola::RCApp.stubs(:app_name).returns('MyWebApp')
+    File.expects(:exist?).with('/tmp/WebApp/MyWebApp').returns(false)
+    FileUtils.expects(:mkdir_p).with('/tmp/WebApp/MyWebApp')
+    
     file_mock = mock('Stylesheet file')
     File.expects(:open).with('/tmp/WebApp/MyWebApp/user_stylesheet.css', 'w').yields(file_mock)
     file_mock.expects(:write).with { |contents| includes_rules(contents) }

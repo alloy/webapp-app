@@ -1,12 +1,17 @@
 $KCODE = 'u'
 
 module Campfire
-  class Lobby < WebApp::EventHandler
+  class All < WebApp::EventHandler
+    # Hide the room tabs in the dom
+    css %{
+      #MainTabs a.chat
+      {
+        display: none;
+      }
+    }
+    
     on_page_loaded(/https*:\/\/.+?\/$/) do |url, title|
-      # Hide the room tabs
-      document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }
-      
-      # Make the room links open a new tab
+      # Make the room links open a new tab in the lobby
       document.find('table.lobby div.room a').each do |link|
         link['target'] = '_open_in_new_tab'
       end

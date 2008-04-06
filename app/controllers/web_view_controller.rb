@@ -105,8 +105,7 @@ class WebViewController < OSX::NSObject
     #   @event_handlers << event_handler
     # end
     
-    require Rucola::RCApp.root_path + "/lib/event_handlers/campfire.rb" unless defined? Campfire::Room
-    [Campfire::Lobby, Campfire::Room].each do |event_handler_class|
+    [Campfire::All, Campfire::Room].each do |event_handler_class|
       event_handler = event_handler_class.alloc.init
       event_handler.webViewController = self
       event_handler.webView = @webView

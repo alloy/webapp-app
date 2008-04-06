@@ -41,9 +41,15 @@ module WebApp
       
       def write_tmp_stylesheet!
         if user_css_rules = WebApp::EventHandler.instance_variable_get(:@user_css_rules)
-          File.open(File.join('/tmp', 'WebApp', Rucola::RCApp.app_name, 'user_stylesheet.css'), 'w') do |file|
+          tmp_path = File.join('/tmp', 'WebApp', Rucola::RCApp.app_name)
+          FileUtils.mkdir_p(tmp_path) unless File.exist?(tmp_path)
+          
+          stylesheet_path = File.join(tmp_path, 'user_stylesheet.css')
+          File.open(stylesheet_path, 'w') do |file|
             file.write user_css_rules
           end
+          
+          stylesheet_path
         end
       end
       

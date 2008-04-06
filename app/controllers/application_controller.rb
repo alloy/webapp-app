@@ -1,4 +1,5 @@
 $WEBAPP_DEBUG = true
+require Rucola::RCApp.root_path + "/lib/event_handlers/campfire.rb" unless defined? Campfire::Room
 
 class ApplicationController < Rucola::RCController
   ib_outlet :main_window
@@ -20,6 +21,14 @@ class ApplicationController < Rucola::RCController
     
     setup_tabView!
     setup_tabBarController!
+    
+    # If there are any custom user css rules, now is the time to write them out.
+    if stylesheet_path = WebApp::EventHandler.write_tmp_stylesheet!
+      # And assign it to the WebView preferences.
+      prefs = OSX::WebPreferences.standardPreferences
+      prefs.userStyleSheetEnabled = true
+      prefs.userStyleSheetLocation = OSX::NSURL.fileURLWithPath(stylesheet_path)
+    end
     
     @webViewControllers = []
     addWebViewTab
