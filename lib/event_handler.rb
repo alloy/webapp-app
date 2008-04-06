@@ -30,6 +30,23 @@ module WebApp
         @event_handlers ||= []
       end
       
+      # Define custom CSS rules which will all be compiled into 1 stylesheet at startup.
+      def css(rules)
+        rules = rules.to_s.unindent
+        if user_css_rules = WebApp::EventHandler.instance_variable_get(:@user_css_rules)
+          rules = "#{user_css_rules}\n#{rules}"
+        end
+        WebApp::EventHandler.instance_variable_set(:@user_css_rules, rules)
+      end
+      
+      def write_tmp_stylesheet!
+        if user_css_rules = WebApp::EventHandler.instance_variable_get(:@user_css_rules)
+          File.open(File.join('/tmp', 'WebApp', Rucola::RCApp.app_name, 'user_stylesheet.css'), 'w') do |file|
+            file.write user_css_rules
+          end
+        end
+      end
+      
       def inherited(subklass)
         super
         event_handlers << subklass unless subklass.name =~ /NamelessEventHandler_/

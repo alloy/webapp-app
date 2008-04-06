@@ -1,6 +1,7 @@
 - WebApp: Status bar?
 - WebApp: Dragging a file should not make the drag icon go away.
 - WebApp: Should still be possible to drag links on textfields.
+- WebApp: Remove growl callback procs when a timeout message is received.
 
 - Campfire: Zip a directory or multiple files before uploading.
 - Campfire: Add a "excludes" highlight textfield.

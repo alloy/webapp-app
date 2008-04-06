@@ -349,3 +349,58 @@ describe "EventHandler, when handling preferences" do
     @handler.preferences[:hightlight_words].should == value
   end
 end
+
+class CSSEventHandler1 < WebApp::EventHandler
+  CSS1 = %{
+    .class1
+    {
+      display: none;
+    }
+  }
+  
+  css CSS1
+end
+
+class CSSEventHandler2 < WebApp::EventHandler
+  CSS2 = %{
+    .class2
+    {
+      display: block;
+    }
+  }
+  
+  css CSS2
+end
+
+describe "EventHandler, when defining css override rules" do
+  it "should store all the css rules in the EventHandler class" do
+    includes_rules(WebApp::EventHandler.instance_variable_get(:@user_css_rules)).should.be true
+  end
+  
+  it "should write the css rules to a tmp stylesheet" do
+    Rucola::RCApp.stubs(:app_name).returns('MyWebApp')
+    file_mock = mock('Stylesheet file')
+    File.expects(:open).with('/tmp/WebApp/MyWebApp/user_stylesheet.css', 'w').yields(file_mock)
+    file_mock.expects(:write).with { |contents| includes_rules(contents) }
+    
+    WebApp::EventHandler.write_tmp_stylesheet!
+  end
+  
+  it "should not write a tmp file if there are no css rules" do
+    before = WebApp::EventHandler.instance_variable_get(:@user_css_rules)
+    WebApp::EventHandler.instance_variable_set(:@user_css_rules, nil)
+    File.expects(:open).times(0)
+    
+    WebApp::EventHandler.write_tmp_stylesheet!
+    
+    WebApp::EventHandler.instance_variable_set(:@user_css_rules, before)
+  end
+  
+  private
+  
+  def includes_rules(str)
+    [CSSEventHandler1::CSS1, CSSEventHandler2::CSS2].all? do |css|
+      str.include? css.unindent
+    end
+  end
+end
