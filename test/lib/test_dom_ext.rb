@@ -167,6 +167,18 @@ describe "DOM Extensions" do
     @webView.mainFrame.DOMDocument.should.respond_to :find_with_xpath
   end
   
+  it "should be possible to modify a link element to open in a new tab" do
+    link = build { a }
+    link.open_in_new_tab!
+    link['target'].should == '_open_in_new_tab'
+  end
+  
+  it "should be possible to modify a link element to close its tab" do
+    link = build { a }
+    link.close_tab!
+    link['target'].should == '_close_tab'
+  end
+  
   private
   
   def build(&block)

@@ -2,19 +2,30 @@ $KCODE = 'u'
 
 module Campfire
   class All < WebApp::EventHandler
-    # Hide the room tabs in the dom
+    # Hide the room tabs at the top of the page
     css %{
       #MainTabs a.chat
       {
         display: none;
       }
     }
+  end
+  
+  class Lobby < WebApp::EventHandler(/https*:\/\/.+?\/$/)
+    # Make the room links open in a new tab
+    on_page_loaded do |url, title|
+      open_room_links_in_new_tab(document)
+    end
     
-    on_page_loaded(/https*:\/\/.+?\/$/) do |url, title|
-      # Make the room links open a new tab in the lobby
-      document.find('table.lobby div.room a').each do |link|
-        link['target'] = '_open_in_new_tab'
-      end
+    # Every now and then the room links get refreshed so we need to update them again
+    on_event('DOMNodeInserted', :conditions => { :id => 'lobby' }) do |event, node|
+      open_room_links_in_new_tab(node)
+    end
+    
+    private
+    
+    def open_room_links_in_new_tab(node)
+      node.find('div.room a').each { |link| link.open_in_new_tab! }
     end
   end
   
@@ -41,13 +52,10 @@ module Campfire
     end
     
     on_page_loaded do |url, title|
-      # Hide the room tabs
-      document.find('#MainTabs a.chat').each { |link| link['style'] = 'display: none;' }
-      
       # Make the 'leave' link close the tab
       if link = document.find(:first, '#leave_link a')
         link['onclick'] = link['onclick'].sub(/return false;$/, '')
-        link['target']  = '_close_tab'
+        link.close_tab!
       end
     end
     

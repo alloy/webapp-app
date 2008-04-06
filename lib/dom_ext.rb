@@ -44,6 +44,18 @@ class OSX::DOMElement
   end
 end
 
+class OSX::DOMHTMLAnchorElement
+  # Modify a link to open in a new tab.
+  def open_in_new_tab!
+    self['target'] = '_open_in_new_tab'
+  end
+  
+  # Modify a link to close the tabe that it belongs to.
+  def close_tab!
+    self['target'] = '_close_tab'
+  end
+end
+
 module WebApp
   module Find
     def find(*args)
