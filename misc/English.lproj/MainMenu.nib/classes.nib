@@ -26,6 +26,8 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
+				<key>bundlesMenu</key>
+				<string>id</string>
 				<key>main_window</key>
 				<string>id</string>
 				<key>tabBarController</key>

@@ -4,6 +4,7 @@ class ApplicationController < Rucola::RCController
   ib_outlet :main_window
   ib_outlet :tabView
   ib_outlet :tabBarController
+  ib_outlet :bundlesMenu
   
   attr_reader :webViewControllers
   attr_accessor :counterDelegate
@@ -29,21 +30,33 @@ class ApplicationController < Rucola::RCController
       prefs.userStyleSheetLocation = OSX::NSURL.fileURLWithPath(stylesheet_path)
     end
     
+    @bundle_window_controllers = {}
+    
     ["#{Rucola::RCApp.root_path}/bundles/", Rucola::RCApp.application_support_path].each do |bundles|
       # Load all event handlers
       Dir.glob("#{bundles}/*.wabundle/event_handlers/*.rb").each do |event_handler|
         require event_handler
       end
       
-      # Load all controllers
+      # Load all window controllers
       Dir.glob("#{bundles}/*.wabundle/controllers/*.rb").each do |controller|
         require controller
-        #p File.constantize(controller)
+        klass = File.constantize(controller)
+        
+        item = OSX::NSMenuItem.alloc.initWithTitle_action_keyEquivalent("#{klass.name.scan(/([A-Z][a-z]+)/).flatten[0..-2].join(' ')}...", 'openBundleWindowController:', '')
+        item.target = self
+        item.representedObject = klass
+        
+        @bundlesMenu.addItem(item)
       end
     end
     
     @webViewControllers = []
     addWebViewTab
+  end
+  
+  def openBundleWindowController(menuItem)
+    (@bundle_window_controllers[menuItem.representedObject] ||= menuItem.representedObject.alloc.init).showWindow(self)
   end
   
   def addWebViewTab(url = nil)

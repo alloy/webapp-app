@@ -8,6 +8,21 @@
 	<string>CampfireTest</string>
 	<key>CFBundleIconFile</key>
 	<string>campfire.tiff</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wabundle</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>WebApp EventHandler Bundle</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSTypeIsPackage</key>
+			<string>1</string>
+		</dict>
+	</array>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
