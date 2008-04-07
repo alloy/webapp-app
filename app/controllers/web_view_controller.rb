@@ -92,25 +92,11 @@ class WebViewController < OSX::NSObject
   
   def setup_event_handlers!
     @event_handlers = []
-    # event_handler_files = Dir.glob "#{RUBYCOCOA_ROOT + 'lib/event_handlers/'}/campfire.rb"
-    # 
-    # event_handler_files.each do |event_handler_file|
-    #   require event_handler_file
-    #   #p WebApp::EventHandler::event_handlers
-    #   
-    #   #event_handler = File.constantize(event_handler_file).alloc.init
-    #   event_handler = Campfire::Room.alloc.init
-    #   p event_handler.methods(false)
-    #   # event_handler.webView = @webView
-    #   @event_handlers << event_handler
-    # end
-    
-    [Campfire::All, Campfire::Lobby, Campfire::Room].each do |event_handler_class|
+    WebApp::EventHandler.event_handlers.each do |event_handler_class|
       event_handler = event_handler_class.alloc.init
       event_handler.webViewController = self
       event_handler.webView = @webView
       @event_handlers << event_handler
     end
   end
-  
 end

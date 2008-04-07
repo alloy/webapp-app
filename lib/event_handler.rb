@@ -4,18 +4,7 @@ module WebApp
       @klass_counter ||= 0
       @klass_counter += 1
       
-      klass = eval %{
-        class WebApp::NamelessEventHandler_#{@klass_counter} < EventHandler
-          class << self
-            def inherited(subklass)
-              super
-              subklass.global_url = global_url
-            end
-          end
-          
-          self
-        end
-      }
+      klass = eval "class WebApp::NamelessEventHandler_#{@klass_counter} < EventHandler; self; end"
       klass.global_url = url
       klass
     end
@@ -28,6 +17,12 @@ module WebApp
       attr_writer :event_handlers
       def event_handlers
         @event_handlers ||= []
+      end
+      
+      def inherited(subklass)
+        super
+        subklass.global_url = global_url
+        EventHandler.event_handlers << subklass unless subklass.name =~ /NamelessEventHandler_/
       end
       
       # Define custom CSS rules which will all be compiled into 1 stylesheet at startup.
@@ -51,11 +46,6 @@ module WebApp
           
           stylesheet_path
         end
-      end
-      
-      def inherited(subklass)
-        super
-        event_handlers << subklass unless subklass.name =~ /NamelessEventHandler_/
       end
     end
     

@@ -23,25 +23,7 @@ class ApplicationController < Rucola::RCController
     setup_tabBarController!
     
     @bundle_window_controllers = {}
-    
-    ["#{Rucola::RCApp.root_path}/bundles/", Rucola::RCApp.application_support_path].each do |bundles|
-      # Load all event handlers
-      Dir.glob("#{bundles}/*.wabundle/event_handlers/*.rb").each do |event_handler|
-        require event_handler
-      end
-      
-      # Load all window controllers
-      Dir.glob("#{bundles}/*.wabundle/controllers/*.rb").each do |controller|
-        require controller
-        klass = File.constantize(controller)
-        
-        item = OSX::NSMenuItem.alloc.initWithTitle_action_keyEquivalent("#{klass.name.scan(/([A-Z][a-z]+)/).flatten[0..-2].join(' ')}...", 'openBundleWindowController:', '')
-        item.target = self
-        item.representedObject = klass
-        
-        @bundlesMenu.addItem(item)
-      end
-    end
+    load_bundles!
     
     # If there are any custom user css rules, now is the time to write them out.
     if stylesheet_path = WebApp::EventHandler.write_tmp_stylesheet!
@@ -89,6 +71,29 @@ class ApplicationController < Rucola::RCController
   end
   
   private
+  
+  def load_bundles!
+    ["#{Rucola::RCApp.root_path}/bundles/", Rucola::RCApp.application_support_path].each do |bundles|
+      # Load all event handlers
+      Dir.glob("#{bundles}/*.wabundle/event_handlers/*.rb").each do |event_handler|
+        log.debug "Loading event handler: #{event_handler}"
+        require event_handler
+      end
+      
+      # Load all window controllers
+      Dir.glob("#{bundles}/*.wabundle/controllers/*.rb").each do |controller|
+        log.debug "Loading controller: #{controller}"
+        require controller
+        klass = File.constantize(controller)
+        
+        item = OSX::NSMenuItem.alloc.initWithTitle_action_keyEquivalent("#{klass.name.scan(/([A-Z][a-z]+)/).flatten[0..-2].join(' ')}...", 'openBundleWindowController:', '')
+        item.target = self
+        item.representedObject = klass
+        
+        @bundlesMenu.addItem(item)
+      end
+    end
+  end
   
   def setup_tabView!
     @tabView.removeTabViewItem(@tabView.tabViewItemAtIndex(0))

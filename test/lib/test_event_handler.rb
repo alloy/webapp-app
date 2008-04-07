@@ -407,3 +407,14 @@ describe "EventHandler, when defining css override rules" do
     end
   end
 end
+
+class SubClassOfANamelessEventHandler < WebApp::EventHandler(/.+/)
+end
+
+describe "EventHandler, class methods" do
+  it "should return a list of all the available event handler classes" do
+    event_handlers = WebApp::EventHandler.event_handlers
+    event_handlers.should.include SubClassOfANamelessEventHandler
+    event_handlers.all? { |eh| eh.name !=~ /^WebApp::NamelessEventHandler_\d+/ }.should.be true
+  end
+end
