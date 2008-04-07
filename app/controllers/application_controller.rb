@@ -22,14 +22,6 @@ class ApplicationController < Rucola::RCController
     setup_tabView!
     setup_tabBarController!
     
-    # If there are any custom user css rules, now is the time to write them out.
-    if stylesheet_path = WebApp::EventHandler.write_tmp_stylesheet!
-      # And assign it to the WebView preferences.
-      prefs = OSX::WebPreferences.standardPreferences
-      prefs.userStyleSheetEnabled = true
-      prefs.userStyleSheetLocation = OSX::NSURL.fileURLWithPath(stylesheet_path)
-    end
-    
     @bundle_window_controllers = {}
     
     ["#{Rucola::RCApp.root_path}/bundles/", Rucola::RCApp.application_support_path].each do |bundles|
@@ -49,6 +41,14 @@ class ApplicationController < Rucola::RCController
         
         @bundlesMenu.addItem(item)
       end
+    end
+    
+    # If there are any custom user css rules, now is the time to write them out.
+    if stylesheet_path = WebApp::EventHandler.write_tmp_stylesheet!
+      # And assign it to the WebView preferences.
+      prefs = OSX::WebPreferences.standardPreferences
+      prefs.userStyleSheetEnabled = true
+      prefs.userStyleSheetLocation = OSX::NSURL.fileURLWithPath(stylesheet_path)
     end
     
     @webViewControllers = []
