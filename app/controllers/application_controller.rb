@@ -88,11 +88,6 @@ class ApplicationController < Rucola::RCController
     @webViewControllers.reject! { |wvc| wvc.tabViewItem == tabViewItem }
   end
   
-  def openPreferences
-    @campfire_preferences_controller ||= CampfirePreferencesController.alloc.init
-    @campfire_preferences_controller.showWindow(self)
-  end
-  
   private
   
   def setup_tabView!
