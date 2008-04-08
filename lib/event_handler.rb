@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module WebApp
   class << self
     def EventHandler(url)
