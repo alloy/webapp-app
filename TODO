@@ -1,6 +1,15 @@
-WebApp:
-- Check if the url can be reached before continueing to the creation step.
-- Should have a rake task which runs the SampleApplication prepare task and creates a WebApp.app release package that embeds the prepared SampleApplication.
+- WebApp: Status bar?
+- WebApp: Dragging a file should not make the drag icon go away.
+- WebApp: Should still be possible to drag links on textfields.
+- WebApp: Remove growl callback procs when a timeout message is received.
+- WebApp: Change the on_event handlers to simply receive the event and not the node,
+  thus making it easier to use with other type of events than only DOMNodeInserted.
+- WebApp: Unescape html in messages.
+- WebApp: Leave all rooms when quitting the app.
 
-SampleApplication:
-- Should have a rake task to create a release package which has been prepared to be able to embed in WebApp.app as the base application skeleton.
+- Campfire: Only parse the username if there are no entries for highlight words yet, so nil.
+- Campfire: Zip a directory or multiple files before uploading.
+- Campfire: Add a "excludes" highlight textfield.
+- Integrate crash reporter
+- rewrite. Eg: #1234 => http://svn.example.com/r1234/trunk/
+- Make sure the application icon is always drawn 128x128
