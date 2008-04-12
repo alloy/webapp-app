@@ -1,0 +1,3 @@
+CFBundleName = "WebApp";
+CFBundleGetInfoString = "WebApp version 0.1, Copyright 2008 YOUR NAME.";
+NSHumanReadableCopyright = "Copyright 2008 YOUR NAME.";
