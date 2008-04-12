@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Campfire Login</title>
+  <link href="/stylesheets/screen.css?1205809682" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/backpack-styles-for-login.css?1205809682" media="all" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/prototype.js?1205809682" type="text/javascript"></script>
+<script src="/javascripts/effects.js?1205809682" type="text/javascript"></script>
+<script src="/javascripts/application.js?1205809682" type="text/javascript"></script>
+</head>
+
+<body class="modal login ">
+
+<div id="Container">
+  
+  
+  
+
+
+  <div id="Modal">
+    <div class="inner">
+      
+      
+      <a href="http://www.campfirenow.com"><img alt="Campfire Logo" height="70" id="logo" src="/images/logo.gif?1205809682" width="84" /></a>
+      
+
+
+<form action="/login" id="loginForm" method="post">
+  <dl>
+    <dt>Email:</dt>
+    <dd><input id="email_address" name="email_address" type="text" /></dd>
+    <dt>Password:</dt>
+    <dd><input id="password" name="password" type="password" /></dd>
+
+    <dd><input type="checkbox" name="remember" value="1" /> Remember me</dd>
+    <dd><input alt="Sign in" src="/images/b-sign_in.gif?1205809682" type="image" /></dd>
+  </dl>
+</form>
+
+<script type="text/javascript">
+//<![CDATA[
+$("loginForm").focusFirstElement();
+//]]>
+</script>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>      
