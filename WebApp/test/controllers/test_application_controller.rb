@@ -1,27 +1,22 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe 'ApplicationController' do
-  before do
-    @controller = ApplicationController.alloc.init
+describe 'ApplicationController, in general' do
+  tests ApplicationController
+  
+  def after_setup
+    @bundles = ['Foo.wabundle', 'Bar.wabundle']
   end
   
-  it "should initialize" do
-    @controller.should.be.an.instance_of ApplicationController
+  it "should return an array of existing bundles" do
+    Dir.stubs(:glob).with("#{Rucola::RCApp.root_path}/bundles/*.wabundle").returns(@bundles.map { |name| "/some/path/to/webapp/#{name}" })
+    controller.send(:bundles).should == @bundles
   end
   
-  it "should set itself as the application delegate" do
-    OSX::NSApp.expects(:delegate=).with(@controller)
-    @controller.ib_outlet(:main_window).expects(:inspect)
-    @controller.awakeFromNib
-  end
-  
-  it "should do some stuff when the application has finished launching" do
-    Kernel.expects(:puts)
-    @controller.applicationDidFinishLaunching(nil)
-  end
-  
-  it "should do some stuff when the application will terminate" do
-    Kernel.expects(:puts)
-    @controller.applicationWillTerminate(nil)
+  it "should return an array of menu items for existing bundles" do
+    controller.stubs(:bundles).returns(@bundles)
+    controller.send(:bundle_menu_items).each_with_index do |menu_item, idx|
+      menu_item.should.be.instance_of OSX::NSMenuItem
+      menu_item.title.should == @bundles[idx]
+    end
   end
 end

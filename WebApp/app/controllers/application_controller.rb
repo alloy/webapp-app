@@ -2,21 +2,19 @@ class ApplicationController < Rucola::RCController
   ib_outlet :main_window
   
   def awakeFromNib
-    # All the application delegate methods will be called on this object.
-    OSX::NSApp.delegate = self
-    
-    puts "ApplicationController awoke."
-    puts "Edit: app/controllers/application_controller.rb"
-    puts  "\nIts window is: #{@main_window.inspect}"
   end
   
-  # NSApplication delegate methods
-  def applicationDidFinishLaunching(notification)
-    Kernel.puts "\nApplication finished launching."
+  private
+  
+  def bundles
+    Dir.glob("#{Rucola::RCApp.root_path}/bundles/*.wabundle").map { |bundle| File.basename(bundle) }
   end
   
-  def applicationWillTerminate(notification)
-    Kernel.puts "\nApplication will terminate."
+  def bundle_menu_items
+    bundles.map do |name|
+      item = OSX::NSMenuItem.alloc.init
+      item.title = name
+      item
+    end
   end
-  
 end
