@@ -5,6 +5,7 @@
 - WebApp: Change the on_event handlers to simply receive the event and not the node,
   thus making it easier to use with other type of events than only DOMNodeInserted.
 - WebApp: Unescape html in messages.
+- WebApp: Also make cursor left/right plus command+shift change tabs, just like the curly braces.
 - WebApp: Leave all rooms when quitting the app.
 
 - Campfire: Only parse the username if there are no entries for highlight words yet, so nil.
