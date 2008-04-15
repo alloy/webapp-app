@@ -19,7 +19,13 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
+				<key>bundles_menu</key>
+				<string>id</string>
 				<key>main_window</key>
+				<string>id</string>
+				<key>name_text_field</key>
+				<string>id</string>
+				<key>url_text_field</key>
 				<string>id</string>
 			</dict>
 			<key>SUPERCLASS</key>
