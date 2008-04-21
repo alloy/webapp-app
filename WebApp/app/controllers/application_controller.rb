@@ -5,7 +5,7 @@ class ApplicationController < Rucola::RCController
   ib_outlet :url_text_field
   
   def awakeFromNib
-    @bundles_menu.addItemsWithTitles(bundles)
+    @bundles_menu.addItemsWithTitles(bundles.keys)
     @bundles_menu.itemArray.each do |item|
       item.target = self
       item.action = 'presetChosen:'
@@ -16,7 +16,7 @@ class ApplicationController < Rucola::RCController
     @name_text_field.stringValue, @url_text_field.stringValue = (if item.title == 'None'
       ['', '']
     else
-      preset = defaults[item.title]
+      preset = bundles[item.title.to_s].defaults
       [preset['name'], preset['url']]
     end)
   end
@@ -24,13 +24,6 @@ class ApplicationController < Rucola::RCController
   private
   
   def bundles
-    Dir.glob("#{Rucola::RCApp.root_path}/bundles/*.wabundle").map { |bundle| bundle.scan(/\/(\w+)\.wabundle$/).first.first }
-  end
-  
-  def defaults
-    {
-      'Campfire' => { 'name' => 'Campfire', 'url' => 'http://CHANGEME.campfirenow.com' },
-      'Twitter' => { 'name' => 'Twitter', 'url' => 'http://twitter.com/CHANGEME' }
-    }.to_ns
+    @bundles ||= WebAppBundle.bundles
   end
 end
