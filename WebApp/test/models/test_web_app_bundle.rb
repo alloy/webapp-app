@@ -11,7 +11,7 @@ describe "WebAppBundle, in general" do
   end
   
   it "should return it's default values" do
-    @bundle.defaults.should == { 'name' => 'Foo', 'url' => 'http://foo.example.com' }
+    @bundle.defaults.should == { 'name' => 'Foo', 'url' => 'http://CHANGEME.example.com/foo' }
   end
 end
 

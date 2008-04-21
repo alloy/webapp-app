@@ -13,12 +13,17 @@ class ApplicationController < Rucola::RCController
   end
   
   def presetChosen(item)
-    @name_text_field.stringValue, @url_text_field.stringValue = (if item.title == 'None'
-      ['', '']
+    if item.title == 'None'
+      @name_text_field.stringValue, @url_text_field.stringValue = ['', '']
     else
       preset = bundles[item.title.to_s].defaults
-      [preset['name'], preset['url']]
-    end)
+      @name_text_field.stringValue, @url_text_field.stringValue = preset['name'], preset['url']
+      
+      if start = preset['url'].index('CHANGEME')
+        @url_text_field.selectText(self)
+        @url_text_field.window.firstResponder.selectedRange = OSX::NSRange.new(start..(start + 7))
+      end
+    end
   end
   
   private

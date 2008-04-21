@@ -28,9 +28,16 @@ describe 'ApplicationController, in general' do
   end
   
   it "should set defaults if a preset was chosen" do
+    url_text_field.expects(:selectText).with(controller)
+    
+    url_text_field.stubs(:window).returns(main_window)
+    responder = mock('First Responder')
+    main_window.stubs(:firstResponder).returns(responder)
+    responder.expects(:selectedRange=).with(OSX::NSRange.new(7..14))
+    
     choose_preset 'Foo'
     name_text_field.stringValue.should == 'Foo'
-    url_text_field.stringValue.should == 'http://foo.example.com'
+    url_text_field.stringValue.should == 'http://CHANGEME.example.com/foo'
   end
   
   it "should empty the form elements if the 'None' preset is chosen" do
