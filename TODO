@@ -1,0 +1,5 @@
+WebApp:
+- Should have a rake task which runs the SampleApplication prepare task and creates a WebApp.app release package that embeds the prepared SampleApplication.
+
+SampleApplication:
+- Should have a rake task to create a release package which has been prepared to be able to embed in WebApp.app as the base application skeleton.
