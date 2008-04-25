@@ -5,9 +5,10 @@ describe 'WebAppBuilder' do
     @tmp = '/tmp/WebAppTest'
     FileUtils.mkdir_p @tmp
     
+    @name = 'WebAppTestApplication'
     @url = 'https://foo.example.com'
     
-    @builder = WebAppBuilder.new('WebAppTestApplication', @url, @tmp)
+    @builder = WebAppBuilder.new(@name, @url, @tmp)
     @builder.create_base_application!
   end
   
@@ -22,6 +23,8 @@ describe 'WebAppBuilder' do
   
   it "should have created the correct Info.plist file" do
     plist = OSX::NSDictionary.dictionaryWithContentsOfFile path_to("Info.plist")
+    
+    plist['CFBundleIdentifier'].should == "nl.superalloy.webapp.#{@name}"
     plist['WebAppURL'].should == @url
   end
   

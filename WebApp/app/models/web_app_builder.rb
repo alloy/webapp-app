@@ -18,7 +18,10 @@ class WebAppBuilder
   def write_info_plist!
     plist_path = File.join(full_path, 'Contents', 'Info.plist')
     plist = OSX::NSDictionary.dictionaryWithContentsOfFile(plist_path)
+    
     plist['WebAppURL'] = @url
+    plist['CFBundleIdentifier'] = "nl.superalloy.webapp.#{@name}"
+    
     plist.writeToFile_atomically(plist_path, true)
   end
 end
