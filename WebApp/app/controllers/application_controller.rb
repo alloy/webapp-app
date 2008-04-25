@@ -14,10 +14,10 @@ class ApplicationController < Rucola::RCController
   
   def presetChosen(item)
     if item.title == 'None'
-      @name_text_field.stringValue, @url_text_field.stringValue = ['', '']
+      set_name_and_url('', '')
     else
       preset = bundles[item.title.to_s].defaults
-      @name_text_field.stringValue, @url_text_field.stringValue = preset['name'], preset['url']
+      set_name_and_url(preset['name'], preset['url'])
       
       if start = preset['url'].index('CHANGEME')
         @url_text_field.selectText(self)
@@ -27,6 +27,10 @@ class ApplicationController < Rucola::RCController
   end
   
   private
+  
+  def set_name_and_url(name, url)
+    @name_text_field.stringValue, @url_text_field.stringValue = name, url
+  end
   
   def bundles
     @bundles ||= WebAppBundle.bundles
