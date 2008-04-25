@@ -30,6 +30,9 @@ desc 'Deploy a release build.'
 task :deploy do
   puts "\nDeploying...\n\n"
   
+  sh "cd ../CampfireTestApp && rake deploy:package_webapp_base_app"
+  sh "cp ../CampfireTestApp/pkg/webapp_base_app.tar.bz2 app/assets/"
+  
   # Rake::Task['release'].invoke
   # Rake::Task['deploy:package'].invoke
   # Rake::Task['deploy:sparkle_appcast'].invoke

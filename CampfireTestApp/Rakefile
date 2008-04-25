@@ -36,3 +36,10 @@ task :deploy do
   # Rake::Task['xcode:clean'].invoke
   Rake::Task['dependencies:clean'].invoke
 end
+
+namespace :deploy do
+  desc 'Prepare a package to be used as a webapp base app'
+  task :package_webapp_base_app => ['dependencies:copy', :release, :pkg] do
+    sh "cd build/Release && /usr/bin/tar -cjf ../../pkg/webapp_base_app.tar.bz2 CampfireTest.app"
+  end
+end
