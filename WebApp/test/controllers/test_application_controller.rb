@@ -50,10 +50,16 @@ describe 'ApplicationController, in general' do
     url_text_field.stringValue.should.be.empty
   end
   
-  # it "should start the creation process of a new webapp" do
-  #   WebAppBuilder.new('/tmp/WebAppTestApplication')
-  #   controller.createApp(nil)
-  # end
+  it "should start the creation process of a new webapp" do
+    @bundles['Foo'].stubs(:defaults).returns('name' => 'Foo', 'url' => 'http://foo.example.com')
+    choose_preset 'Foo'
+    
+    builder = mock('WebAppBuilder')
+    WebAppBuilder.expects(:new).with('Foo', 'http://foo.example.com', '/tmp/').returns(builder)
+    builder.expects(:create_base_application!)
+    
+    controller.createApp(nil)
+  end
   
   private
   

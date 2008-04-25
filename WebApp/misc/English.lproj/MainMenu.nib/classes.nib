@@ -13,6 +13,11 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>createApp</key>
+				<string>id</string>
+			</dict>
 			<key>CLASS</key>
 			<string>ApplicationController</string>
 			<key>LANGUAGE</key>

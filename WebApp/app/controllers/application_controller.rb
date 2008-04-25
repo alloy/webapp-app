@@ -26,6 +26,11 @@ class ApplicationController < Rucola::RCController
     end
   end
   
+  def createApp(sender)
+    path = '/tmp/'
+    WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, path).create_base_application!
+  end
+  
   private
   
   def set_name_and_url(name, url)

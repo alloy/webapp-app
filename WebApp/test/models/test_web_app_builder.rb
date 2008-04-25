@@ -2,6 +2,8 @@ require File.expand_path('../../test_helper', __FILE__)
 
 describe 'WebAppBuilder' do
   before do
+    OSX::NSUserDefaults.standardUserDefaults.stubs(:[]).with('CFBundleVersion').returns('91.123')
+    
     @tmp = '/tmp/WebAppTest'
     FileUtils.mkdir_p @tmp
     
@@ -23,9 +25,14 @@ describe 'WebAppBuilder' do
   
   it "should have created the correct Info.plist file" do
     plist = OSX::NSDictionary.dictionaryWithContentsOfFile path_to("Info.plist")
-    
     plist['CFBundleIdentifier'].should == "nl.superalloy.webapp.#{@name}"
     plist['WebAppURL'].should == @url
+  end
+  
+  it "should have created the correct InfoPlist.strings file" do
+    strings = File.read path_to('Resources/English.lproj/InfoPlist.strings')
+    copyright = "\"WebApp application\\nCopyright 2008 Eloy Duran <e.duran@superalloy.nl>.\""
+    strings.should == "CFBundleName = \"WebAppTestApplication\";\nCFBundleGetInfoString = #{copyright};\nNSHumanReadableCopyright = #{copyright};"
   end
   
   private

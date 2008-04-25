@@ -8,6 +8,7 @@ class WebAppBuilder
   def create_base_application!
     unpack!
     write_info_plist!
+    write_info_plist_strings!
   end
   
   def unpack!
@@ -23,5 +24,13 @@ class WebAppBuilder
     plist['CFBundleIdentifier'] = "nl.superalloy.webapp.#{@name}"
     
     plist.writeToFile_atomically(plist_path, true)
+  end
+  
+  def write_info_plist_strings!
+    strings = File.join(full_path, 'Contents', 'Resources', 'English.lproj', 'InfoPlist.strings')
+    File.open(strings, 'w') do |file|
+      copyright = "\"WebApp application\\nCopyright 2008 Eloy Duran <e.duran@superalloy.nl>.\""
+      file.write "CFBundleName = \"#{@name}\";\nCFBundleGetInfoString = #{copyright};\nNSHumanReadableCopyright = #{copyright};"
+    end
   end
 end
