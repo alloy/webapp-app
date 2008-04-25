@@ -50,6 +50,11 @@ describe 'ApplicationController, in general' do
     url_text_field.stringValue.should.be.empty
   end
   
+  # it "should start the creation process of a new webapp" do
+  #   WebAppBuilder.new('/tmp/WebAppTestApplication')
+  #   controller.createApp(nil)
+  # end
+  
   private
   
   def choose_preset(title)
