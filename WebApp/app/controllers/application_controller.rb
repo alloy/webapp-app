@@ -3,6 +3,7 @@ class ApplicationController < Rucola::RCController
   ib_outlet :bundles_menu
   ib_outlet :name_text_field
   ib_outlet :url_text_field
+  ib_outlet :path_text_field
   
   def awakeFromNib
     @bundles_menu.addItemsWithTitles(bundles.keys)
@@ -26,9 +27,16 @@ class ApplicationController < Rucola::RCController
     end
   end
   
+  def openBrowsePanel(sender)
+    panel = OSX::NSOpenPanel.openPanel
+    panel.canChooseDirectories, panel.canChooseFiles = true, false
+    if panel.runModalForDirectory_file_types('/Applications', nil, nil) == OSX::NSOKButton
+      @path_text_field.stringValue = panel.filenames.first
+    end
+  end
+  
   def createApp(sender)
-    path = '/tmp/'
-    WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, path).create_base_application!
+    WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, @path_text_field.stringValue).create_base_application!
   end
   
   private

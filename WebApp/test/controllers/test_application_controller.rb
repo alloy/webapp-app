@@ -6,8 +6,10 @@ describe 'ApplicationController, in general' do
   def after_setup
     ib_outlets :bundles_menu => OSX::NSPopUpButton.alloc.init,
                :name_text_field => OSX::NSTextField.alloc.init,
-               :url_text_field => OSX::NSTextField.alloc.init
+               :url_text_field => OSX::NSTextField.alloc.init,
+               :path_text_field => OSX::NSTextField.alloc.init
                
+    path_text_field.stringValue = '/tmp'
     
     @bundles = { 'Foo' => WebAppBundle.new(File.expand_path('../../fixtures/bundles/Foo.wabundle', __FILE__)) }
     WebAppBundle.stubs(:bundles).returns(@bundles)
@@ -55,7 +57,7 @@ describe 'ApplicationController, in general' do
     choose_preset 'Foo'
     
     builder = mock('WebAppBuilder')
-    WebAppBuilder.expects(:new).with('Foo', 'http://foo.example.com', '/tmp/').returns(builder)
+    WebAppBuilder.expects(:new).with('Foo', 'http://foo.example.com', '/tmp').returns(builder)
     builder.expects(:create_base_application!)
     
     controller.createApp(nil)

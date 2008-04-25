@@ -17,6 +17,8 @@
 			<dict>
 				<key>createApp</key>
 				<string>id</string>
+				<key>openBrowsePanel</key>
+				<string>id</string>
 			</dict>
 			<key>CLASS</key>
 			<string>ApplicationController</string>
@@ -29,6 +31,8 @@
 				<key>main_window</key>
 				<string>id</string>
 				<key>name_text_field</key>
+				<string>id</string>
+				<key>path_text_field</key>
 				<string>id</string>
 				<key>url_text_field</key>
 				<string>id</string>
