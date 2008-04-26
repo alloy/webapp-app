@@ -52,7 +52,7 @@ describe 'ApplicationController, in general' do
     url_text_field.stringValue.should.be.empty
   end
   
-  it "should start the creation process of a new webapp and launch it when done" do
+  it "should start the creation process of a new webapp and open it in the finder when done" do
     @bundles['Foo'].stubs(:defaults).returns('name' => 'Foo', 'url' => 'http://foo.example.com')
     choose_preset 'Foo'
     
