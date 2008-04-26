@@ -36,7 +36,9 @@ class ApplicationController < Rucola::RCController
   end
   
   def createApp(sender)
-    WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, @path_text_field.stringValue).create_base_application!
+    builder = WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, @path_text_field.stringValue)
+    builder.create_base_application!
+    OSX::NSWorkspace.sharedWorkspace.selectFile_inFileViewerRootedAtPath(builder.full_path, '')
   end
   
   private

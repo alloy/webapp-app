@@ -52,13 +52,16 @@ describe 'ApplicationController, in general' do
     url_text_field.stringValue.should.be.empty
   end
   
-  it "should start the creation process of a new webapp" do
+  it "should start the creation process of a new webapp and launch it when done" do
     @bundles['Foo'].stubs(:defaults).returns('name' => 'Foo', 'url' => 'http://foo.example.com')
     choose_preset 'Foo'
     
     builder = mock('WebAppBuilder')
     WebAppBuilder.expects(:new).with('Foo', 'http://foo.example.com', '/tmp').returns(builder)
     builder.expects(:create_base_application!)
+    
+    builder.stubs(:full_path).returns('/tmp/Foo.app')
+    OSX::NSWorkspace.sharedWorkspace.expects(:selectFile_inFileViewerRootedAtPath).with('/tmp/Foo.app', '')
     
     controller.createApp(nil)
   end
