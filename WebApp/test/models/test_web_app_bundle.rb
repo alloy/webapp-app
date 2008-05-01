@@ -2,8 +2,8 @@ require File.expand_path('../../test_helper', __FILE__)
 
 describe "WebAppBundle, in general" do
   before do
-    path = File.expand_path('../../Fixtures/bundles/Foo.wabundle', __FILE__)
-    @bundle = WebAppBundle.new(path)
+    @path = File.expand_path('../../Fixtures/bundles/Foo.wabundle', __FILE__)
+    @bundle = WebAppBundle.new(@path)
   end
   
   it "should return the display name" do
@@ -12,6 +12,10 @@ describe "WebAppBundle, in general" do
   
   it "should return it's default values" do
     @bundle.defaults.should == { 'name' => 'Foo', 'url' => 'http://CHANGEME.example.com/foo' }
+  end
+  
+  it "should return a path to a icon file if there is one in the bundle" do
+    @bundle.icon.should == File.join(@path, 'icon.tiff')
   end
 end
 

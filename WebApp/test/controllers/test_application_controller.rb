@@ -37,15 +37,27 @@ describe 'ApplicationController, in general' do
     main_window.stubs(:firstResponder).returns(responder)
     responder.expects(:selectedRange=).with(OSX::NSRange.new(7..14))
     
+    image = mock('NSImage')
+    OSX::NSImage.any_instance.expects(:initWithContentsOfFile).with(File.join(@bundles['Foo'].path, 'icon.tiff')).returns(image)
+    icon_image_well.expects(:image=).with(image)
+    
     choose_preset 'Foo'
     name_text_field.stringValue.should == 'Foo'
     url_text_field.stringValue.should == 'http://CHANGEME.example.com/foo'
+  end
+  
+  it "should set the image to a empty image if no icon is present" do
+    @bundles['Foo'].stubs(:defaults).returns('name' => 'Foo', 'url' => 'http://foo.example.com')
+    @bundles['Foo'].stubs(:icon).returns(nil)
+    icon_image_well.expects(:image=).with(ApplicationController::EMPTY_IMAGE)
+    choose_preset 'Foo'
   end
   
   it "should empty the form elements if the 'None' preset is chosen" do
     name_text_field.stringValue = 'Foo'
     url_text_field.stringValue = 'http://foo.example.com'
     
+    icon_image_well.expects(:image=).with(ApplicationController::EMPTY_IMAGE)
     choose_preset 'None'
     
     name_text_field.stringValue.should.be.empty

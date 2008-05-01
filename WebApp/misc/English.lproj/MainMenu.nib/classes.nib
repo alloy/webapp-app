@@ -28,6 +28,8 @@
 			<dict>
 				<key>bundles_menu</key>
 				<string>id</string>
+				<key>icon_image_well</key>
+				<string>id</string>
 				<key>main_window</key>
 				<string>id</string>
 				<key>name_text_field</key>

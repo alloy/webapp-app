@@ -20,4 +20,8 @@ class WebAppBundle
   def defaults
     YAML.load File.read(File.join(@path, 'defaults.yml'))
   end
+  
+  def icon
+    Dir.glob("#{@path}/icon.*").first
+  end
 end

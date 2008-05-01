@@ -1,9 +1,12 @@
 class ApplicationController < Rucola::RCController
+  EMPTY_IMAGE = OSX::NSImage.alloc.init
+  
   ib_outlet :main_window
   ib_outlet :bundles_menu
   ib_outlet :name_text_field
   ib_outlet :url_text_field
   ib_outlet :path_text_field
+  ib_outlet :icon_image_well
   
   def awakeFromNib
     @bundles_menu.addItemsWithTitles(bundles.keys)
@@ -16,13 +19,21 @@ class ApplicationController < Rucola::RCController
   def presetChosen(item)
     if item.title == 'None'
       set_name_and_url('', '')
+      @icon_image_well.image = EMPTY_IMAGE
     else
-      preset = bundles[item.title.to_s].defaults
-      set_name_and_url(preset['name'], preset['url'])
+      bundle = bundles[item.title.to_s]
+      defaults = bundle.defaults
+      set_name_and_url(defaults['name'], defaults['url'])
       
-      if start = preset['url'].index('CHANGEME')
+      if start = defaults['url'].index('CHANGEME')
         @url_text_field.selectText(self)
         @url_text_field.window.firstResponder.selectedRange = OSX::NSRange.new(start..(start + 7))
+      end
+      
+      if bundle.icon
+        @icon_image_well.image = OSX::NSImage.alloc.initWithContentsOfFile(bundle.icon)
+      else
+        @icon_image_well.image = EMPTY_IMAGE
       end
     end
   end
