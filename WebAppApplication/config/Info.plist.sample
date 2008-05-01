@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>CampfireTest</string>
+	<string>WebAppApplication</string>
 	<key>CFBundleIconFile</key>
 	<string>CHANGEME</string>
 	<key>CFBundleDocumentTypes</key>

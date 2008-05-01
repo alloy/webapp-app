@@ -1,0 +1,3 @@
+CFBundleName = "WebAppApplication";
+CFBundleGetInfoString = "WebAppApplication version 0.1, Copyright 2008 Eloy Duran <e.duran@superalloy.nl>.";
+NSHumanReadableCopyright = "Copyright 2008 Eloy Duran <e.duran@superalloy.nl>.";
