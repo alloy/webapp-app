@@ -24,6 +24,16 @@ load 'rucola/tasks/main.rake'
 
 # Tasks
 
+desc 'Build and run a WebApp Application in debug mode'
+task :debug_build do
+  ENV['DONT_START_RUBYCOCOA_APP'] = 'true'
+  Rake::Task['xcode:build'].invoke
+  FileUtils.cp 'bundles/Campfire.wabundle/icon.tiff', 'build/Debug/CampfireTest.app/Contents/Resources/icon.tiff'
+  ENV['DONT_START_RUBYCOCOA_APP'] = nil
+  Rake::Task['xcode:run'].invoke
+end
+task :default => :debug_build
+
 desc 'Deploy a release build.'
 task :deploy do
   puts "\nDeploying...\n\n"
