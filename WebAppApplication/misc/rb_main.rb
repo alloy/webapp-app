@@ -1,6 +1,6 @@
 #
 #  rb_main.rb
-#  CampfireTest
+#  WebAppApplication
 #
 #  Created by YOUR NAME on 2008-03-10.
 #  Copyright (c) 2007 YOUR NAME. All rights reserved.

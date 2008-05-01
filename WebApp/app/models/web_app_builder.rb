@@ -13,7 +13,7 @@ class WebAppBuilder
   
   def unpack!
     pkg = File.join(Rucola::RCApp.assets_path, 'webapp_base_app.tar.bz2')
-    system "/usr/bin/tar -xjf #{pkg} --directory /tmp/ && mv /tmp/CampfireTest.app #{full_path}"
+    system "/usr/bin/tar -xjf #{pkg} --directory /tmp/ && mv /tmp/WebAppApplication.app #{full_path}"
   end
   
   def write_info_plist!

@@ -41,3 +41,8 @@ task :deploy do
   # Rake::Task['xcode:clean'].invoke
   # Rake::Task['dependencies:clean'].invoke
 end
+
+desc 'Clean WebApp and WebAppApplication'
+task :clean_all => :clean do
+  sh "cd ../WebAppApplication && rake clean"
+end
