@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>CampfireTest</string>
 	<key>CFBundleIconFile</key>
-	<string>campfire.tiff</string>
+	<string>CHANGEME</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -36,10 +36,10 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.rubycocoa.CampfireTestApp</string>
+	<string>nl.superalloy.webapp.CHANGEME</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>WebAppURL</key>
-	<string>https://CHANGEME.campfirenow.com</string>
+	<string>https://CHANGEME.example.com</string>
 </dict>
 </plist>

@@ -38,8 +38,22 @@ task :deploy do
 end
 
 namespace :deploy do
+  APP_BUILD_ROOT = "build/Release"
+  
   desc 'Prepare a package to be used as a webapp base app'
   task :package_webapp_base_app => ['dependencies:copy', :release, :pkg] do
-    sh "cd build/Release && /usr/bin/tar -cjf ../../pkg/webapp_base_app.tar.bz2 CampfireTest.app"
+    contents = File.join(APP_BUILD_ROOT, 'CampfireTest.app', 'Contents')
+    
+    info_plist = File.join(contents, 'Info.plist')
+    FileUtils.rm info_plist
+    FileUtils.cp File.expand_path('../config/Info.plist.sample', __FILE__), info_plist
+    
+    create_bz2_package!
+  end
+  
+  private
+  
+  def create_bz2_package!
+    sh "cd #{APP_BUILD_ROOT} && /usr/bin/tar -cjf ../../pkg/webapp_base_app.tar.bz2 CampfireTest.app"
   end
 end
