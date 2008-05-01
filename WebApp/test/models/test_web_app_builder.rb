@@ -2,15 +2,15 @@ require File.expand_path('../../test_helper', __FILE__)
 
 describe 'WebAppBuilder' do
   before do
-    OSX::NSUserDefaults.standardUserDefaults.stubs(:[]).with('CFBundleVersion').returns('91.123')
-    
     @tmp = '/tmp/WebAppTest'
     FileUtils.mkdir_p @tmp
     
     @name = 'WebAppTestApplication'
     @url = 'https://foo.example.com'
     
-    @builder = WebAppBuilder.new(@name, @url, @tmp)
+    @bundle = WebAppBundle.new(File.expand_path('../../Fixtures/bundles/Foo.wabundle', __FILE__))
+    
+    @builder = WebAppBuilder.new(@name, @url, @tmp, @bundle)
     @builder.create_base_application!
   end
   
@@ -20,7 +20,7 @@ describe 'WebAppBuilder' do
   
   it "should unpack the WebApp base application and move it to the full path" do
     @builder.full_path.should == '/tmp/WebAppTest/WebAppTestApplication.app'
-    File.exist?(@builder.full_path).should.be true
+    File.should.exist @builder.full_path
   end
   
   it "should have created the correct Info.plist file" do
@@ -33,6 +33,15 @@ describe 'WebAppBuilder' do
     strings = File.read path_to('Resources/English.lproj/InfoPlist.strings')
     copyright = "\"WebApp application\\nCopyright 2008 Eloy Duran <e.duran@superalloy.nl>.\""
     strings.should == "CFBundleName = \"WebAppTestApplication\";\nCFBundleGetInfoString = #{copyright};\nNSHumanReadableCopyright = #{copyright};"
+  end
+  
+  it "should have copied the specified bundle to the bundles dir inside the app" do
+    File.should.exist path_to('Resources/bundles/Foo.wabundle')
+  end
+  
+  it "should not try to copy a bundle if none was selected" do
+    FileUtils.expects(:cp_r).times(0)
+    WebAppBuilder.new(@name, @url, @tmp, nil).create_base_application!
   end
   
   private

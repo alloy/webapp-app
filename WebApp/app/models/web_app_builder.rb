@@ -1,14 +1,15 @@
 class WebAppBuilder
   attr_reader :name, :path, :full_path
   
-  def initialize(name, url, path)
-    @name, @url, @path, @full_path = name, url, path, File.join(path, name) << '.app'
+  def initialize(name, url, path, bundle)
+    @name, @url, @path, @bundle, @full_path = name, url, path, bundle, File.join(path, name) << '.app'
   end
   
   def create_base_application!
     unpack!
     write_info_plist!
     write_info_plist_strings!
+    copy_bundle!
   end
   
   def unpack!
@@ -17,7 +18,7 @@ class WebAppBuilder
   end
   
   def write_info_plist!
-    plist_path = File.join(full_path, 'Contents', 'Info.plist')
+    plist_path = path_to('Info.plist')
     plist = OSX::NSDictionary.dictionaryWithContentsOfFile(plist_path)
     
     plist['WebAppURL'] = @url
@@ -27,10 +28,22 @@ class WebAppBuilder
   end
   
   def write_info_plist_strings!
-    strings = File.join(full_path, 'Contents', 'Resources', 'English.lproj', 'InfoPlist.strings')
+    strings = path_to('Resources/English.lproj/InfoPlist.strings')
     File.open(strings, 'w') do |file|
       copyright = "\"WebApp application\\nCopyright 2008 Eloy Duran <e.duran@superalloy.nl>.\""
       file.write "CFBundleName = \"#{@name}\";\nCFBundleGetInfoString = #{copyright};\nNSHumanReadableCopyright = #{copyright};"
     end
+  end
+  
+  def copy_bundle!
+    if @bundle
+      FileUtils.cp_r @bundle.path, path_to('Resources/bundles/')
+    end
+  end
+  
+  private
+  
+  def path_to(file)
+    File.join full_path, 'Contents', file
   end
 end

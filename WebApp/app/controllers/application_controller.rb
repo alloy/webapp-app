@@ -47,7 +47,7 @@ class ApplicationController < Rucola::RCController
   end
   
   def createApp(sender)
-    builder = WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, @path_text_field.stringValue)
+    builder = WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, @path_text_field.stringValue, selected_bundle)
     builder.create_base_application!
     OSX::NSWorkspace.sharedWorkspace.selectFile_inFileViewerRootedAtPath(builder.full_path, '')
   end
@@ -60,5 +60,9 @@ class ApplicationController < Rucola::RCController
   
   def bundles
     @bundles ||= WebAppBundle.bundles
+  end
+  
+  def selected_bundle
+    bundles[@bundles_menu.selectedItem.title.to_s]
   end
 end

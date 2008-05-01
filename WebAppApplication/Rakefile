@@ -48,7 +48,7 @@ task :deploy do
 end
 
 namespace :deploy do
-  APP_BUILD_ROOT = "build/Release"
+  APP_BUILD_ROOT = File.expand_path("build/Release")
   
   desc 'Prepare a package to be used as a webapp base app'
   task :package_webapp_base_app => ['dependencies:copy', :release, :pkg] do
@@ -57,6 +57,7 @@ namespace :deploy do
     info_plist = File.join(contents, 'Info.plist')
     FileUtils.rm info_plist
     FileUtils.cp File.expand_path('../config/Info.plist.sample', __FILE__), info_plist
+    `"rm -r #{File.join(contents, 'Resources', 'bundles', '*.wabundle')}"`
     
     create_bz2_package!
   end

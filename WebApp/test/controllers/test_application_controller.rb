@@ -69,7 +69,7 @@ describe 'ApplicationController, in general' do
     choose_preset 'Foo'
     
     builder = mock('WebAppBuilder')
-    WebAppBuilder.expects(:new).with('Foo', 'http://foo.example.com', '/tmp').returns(builder)
+    WebAppBuilder.expects(:new).with('Foo', 'http://foo.example.com', '/tmp', @bundles['Foo']).returns(builder)
     builder.expects(:create_base_application!)
     
     builder.stubs(:full_path).returns('/tmp/Foo.app')
@@ -78,11 +78,20 @@ describe 'ApplicationController, in general' do
     controller.createApp(nil)
   end
   
+  it "should return the selected bundle" do
+    item = OSX::NSMenuItem.alloc.init
+    item.title = 'Foo'
+    bundles_menu.stubs(:selectedItem).returns(item)
+    
+    controller.send(:selected_bundle).should == @bundles['Foo']
+  end
+  
   private
   
   def choose_preset(title)
     item = OSX::NSMenuItem.alloc.init
     item.title = title
+    controller.stubs(:selected_bundle).returns(@bundles[title])
     controller.presetChosen(item)
   end
 end
