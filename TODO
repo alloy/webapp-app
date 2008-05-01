@@ -1,4 +1,5 @@
 WebApp:
+- Add a icon field.
 - Should have a rake task which runs the SampleApplication prepare task and creates a WebApp.app release package that embeds the prepared SampleApplication.
 
 SampleApplication:
