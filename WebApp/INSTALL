@@ -1,0 +1,7 @@
+Get the latest rucola trunk:
+$ svn://rubyforge.org/var/svn/rucola/trunk rucola
+$ cd rucola && rake install_gem
+
+$ cd WebAppCheckout (or whatever)
+$ mkdir lib vendor
+$ rake
