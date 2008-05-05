@@ -1,8 +1,8 @@
 class WebAppBuilder
   attr_reader :name, :path, :full_path
   
-  def initialize(name, url, path, bundle)
-    @name, @url, @path, @bundle, @full_path = name, url, path, bundle, File.join(path, name) << '.app'
+  def initialize(name, url, path, bundle, icon = nil)
+    @name, @url, @path, @bundle, @icon, @full_path = name, url, path, bundle, icon, File.join(path, name) << '.app'
   end
   
   def create_base_application!
@@ -10,6 +10,7 @@ class WebAppBuilder
     write_info_plist!
     write_info_plist_strings!
     copy_bundle!
+    copy_icon!
   end
   
   def unpack!
@@ -36,8 +37,14 @@ class WebAppBuilder
   end
   
   def copy_bundle!
-    if @bundle
-      FileUtils.cp_r @bundle.path, path_to('Resources/bundles/')
+    FileUtils.cp_r @bundle.path, path_to('Resources/bundles/') if @bundle
+  end
+  
+  def copy_icon!
+    if @icon
+      FileUtils.cp_r @icon, path_to("Resources/#{ File.basename @icon }")
+    elsif @bundle
+      FileUtils.cp_r @bundle.icon, path_to("Resources/#{ File.basename @bundle.icon }")
     end
   end
   

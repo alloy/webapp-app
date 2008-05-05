@@ -10,7 +10,7 @@ describe 'WebAppBuilder' do
     
     @bundle = WebAppBundle.new(File.expand_path('../../Fixtures/bundles/Foo.wabundle', __FILE__))
     
-    @builder = WebAppBuilder.new(@name, @url, @tmp, @bundle)
+    @builder = WebAppBuilder.new(@name, @url, @tmp, @bundle, nil)
     @builder.create_base_application!
   end
   
@@ -41,7 +41,16 @@ describe 'WebAppBuilder' do
   
   it "should not try to copy a bundle if none was selected" do
     FileUtils.expects(:cp_r).times(0)
-    WebAppBuilder.new(@name, @url, @tmp, nil).create_base_application!
+    WebAppBuilder.new(@name, @url, @tmp, nil, nil).create_base_application!
+  end
+  
+  it "should copy the icon file from the bundle if no optional icon was specified" do
+    File.should.exist path_to('Resources/icon.tiff')
+  end
+  
+  it "should copy the optionally specified icon instead of the one from the bundle" do
+    WebAppBuilder.new(@name, @url, @tmp, @bundle, File.expand_path('../../Fixtures/other_icon.jpg', __FILE__)).create_base_application!
+    File.should.exist path_to('Resources/other_icon.jpg')
   end
   
   private
