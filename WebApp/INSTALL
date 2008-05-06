@@ -3,5 +3,5 @@ $ svn://rubyforge.org/var/svn/rucola/trunk rucola
 $ cd rucola && rake install_gem
 
 $ cd WebAppCheckout (or whatever)
-$ mkdir lib vendor
+$ mkdir app/assets lib vendor
 $ rake
