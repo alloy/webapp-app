@@ -84,7 +84,7 @@ class ApplicationController < Rucola::RCController
       Dir.glob("#{bundles}/*.wabundle/controllers/*.rb").each do |controller|
         log.debug "Loading controller: #{controller}"
         require controller
-        klass = File.constantize(controller)
+        klass = File.to_const(controller)
         
         item = OSX::NSMenuItem.alloc.initWithTitle_action_keyEquivalent("#{klass.name.scan(/([A-Z][a-z]+)/).flatten[0..-2].join(' ')}...", 'openBundleWindowController:', '')
         item.target = self
