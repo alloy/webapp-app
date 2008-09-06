@@ -30,10 +30,34 @@ describe 'ApplicationController, in general' do
   it "should figure out the bundle for a given url and advance to the creation step" do
     assigns(:url, 'https://example.com/foo')
     
-    #controller.expects(:setValue_forKey).with(@bundle, 'bundle')
     controller.expects(:bundle=).with(@bundle)
+    controller.expects(:name=).with(@bundle.name)
     controller.nextStep(controller)
     steps_tab_view.selectedTabViewItem.should.be @second_step
+  end
+  
+  it "should still be able to advance to the creation step if no bundle was found for the given url" do
+    assigns(:url, 'https://example.com/bar')
+    
+    controller.nextStep(controller)
+    steps_tab_view.selectedTabViewItem.should.be @second_step
+    controller.bundle.should.be nil
+    controller.name.should.be nil
+  end
+  
+  it "should start the creation process of a new webapp and open it in the finder when done" do
+    assigns(:bundle, @bundle)
+    assigns(:url, 'https://example.com/foo')
+    assigns(:name, 'MyFoo')
+    
+    builder = mock('WebAppBuilder')
+    WebAppBuilder.expects(:new).with('MyFoo', 'https://example.com/foo', '/Applications', @bundle).returns(builder)
+    builder.expects(:create_base_application)
+    
+    builder.stubs(:full_path).returns('/Applications/MyFoo.app')
+    OSX::NSWorkspace.sharedWorkspace.expects(:selectFile_inFileViewerRootedAtPath).with('/Applications/MyFoo.app', '')
+    
+    controller.createApp(self)
   end
   
   private

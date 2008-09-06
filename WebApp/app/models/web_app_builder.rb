@@ -5,20 +5,20 @@ class WebAppBuilder
     @name, @url, @path, @bundle, @icon, @full_path = name, url, path, bundle, icon, File.join(path, name) << '.app'
   end
   
-  def create_base_application!
-    unpack!
-    write_info_plist!
-    write_info_plist_strings!
-    copy_bundle!
-    copy_icon!
+  def create_base_application
+    unpack
+    write_info_plist
+    write_info_plist_strings
+    copy_bundle
+    copy_icon
   end
   
-  def unpack!
+  def unpack
     pkg = File.join(Rucola::RCApp.assets_path, 'webapp_base_app.tar.bz2')
     system "/usr/bin/tar -xjf #{pkg} --directory /tmp/ && mv /tmp/WebAppApplication.app #{full_path}"
   end
   
-  def write_info_plist!
+  def write_info_plist
     plist_path = path_to('Info.plist')
     plist = OSX::NSDictionary.dictionaryWithContentsOfFile(plist_path)
     
@@ -28,7 +28,7 @@ class WebAppBuilder
     plist.writeToFile_atomically(plist_path, true)
   end
   
-  def write_info_plist_strings!
+  def write_info_plist_strings
     strings = path_to('Resources/English.lproj/InfoPlist.strings')
     File.open(strings, 'w') do |file|
       copyright = "\"WebApp application\\nCopyright 2008 Eloy Duran <e.duran@superalloy.nl>.\""
@@ -36,11 +36,11 @@ class WebAppBuilder
     end
   end
   
-  def copy_bundle!
+  def copy_bundle
     FileUtils.cp_r @bundle.path, path_to('Resources/bundles/') if @bundle
   end
   
-  def copy_icon!
+  def copy_icon
     if @icon
       FileUtils.cp_r @icon, path_to("Resources/#{ File.basename @icon }")
     elsif @bundle
