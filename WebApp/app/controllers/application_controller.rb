@@ -1,68 +1,23 @@
+require 'uri'
+
 class ApplicationController < Rucola::RCController
-  EMPTY_IMAGE = OSX::NSImage.alloc.init
+  ib_outlet :steps_tab_view
   
-  ib_outlet :main_window
-  ib_outlet :bundles_menu
-  ib_outlet :name_text_field
-  ib_outlet :url_text_field
-  ib_outlet :path_text_field
-  ib_outlet :icon_image_well
+  kvc_accessor :url, :bundle
+  ib_outlet :continue_button
   
-  def awakeFromNib
-    @bundles_menu.addItemsWithTitles(bundles.keys)
-    @bundles_menu.itemArray.each do |item|
-      item.target = self
-      item.action = 'presetChosen:'
-    end
+  # def awakeFromNib
+  #   @bundle = nil
+  # end
+  
+  def url=(url)
+    @url = url.to_s
+    @continue_button.enabled = !!(@url =~ /^https?:\/\/\w+\.\w+/)
   end
   
-  def presetChosen(item)
-    if item.title == 'None'
-      set_name_and_url('', '')
-      @icon_image_well.image = EMPTY_IMAGE
-    else
-      bundle = bundles[item.title.to_s]
-      defaults = bundle.defaults
-      set_name_and_url(defaults['name'], defaults['url'])
-      
-      if start = defaults['url'].index('CHANGEME')
-        @url_text_field.selectText(self)
-        @url_text_field.window.firstResponder.selectedRange = OSX::NSRange.new(start..(start + 7))
-      end
-      
-      if bundle.icon
-        @icon_image_well.image = OSX::NSImage.alloc.initWithContentsOfFile(bundle.icon)
-      else
-        @icon_image_well.image = EMPTY_IMAGE
-      end
-    end
-  end
-  
-  def openBrowsePanel(sender)
-    panel = OSX::NSOpenPanel.openPanel
-    panel.canChooseDirectories, panel.canChooseFiles = true, false
-    if panel.runModalForDirectory_file_types('/Applications', nil, nil) == OSX::NSOKButton
-      @path_text_field.stringValue = panel.filenames.first
-    end
-  end
-  
-  def createApp(sender)
-    builder = WebAppBuilder.new(@name_text_field.stringValue, @url_text_field.stringValue, @path_text_field.stringValue, selected_bundle)
-    builder.create_base_application!
-    OSX::NSWorkspace.sharedWorkspace.selectFile_inFileViewerRootedAtPath(builder.full_path, '')
-  end
-  
-  private
-  
-  def set_name_and_url(name, url)
-    @name_text_field.stringValue, @url_text_field.stringValue = name, url
-  end
-  
-  def bundles
-    @bundles ||= WebAppBundle.bundles
-  end
-  
-  def selected_bundle
-    bundles[@bundles_menu.selectedItem.title.to_s]
+  def nextStep(sender)
+    #setValue_forKey(WebAppBundle.bundle_for_url(@url), 'bundle')
+    self.bundle = WebAppBundle.bundle_for_url(@url)
+    @steps_tab_view.selectNextTabViewItem(self)
   end
 end

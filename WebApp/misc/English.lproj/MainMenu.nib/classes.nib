@@ -17,7 +17,7 @@
 			<dict>
 				<key>createApp</key>
 				<string>id</string>
-				<key>openBrowsePanel</key>
+				<key>nextStep</key>
 				<string>id</string>
 			</dict>
 			<key>CLASS</key>
@@ -26,7 +26,7 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
-				<key>bundles_menu</key>
+				<key>continue_button</key>
 				<string>id</string>
 				<key>icon_image_well</key>
 				<string>id</string>
@@ -34,7 +34,7 @@
 				<string>id</string>
 				<key>name_text_field</key>
 				<string>id</string>
-				<key>path_text_field</key>
+				<key>steps_tab_view</key>
 				<string>id</string>
 				<key>url_text_field</key>
 				<string>id</string>

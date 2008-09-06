@@ -4,94 +4,49 @@ describe 'ApplicationController, in general' do
   tests ApplicationController
   
   def after_setup
-    ib_outlets :bundles_menu => OSX::NSPopUpButton.alloc.init,
-               :name_text_field => OSX::NSTextField.alloc.init,
+    ib_outlets :steps_tab_view => OSX::NSTabView.alloc.init,
                :url_text_field => OSX::NSTextField.alloc.init,
-               :path_text_field => OSX::NSTextField.alloc.init
-               
-    path_text_field.stringValue = '/tmp'
+               :continue_button => OSX::NSButton.alloc.init
     
-    @bundles = { 'Foo' => WebAppBundle.new(File.expand_path('../../fixtures/bundles/Foo.wabundle', __FILE__)) }
-    WebAppBundle.stubs(:bundles).returns(@bundles)
+    @first_step, @second_step = Array.new(2) do |i|
+      item = OSX::NSTabViewItem.alloc.initWithIdentifier(i+1)
+      steps_tab_view.addTabViewItem item
+      item
+    end
+    
+    @bundle = WebAppBundle.alloc.initWithPath(File.expand_path('../../fixtures/bundles/Foo.wabundle', __FILE__))
+    WebAppBundle.stubs(:bundles).returns([@bundle])
   end
   
-  it "should return an array of existing bundles" do
-    controller.send(:bundles).should == @bundles
+  it "should allow the user to advance to the creation step once a valid url has been given" do
+    should_not_enable_continue_button { controller.url = 'http://' }
+    should_not_enable_continue_button { controller.url = 'https://example' }
+    
+    should_enable_continue_button { controller.url = 'http://example.com' }
+    should_enable_continue_button { controller.url = 'https://example.com' }
+    should_enable_continue_button { controller.url = 'https://example.com/foo/bar' }
   end
   
-  it "should return an array of menu items for existing bundles" do
-    controller.send(:awakeFromNib)
-    bundles_menu.itemArray.length.should.be 1
+  it "should figure out the bundle for a given url and advance to the creation step" do
+    assigns(:url, 'https://example.com/foo')
     
-    item = bundles_menu.itemArray.first
-    item.title.to_s.should == 'Foo'
-    item.target.should.be controller
-    item.action.should == 'presetChosen:'
-  end
-  
-  it "should set defaults if a preset was chosen" do
-    url_text_field.expects(:selectText).with(controller)
-    
-    url_text_field.stubs(:window).returns(main_window)
-    responder = mock('First Responder')
-    main_window.stubs(:firstResponder).returns(responder)
-    responder.expects(:selectedRange=).with(OSX::NSRange.new(7..14))
-    
-    image = mock('NSImage')
-    OSX::NSImage.any_instance.expects(:initWithContentsOfFile).with(File.join(@bundles['Foo'].path, 'icon.tiff')).returns(image)
-    icon_image_well.expects(:image=).with(image)
-    
-    choose_preset 'Foo'
-    name_text_field.stringValue.should == 'Foo'
-    url_text_field.stringValue.should == 'http://CHANGEME.example.com/foo'
-  end
-  
-  it "should set the image to a empty image if no icon is present" do
-    @bundles['Foo'].stubs(:defaults).returns('name' => 'Foo', 'url' => 'http://foo.example.com')
-    @bundles['Foo'].stubs(:icon).returns(nil)
-    icon_image_well.expects(:image=).with(ApplicationController::EMPTY_IMAGE)
-    choose_preset 'Foo'
-  end
-  
-  it "should empty the form elements if the 'None' preset is chosen" do
-    name_text_field.stringValue = 'Foo'
-    url_text_field.stringValue = 'http://foo.example.com'
-    
-    icon_image_well.expects(:image=).with(ApplicationController::EMPTY_IMAGE)
-    choose_preset 'None'
-    
-    name_text_field.stringValue.should.be.empty
-    url_text_field.stringValue.should.be.empty
-  end
-  
-  it "should start the creation process of a new webapp and open it in the finder when done" do
-    @bundles['Foo'].stubs(:defaults).returns('name' => 'Foo', 'url' => 'http://foo.example.com')
-    choose_preset 'Foo'
-    
-    builder = mock('WebAppBuilder')
-    WebAppBuilder.expects(:new).with('Foo', 'http://foo.example.com', '/tmp', @bundles['Foo']).returns(builder)
-    builder.expects(:create_base_application!)
-    
-    builder.stubs(:full_path).returns('/tmp/Foo.app')
-    OSX::NSWorkspace.sharedWorkspace.expects(:selectFile_inFileViewerRootedAtPath).with('/tmp/Foo.app', '')
-    
-    controller.createApp(nil)
-  end
-  
-  it "should return the selected bundle" do
-    item = OSX::NSMenuItem.alloc.init
-    item.title = 'Foo'
-    bundles_menu.stubs(:selectedItem).returns(item)
-    
-    controller.send(:selected_bundle).should == @bundles['Foo']
+    #controller.expects(:setValue_forKey).with(@bundle, 'bundle')
+    controller.expects(:bundle=).with(@bundle)
+    controller.nextStep(controller)
+    steps_tab_view.selectedTabViewItem.should.be @second_step
   end
   
   private
   
-  def choose_preset(title)
-    item = OSX::NSMenuItem.alloc.init
-    item.title = title
-    controller.stubs(:selected_bundle).returns(@bundles[title])
-    controller.presetChosen(item)
+  def should_not_enable_continue_button
+    continue_button.enabled = false
+    yield
+    continue_button.isEnabled.should.be false
+  end
+  
+  def should_enable_continue_button
+    continue_button.enabled = false
+    yield
+    continue_button.isEnabled.should.be true
   end
 end
