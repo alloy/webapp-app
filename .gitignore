@@ -5,3 +5,4 @@ build
 WebAppApplication/config/Info.plist
 pkg
 pkg/*
+WebApp/bundles/*.wabundle

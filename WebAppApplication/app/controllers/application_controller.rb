@@ -1,5 +1,3 @@
-$WEBAPP_DEBUG = true
-
 class ApplicationController < Rucola::RCController
   ib_outlet :main_window
   ib_outlet :tabView

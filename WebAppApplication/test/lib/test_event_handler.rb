@@ -1,7 +1,5 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-$WEBAPP_DEBUG = false
-
 class Hash
   def getNamedItem(item)
     self[item]

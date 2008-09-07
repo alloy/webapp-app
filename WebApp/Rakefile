@@ -32,6 +32,7 @@ task :deploy do
   
   sh "cd ../WebAppApplication && rake deploy:package_webapp_base_app"
   sh "cp ../WebAppApplication/pkg/webapp_base_app.tar.bz2 app/assets/"
+  sh "cp -R ../WebAppApplication/bundles/*.wabundle bundles/"
   
   Rake::Task['release'].invoke
   Rake::Task['deploy:package'].invoke
@@ -44,5 +45,6 @@ end
 
 desc 'Clean WebApp and WebAppApplication'
 task :clean_all => :clean do
+  sh "rm -rf bundles/*.wabundle"
   sh "cd ../WebAppApplication && rake clean"
 end

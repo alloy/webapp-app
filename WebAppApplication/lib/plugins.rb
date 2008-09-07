@@ -1,5 +1,3 @@
-$WEBAPP_DEBUG = false
-
 Dir.glob("#{File.expand_path("../plugins/", __FILE__)}/*.rb").each {|f| require f }
 
 module WebApp
