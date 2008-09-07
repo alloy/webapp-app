@@ -33,13 +33,13 @@ task :deploy do
   sh "cd ../WebAppApplication && rake deploy:package_webapp_base_app"
   sh "cp ../WebAppApplication/pkg/webapp_base_app.tar.bz2 app/assets/"
   
-  # Rake::Task['release'].invoke
-  # Rake::Task['deploy:package'].invoke
+  Rake::Task['release'].invoke
+  Rake::Task['deploy:package'].invoke
   # Rake::Task['deploy:sparkle_appcast'].invoke
   # Rake::Task['deploy:release_notes'].invoke
   # Rake::Task['deploy:upload'].invoke
-  # Rake::Task['xcode:clean'].invoke
-  # Rake::Task['dependencies:clean'].invoke
+  Rake::Task['xcode:clean'].invoke
+  Rake::Task['dependencies:clean'].invoke
 end
 
 desc 'Clean WebApp and WebAppApplication'
