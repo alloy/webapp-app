@@ -3,3 +3,5 @@ build
 *.mode1v3
 *.pbxuser
 WebAppApplication/config/Info.plist
+pkg
+pkg/*
