@@ -112,6 +112,12 @@ describe "WebApp::Plugins::Growl, when growling" do
     should_call_block "@event_handler.sticky_growl_entered('Title', 'Description')"
   end
   
+  it "should send the default @bring_app_and_tab_to_the_front proc for this event handler if no callback is given" do
+    proc = @event_handler.instance_variable_get(:@bring_app_and_tab_to_the_front)
+    @event_handler.growl(*@args)
+    @callbacks[proc.object_id].should == proc
+  end
+  
   private
   
   def should_call_block(str)

@@ -4,6 +4,7 @@ module WebApp
       
       def growl(name, title, description, options = {}, &callback)
         if !OSX::NSApp.active? || Rucola::RCApp.debug?
+          callback = callback || @bring_app_and_tab_to_the_front
           ::Growl::Notifier.sharedInstance.notify(name, title, description, options, &callback)
         end
       end
