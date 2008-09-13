@@ -1,7 +1,5 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-OSX::NSApplication.sharedApplication
-
 GROWL_OPTIONS = { :entered => 'Someone has entered', :leave => 'Someone has left' }
 
 class GrowlTestEventHandler < WebApp::EventHandler

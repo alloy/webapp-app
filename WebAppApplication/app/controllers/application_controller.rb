@@ -9,30 +9,14 @@ class ApplicationController < Rucola::RCController
   
   def awakeFromNib
     OSX::NSApp.delegate = self
-    
-    # Make sure that SRAutoFillManager stores/retrieves usernames & passwords.
-    OSX::NSUserDefaults.standardUserDefaults.registerDefaults({
-      'autoFillUserPass' => true
-    })
-    
     @main_window.title = OSX::NSBundle.mainBundle.infoDictionary['WebAppURL'].to_s.scan(/https*:\/\/(.*?)\/*$/)[0][0]
     
-    setup_tabView!
-    setup_tabBarController!
-    
-    @bundle_window_controllers = {}
-    load_bundles!
-    
-    # If there are any custom user css rules, now is the time to write them out.
-    if stylesheet_path = WebApp::EventHandler.write_tmp_stylesheet!
-      # And assign it to the WebView preferences.
-      prefs = OSX::WebPreferences.standardPreferences
-      prefs.userStyleSheetEnabled = true
-      prefs.userStyleSheetLocation = OSX::NSURL.fileURLWithPath(stylesheet_path)
-    end
-    
-    @webViewControllers = []
+    registerDefaults
+    setupTabBarController
+    loadBundles
+    writeUserStyleSheet
     addWebViewTab
+    
     WebApp::Plugins.start
   end
   
@@ -41,6 +25,7 @@ class ApplicationController < Rucola::RCController
   end
   
   def addWebViewTab(url = nil)
+    @webViewControllers ||= []
     if url.is_a? OSX::NSURL
       @webViewControllers << WebViewController.alloc.initWithURL(url)
     else
@@ -70,8 +55,17 @@ class ApplicationController < Rucola::RCController
   
   private
   
-  def load_bundles!
-    ["#{Rucola::RCApp.root_path}/bundles/", Rucola::RCApp.application_support_path].each do |bundles|
+  def registerDefaults
+    # Make sure that SRAutoFillManager stores/retrieves usernames & passwords.
+    OSX::NSUserDefaults.standardUserDefaults.registerDefaults({
+      'autoFillUserPass' => true
+    })
+  end
+  
+  def loadBundles
+    @bundle_window_controllers = {}
+    
+    [File.join(Rucola::RCApp.root_path, 'bundles'), Rucola::RCApp.application_support_path].each do |bundles|
       # Load all event handlers
       Dir.glob("#{bundles}/*.wabundle/event_handlers/*.rb").each do |event_handler|
         log.debug "Loading event handler: #{event_handler}"
@@ -93,12 +87,23 @@ class ApplicationController < Rucola::RCController
     end
   end
   
-  def setup_tabView!
+  def writeUserStyleSheet
+    if stylesheet_path = WebApp::EventHandler.write_tmp_stylesheet!
+      # And assign it to the WebView preferences.
+      prefs = OSX::WebPreferences.standardPreferences
+      prefs.userStyleSheetEnabled = true
+      prefs.userStyleSheetLocation = OSX::NSURL.fileURLWithPath(stylesheet_path)
+    end
+  end
+  
+  def setupTabView
     @tabView.removeTabViewItem(@tabView.tabViewItemAtIndex(0))
     @tabView.delegate = @tabBarController
   end
   
-  def setup_tabBarController!
+  def setupTabBarController
+    setupTabView
+    
     @tabBarController.tabView = @tabView
     @tabBarController.setStyleNamed('Unified')
     @tabBarController.delegate = self

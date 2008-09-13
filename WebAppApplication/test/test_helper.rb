@@ -14,6 +14,9 @@ require File.expand_path('../../config/boot', __FILE__)
 
 require "lib/nsmarkaby/nsmarkaby"
 
+# So OSX::NSApp works
+OSX::NSApplication.sharedApplication
+
 # Otherwise the WebView rendering won't work.
 Thread.new { OSX.CFRunLoopRun }
 
