@@ -2,195 +2,116 @@ module WebApp
   module Plugins
     module Growl
       
-      # This is the method that will make you growl!
-      def growl(type, title, description, sticky = false, block = nil)
-        if not OSX::NSApp.active? or Rucola::RCApp.debug?
-          block_object_id = nil
-          if block.nil?
-            block_object_id = @bring_app_and_tab_to_the_front.object_id
-            register_callback(@bring_app_and_tab_to_the_front)
-          else
-            block_object_id = block.object_id
-            register_callback(block)
-          end
-          log.debug "Send #{ "sticky " if sticky }growl notification. Block: #{block_object_id}"
-          WebApp::Plugins::Growl.instance.notify(type, title, description, block_object_id, sticky)
+      def growl(name, title, description, options = {}, &callback)
+        if !OSX::NSApp.active? || Rucola::RCApp.debug?
+          ::Growl::Notifier.sharedInstance.notify(name, title, description, options, &callback)
         end
       end
+
+      # Sends a sticky Growl notification. See Growl::Notifier#notify for more info.
+      def sticky_growl(name, title, description, options = {}, &callback)
+        growl(name, title, description, options.merge!(:sticky => true), &callback)
+      end
+      
+      # STill need to do this one:
+      #     if block.nil?
+      #       block_object_id = @bring_app_and_tab_to_the_front.object_id
+      #       register_callback(@bring_app_and_tab_to_the_front)
+      #     else
       
       class << self
-        def included(klass)
-          WebApp::Plugins.include_plugin(self)
+        def registered_notifications
+          @registered_notifications ||= {}
         end
         
-        # After including the module any arguments passed to #plugin other than the name will be passed to this method together with the class that passed these args.
-        def plugin_arguments(klass, options)
-          (@registered_notifications ||= {})[klass] = options
+        def notification_names
+          @notification_names ||= Set.new
+        end
+        
+        def plugin_arguments(klass, notifications)
+          registered_notifications[klass] = notifications
+          notifications.each_value { |name| notification_names << name }
         end
         
         def start
-          @registered_notifications.each do |klass, notifications|
-            str = "class #{klass.name}\n\n"
-            notifications.each do |mname, name|
-              str += %{
-                def growl_#{mname}(title, description, &block)
-                  if block_given?
-                    growl("#{name}", title, description, false, block)
-                  else
-                    growl("#{name}", title, description)
-                  end
+          registered_notifications.each do |klass, notifications|
+            notifications.each do |method, name|
+              klass.class_eval %{
+                def growl_#{method}(title, description, &block)
+                  growl('#{name}', title, description, &block)
                 end
                 
-                def sticky_growl_#{mname}(title, description, &block)
-                  if block_given?
-                    growl("#{name}", title, description, true, block)
-                  else
-                    growl("#{name}", title, description, true)
-                  end
+                def sticky_growl_#{method}(title, description, &block)
+                  sticky_growl('#{name}', title, description, &block)
                 end
               }
             end
-            str += "\n\nend"
-            eval str
           end
           
-           # get an array of all the registered notifications.
-          notification_names = []
-          @registered_notifications.values.each do |v|
-            notification_names << v.values
-          end
-          notification_names.flatten!
-          
-          if @growl_bridge.nil?
-            @growl_bridge = GrowlBridge.sharedInstance
-            @growl_bridge.delegate = self
-            # FIXME: hardcoded the application name.
-            @growl_bridge.start(:Campfire, notification_names, notification_names)
-          end
-        end
-        
-        def instance
-          @growl_bridge
-        end
-        
-        def callbacks
-          @callbacks ||= {}
-        end
-        
-        def growl_onClicked(sender, context)
-          log.debug "Growl notification clicked: #{context}"
-          OSX::NSNotificationCenter.defaultCenter.postNotificationName_object('WebAppCallbackNotification', context)
+          ::Growl::Notifier.sharedInstance.register(Rucola::RCApp.app_name.to_sym, notification_names.to_a)
         end
       end
       
-      # Created by Satoshi Nakagawa.
-      # You can redistribute it and/or modify it under the Ruby's license or the GPL2.
-      class GrowlBridge < OSX::NSObject
-        attr_accessor :delegate
-        
-        GROWL_IS_READY = "Lend Me Some Sugar; I Am Your Neighbor!"
-        GROWL_NOTIFICATION_CLICKED = "GrowlClicked!"
-        GROWL_NOTIFICATION_TIMED_OUT = "GrowlTimedOut!"
-        GROWL_KEY_CLICKED_CONTEXT = "ClickedContext"
-        
-        def self.sharedInstance
-          @instance ||= alloc.init
-        end
-        
-        # def init
-        #   if super_init
-        #     puts 'GROWL INSTANTIATED!'
-        #     self
-        #   end
-        # end
-        
-        # def initWithDelegate(delegate)
-        #   puts 'GROWL INSTANTIATED!'
-        #   init
-        #   @delegate = delegate
-        #   self
-        # end
-        
-        def start(appname, notifications, default_notifications=nil, appicon=nil)
-          @appname = appname
-          @notifications = notifications
-          @default_notifications = default_notifications
-          @appicon = appicon
-          @default_notifications = @notifications unless @default_notifications
-          register
-        end
-        
-        def notify(type, title, desc, click_context=nil, sticky=false, priority=0, icon=nil)
-          dic = {
-            :ApplicationName => @appname,
-            :ApplicationPID => OSX::NSProcessInfo.processInfo.processIdentifier,
-            :NotificationName => type,
-            :NotificationTitle => title,
-            :NotificationDescription => desc,
-            :NotificationPriority => priority,
-          }
-          dic[:NotificationIcon] = icon.TIFFRepresentation if icon
-          dic[:NotificationSticky] = 1 if sticky
-          dic[:NotificationClickContext] = click_context if click_context
-          
-          c = OSX::NSDistributedNotificationCenter.defaultCenter
-          c.postNotificationName_object_userInfo_deliverImmediately(:GrowlNotification, nil, dic, true)
-        end
-        
-        KEY_TABLE = {
-          :type => :NotificationName,
-          :title => :NotificationTitle,
-          :desc => :NotificationDescription,
-          :clickContext => :NotificationClickContext,
-          :sticky => :NotificationSticky,
-          :priority => :NotificationPriority,
-          :icon => :NotificationIcon,
-        }
-        
-        def notifyWith(hash)
-          dic = {}
-          KEY_TABLE.each {|k,v| dic[v] = hash[k] if hash.key?(k) }
-          dic[:ApplicationName] = @appname
-          dic[:ApplicationPID] = NSProcessInfo.processInfo.processIdentifier
-          
-          c = OSX::NSDistributedNotificationCenter.defaultCenter
-          c.postNotificationName_object_userInfo_deliverImmediately(:GrowlNotification, nil, dic, true)
-        end
-        
-        def onReady(n)
-          register
-        end
-        
-        def onClicked(n)
-          context = n.userInfo[GROWL_KEY_CLICKED_CONTEXT].to_s
-          @delegate.growl_onClicked(self, context) if @delegate && @delegate.respond_to?(:growl_onClicked)
-        end
-        
-        def onTimeout(n)
-          context = n.userInfo[GROWL_KEY_CLICKED_CONTEXT].to_s
-          @delegate.growl_onTimeout(self, context) if @delegate && @delegate.respond_to?(:growl_onTimeout)
-        end
-        
-        private
-        
-        def register
-          pid = OSX::NSProcessInfo.processInfo.processIdentifier.to_i
-          
-          c = OSX::NSDistributedNotificationCenter.defaultCenter
-          c.addObserver_selector_name_object(self, 'onReady:', GROWL_IS_READY, nil)
-          c.addObserver_selector_name_object(self, 'onClicked:', "#{@appname}-#{pid}-#{GROWL_NOTIFICATION_CLICKED}", nil)
-          c.addObserver_selector_name_object(self, 'onTimeout:', "#{@appname}-#{pid}-#{GROWL_NOTIFICATION_TIMED_OUT}", nil)
-          
-          icon = @appicon || OSX::NSApplication.sharedApplication.applicationIconImage
-          dic = {
-            :ApplicationName => @appname,
-            :AllNotifications => @notifications,
-            :DefaultNotifications => @default_notifications,
-            :ApplicationIcon => icon.TIFFRepresentation,
-          }
-          c.postNotificationName_object_userInfo_deliverImmediately(:GrowlApplicationRegistrationNotification, nil, dic, true)
-        end
-      end
+      # class << self
+      #   # After including the module any arguments passed to #plugin other than the name will be passed to this method together with the class that passed these args.
+      #   def plugin_arguments(klass, options)
+      #     (@registered_notifications ||= {})[klass] = options
+      #   end
+      #   
+      #   def start
+      #     @registered_notifications.each do |klass, notifications|
+      #       str = "class #{klass.name}\n\n"
+      #       notifications.each do |mname, name|
+      #         str += %{
+      #           def growl_#{mname}(title, description, &block)
+      #             if block_given?
+      #               growl("#{name}", title, description, false, block)
+      #             else
+      #               growl("#{name}", title, description)
+      #             end
+      #           end
+      #           
+      #           def sticky_growl_#{mname}(title, description, &block)
+      #             if block_given?
+      #               growl("#{name}", title, description, true, block)
+      #             else
+      #               growl("#{name}", title, description, true)
+      #             end
+      #           end
+      #         }
+      #       end
+      #       str += "\n\nend"
+      #       eval str
+      #     end
+      #     
+      #      # get an array of all the registered notifications.
+      #     notification_names = []
+      #     @registered_notifications.values.each do |v|
+      #       notification_names << v.values
+      #     end
+      #     notification_names.flatten!
+      #     
+      #     if @growl_bridge.nil?
+      #       @growl_bridge = GrowlBridge.sharedInstance
+      #       @growl_bridge.delegate = self
+      #       # FIXME: hardcoded the application name.
+      #       @growl_bridge.start(:Campfire, notification_names, notification_names)
+      #     end
+      #   end
+      #   
+      #   def instance
+      #     @growl_bridge
+      #   end
+      #   
+      #   def callbacks
+      #     @callbacks ||= {}
+      #   end
+      #   
+      #   def growl_onClicked(sender, context)
+      #     log.debug "Growl notification clicked: #{context}"
+      #     OSX::NSNotificationCenter.defaultCenter.postNotificationName_object('WebAppCallbackNotification', context)
+      #   end
+      # end
     end
   end
 end

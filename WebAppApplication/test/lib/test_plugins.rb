@@ -7,6 +7,11 @@ module WebApp::Plugins::TestPlugin
   end
 end
 
+class WebApp::EventHandler
+  plugin :test_plugin
+  plugin :test_plugin
+end
+
 describe "WebApp::Plugins" do
   include WebApp
   
@@ -52,8 +57,8 @@ describe "WebApp::Plugins" do
     @event_handler.plugin :test_plugin
   end
   
-  it "should add the plugin to WebApp::Plugins::included_plugins" do
-    WebApp::Plugins.included_plugins.should.include @test_plugin
+  it "should add the plugin to WebApp::Plugins::included_plugins and only once" do
+    WebApp::Plugins.included_plugins.select { |plugin| plugin == @test_plugin }.should == [@test_plugin]
   end
   
   it "should call start on each included plugin" do

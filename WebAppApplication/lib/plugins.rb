@@ -1,3 +1,5 @@
+require 'set'
+
 Dir.glob("#{File.expand_path("../plugins/", __FILE__)}/*.rb").each {|f| require f }
 
 module WebApp
@@ -10,11 +12,11 @@ module WebApp
       end
       
       def included_plugins
-        @included_plugins ||= []
+        @included_plugins ||= Set.new
       end
       
       def include_plugin(plugin)
-        included_plugins << plugin unless included_plugins.include?(plugin)
+        included_plugins << plugin
       end
     end
   end
