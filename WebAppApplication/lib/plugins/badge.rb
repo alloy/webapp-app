@@ -9,10 +9,6 @@ module WebApp
       end
       
       class << self
-        def included(klass)
-          WebApp::Plugins.include_plugin(self)
-        end
-        
         def start
           @global_badge ||= GlobalBadge.alloc.init
         end

@@ -61,8 +61,6 @@ module WebApp
       @badge_counter = 0
       @registered_events_for_this_page = []
       
-      OSX::NSNotificationCenter.defaultCenter.addObserver_selector_name_object(self, :callback_notification_handler, 'WebAppCallbackNotification', nil)
-      
       @bring_app_and_tab_to_the_front = Proc.new do
         OSX::NSApp.activateIgnoringOtherApps(true)
         log.debug "From bring app to the front proc: #{webViewController.inspect}"
@@ -161,15 +159,6 @@ module WebApp
     
     def handle_files_dropped_event(files)
       handleEvent :name => 'WebAppFilesDropped', :files => files
-    end
-    
-    def callback_notification_handler(notification)
-      if callback = @callbacks[notification.object.to_i]
-        callback.call
-        # FIXME: How are we going to clean the other unused procs...?
-        # By using the grol onTimeout callback!
-        @callbacks[notification.object.to_i] = nil unless callback == @bring_app_and_tab_to_the_front
-      end
     end
     
     # Helpers

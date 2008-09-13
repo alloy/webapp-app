@@ -33,6 +33,7 @@ class ApplicationController < Rucola::RCController
     
     @webViewControllers = []
     addWebViewTab
+    WebApp::Plugins.start
   end
   
   def openBundleWindowController(menuItem)
@@ -46,7 +47,6 @@ class ApplicationController < Rucola::RCController
       @webViewControllers << WebViewController.alloc.init
     end
     @tabView.addTabViewItem @webViewControllers.last.tabViewItem
-    WebApp::Plugins.start
   end
   
   def applicationDidBecomeActive(notification)
