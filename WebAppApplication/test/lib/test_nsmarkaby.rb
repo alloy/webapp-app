@@ -23,13 +23,11 @@ describe "NSMarkaby" do
   end
   
   it "should be able to build" do
-    span_contents = 'span contents'
-    
     mab do
       table do
         tr do
           span do
-            span_contents
+            'span contents'
           end
         end
         tr do
