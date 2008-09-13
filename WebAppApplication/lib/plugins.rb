@@ -35,6 +35,7 @@ module WebApp
           mod = WebApp::Plugins.const_get(mod_name)
           include mod
           mod.plugin_arguments(self, options) if mod.respond_to?(:plugin_arguments)
+          WebApp::Plugins.include_plugin(mod)
         else
           raise NameError, "The plugin module 'WebApp::Plugins::#{mod_name}' does not exist."
         end
