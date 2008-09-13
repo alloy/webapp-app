@@ -57,7 +57,6 @@ module WebApp
     attr_reader :badge_counter
     
     def initialize
-      @callbacks = {}
       @badge_counter = 0
       @registered_events_for_this_page = []
       
@@ -209,10 +208,6 @@ module WebApp
     def register_event_for_this_page(doc, event_handler)
       @registered_events_for_this_page << event_handler
       doc.addEventListener___(event_handler[:name], self, true)
-    end
-    
-    def register_callback(callback)
-      @callbacks[callback.object_id] = callback
     end
   end
 end

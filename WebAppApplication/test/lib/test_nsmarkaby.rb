@@ -73,9 +73,3 @@ describe "NSMarkaby" do
     @mb.build(&block).to_s
   end
 end
-
-describe "DOMElement extensions" do
-  it "should check if an element is of a specific class" do
-    
-  end
-end

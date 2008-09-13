@@ -10,6 +10,7 @@ describe 'ApplicationController, when initializing' do
     OSX::NSBundle.mainBundle.stubs(:infoDictionary).returns('WebAppURL' => 'https://foo.example.com/login')
     @prefs = OSX::WebPreferences.standardPreferences
     controller.stubs(:setupTabBarController)
+    controller.stubs(:loadBundles)
     controller.stubs(:addWebViewTab)
     WebApp::Plugins.stubs(:start)
   end
