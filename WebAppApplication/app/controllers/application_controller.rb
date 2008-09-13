@@ -18,6 +18,12 @@ class ApplicationController < Rucola::RCController
     addWebViewTab
     
     WebApp::Plugins.start
+    
+    # app_name = OSX::NSBundle.mainBundle.infoDictionary['WebAppName']
+    # items = OSX::NSApp.mainMenu.itemAtIndex(0).submenu.itemArray
+    # items.first.title = "About #{app_name}"
+    # items.last.title = "Quit #{app_name}"
+    # items.find { |i| i.title == "Hide NewApplication" }.title = "Hide #{app_name}"
   end
   
   def openBundleWindowController(menuItem)
