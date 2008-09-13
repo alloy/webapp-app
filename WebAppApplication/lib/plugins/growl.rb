@@ -1,10 +1,10 @@
 module WebApp
   module Plugins
     module Growl
-      
       def growl(name, title, description, options = {}, &callback)
         if !OSX::NSApp.active? || Rucola::RCApp.debug?
           callback = callback || @bring_app_and_tab_to_the_front
+          log.debug "Send #{ "sticky " if options[:sticky] }growl notification. Block: #{callback.object_id}"
           ::Growl::Notifier.sharedInstance.notify(name, title, description, options, &callback)
         end
       end
@@ -13,12 +13,6 @@ module WebApp
       def sticky_growl(name, title, description, options = {}, &callback)
         growl(name, title, description, options.merge!(:sticky => true), &callback)
       end
-      
-      # STill need to do this one:
-      #     if block.nil?
-      #       block_object_id = @bring_app_and_tab_to_the_front.object_id
-      #       register_callback(@bring_app_and_tab_to_the_front)
-      #     else
       
       class << self
         def registered_notifications
