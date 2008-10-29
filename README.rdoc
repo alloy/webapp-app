@@ -1,0 +1,75 @@
+== WebApp
+
+http://github.com/alloy/webapp-app/tree/master
+
+A OSX "single site browser" application, which at some point will be able to create new SSB applications that wrap specific web applications. Think Campfire, Twitter etc. The user can use Ruby to create event handlers to be able to support stuff like Growl, for instance, or whatever you can think off, as the user has access to Ruby libraries and Cocoa.
+
+== Requirements
+
+=== RubyCocoa
+
+WebApp needs at least RubyCocoa 0.13.2, which can be acquired in the following ways:
+* Included on Mac OS X since version 10.5.2
+* Binary installer and source distributions: http://sourceforge.net/project/showfiles.php?group_id=44114&package_id=36578
+
+Note that if you wish to use a custom Ruby, not the default Apple Ruby, you will have to install RubyCocoa from source as well.
+See http://rubycocoa.sourceforge.net/GettingStarted for more info on this topic.
+
+(Note: the author always uses RubyCocoa trunk and is not 100% certain that RubyCocoa 0.13.2 is enough, if so please let him know)
+
+=== Rucola
+
+WebApp needs Rucola 0.5.1:
+* As a gem: <tt>$ gem install rucola</tt>
+* From source: http://github.com/alloy/rucola/tree/master
+
+== Install
+
+Note:
+* WeApp is the application which generates the single site browser applications.
+* WebAppApplication is the actual single site browser application template.
+
+* Get the source: <tt>$ git clone git clone git://github.com/alloy/webapp-app.git && cd webapp-app/</tt>
+* Initialize and update the submodule(s): <tt>$ git submodule init && git submodule update</tt>
+
+=== WebAppApplication
+
+* Configure for, for instance, Campfire:
+  <tt>$ cd WebAppApplication && cp config/Info.plist.sample config/Info.plist</tt>
+* In config/Info.plist change the following keys:
+  * CFBundleIdentifier: Substitute CHANGEME with the name of your app.
+  * WebAppURL: Substitute with the URL of the web app that you want to wrap.
+* Build/Run her: <tt>$ rake</tt>
+
+=== WebApp
+
+WebApp needs a build of WebAppApplication prepared as an archive, simply run the deploy task: <tt>$ rake deploy</tt>
+
+The deploy tasks will start the applications after building but before packaging to give you a chance to check
+if the build is really functioning. When you quit the application the packaging will continue.
+
+== Support
+
+Visit #ruby-osx on the freenode IRC network.
+
+== MIT License
+
+Copyright (c) <2007 - 2008> Eloy Duran <e.duran@superalloy.nl>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
