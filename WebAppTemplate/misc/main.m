@@ -1,6 +1,6 @@
 //
 //  main.m
-//  WebAppApplication
+//  WebAppTemplate
 //
 //  Created by YOUR NAME on 2008-02-24.
 //  Copyright (c) 2007 YOUR NAME. All rights reserved.

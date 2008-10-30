@@ -9,7 +9,7 @@ load 'rucola/tasks/main.rake'
 # You only need to specify this if for some reason the applications name
 # might be different than the one specified in the Info.plist file under key: CFBundleExecutable
 #
-# APPNAME = "WebAppApplication"
+# APPNAME = "WebAppTemplate"
 # TARGET  = "#{APPNAME}.app"
 
 # You only need to specify this if for some reason the applications version
@@ -28,7 +28,7 @@ desc 'Build and run a WebApp Application in debug mode'
 task :debug_build do
   ENV['DONT_START_RUBYCOCOA_APP'] = 'true'
   Rake::Task['xcode:build'].invoke
-  FileUtils.cp 'bundles/Campfire.wabundle/icon.tiff', 'build/Debug/WebAppApplication.app/Contents/Resources/icon.tiff'
+  FileUtils.cp 'bundles/Campfire.wabundle/icon.tiff', 'build/Debug/WebAppTemplate.app/Contents/Resources/icon.tiff'
   ENV['DONT_START_RUBYCOCOA_APP'] = nil
   Rake::Task['xcode:run'].invoke
 end
@@ -52,7 +52,7 @@ namespace :deploy do
   
   desc 'Prepare a package to be used as a webapp base app'
   task :package_webapp_base_app => ['dependencies:copy', :release, :pkg] do
-    contents = File.join(APP_BUILD_ROOT, 'WebAppApplication.app', 'Contents')
+    contents = File.join(APP_BUILD_ROOT, 'WebAppTemplate.app', 'Contents')
     
     info_plist = File.join(contents, 'Info.plist')
     FileUtils.rm info_plist
@@ -65,6 +65,6 @@ namespace :deploy do
   private
   
   def create_bz2_package!
-    sh "cd #{APP_BUILD_ROOT} && /usr/bin/tar -cjf ../../pkg/webapp_base_app.tar.bz2 WebAppApplication.app"
+    sh "cd #{APP_BUILD_ROOT} && /usr/bin/tar -cjf ../../pkg/webapp_base_app.tar.bz2 WebAppTemplate.app"
   end
 end
