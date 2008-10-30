@@ -58,8 +58,8 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = main.m; path = misc/main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		4DDCA7110ACC9A6100E082CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Info.plist; path = config/Info.plist; sourceTree = "<group>"; };
-		4DDCA7120ACC9A6100E082CE /* WebAppApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebAppApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DDCA7110ACC9A6100E082CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = config/Info.plist; sourceTree = "<group>"; };
+		4DDCA7120ACC9A6100E082CE /* WebAppTemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebAppTemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		514292B90CC66CDC00F9CEEF /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; path = app; sourceTree = "<group>"; };
 		514292C10CC66CDC00F9CEEF /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; path = config; sourceTree = "<group>"; };
 		514292C40CC66CDC00F9CEEF /* misc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = misc; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4DDCA7120ACC9A6100E082CE /* WebAppApplication.app */,
+				4DDCA7120ACC9A6100E082CE /* WebAppTemplate.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -207,9 +207,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4DDCA7030ACC9A6100E082CE /* WebAppApplication */ = {
+		4DDCA7030ACC9A6100E082CE /* WebAppTemplate */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4DDCA70E0ACC9A6100E082CE /* Build configuration list for PBXNativeTarget "WebAppApplication" */;
+			buildConfigurationList = 4DDCA70E0ACC9A6100E082CE /* Build configuration list for PBXNativeTarget "WebAppTemplate" */;
 			buildPhases = (
 				4DDCA7040ACC9A6100E082CE /* Headers */,
 				4DDCA7050ACC9A6100E082CE /* Resources */,
@@ -221,10 +221,10 @@
 			);
 			dependencies = (
 			);
-			name = WebAppApplication;
+			name = WebAppTemplate;
 			productInstallPath = "$(HOME)/Applications";
 			productName = CampfireTest;
-			productReference = 4DDCA7120ACC9A6100E082CE /* WebAppApplication.app */;
+			productReference = 4DDCA7120ACC9A6100E082CE /* WebAppTemplate.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -232,14 +232,14 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 4D7A7B570ABF745500C2D4C0 /* Build configuration list for PBXProject "WebAppApplication" */;
+			buildConfigurationList = 4D7A7B570ABF745500C2D4C0 /* Build configuration list for PBXProject "WebAppTemplate" */;
 			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CampfireTest */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4DDCA7030ACC9A6100E082CE /* WebAppApplication */,
+				4DDCA7030ACC9A6100E082CE /* WebAppTemplate */,
 			);
 		};
 /* End PBXProject section */
@@ -336,7 +336,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = WebAppApplication;
+				PRODUCT_NAME = WebAppTemplate;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -356,7 +356,7 @@
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = WebAppApplication;
+				PRODUCT_NAME = WebAppTemplate;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -364,7 +364,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4D7A7B570ABF745500C2D4C0 /* Build configuration list for PBXProject "WebAppApplication" */ = {
+		4D7A7B570ABF745500C2D4C0 /* Build configuration list for PBXProject "WebAppTemplate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D7A7B580ABF745500C2D4C0 /* Debug */,
@@ -373,7 +373,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4DDCA70E0ACC9A6100E082CE /* Build configuration list for PBXNativeTarget "WebAppApplication" */ = {
+		4DDCA70E0ACC9A6100E082CE /* Build configuration list for PBXNativeTarget "WebAppTemplate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4DDCA70F0ACC9A6100E082CE /* Debug */,
