@@ -1,3 +1,3 @@
-[submodule "WebAppApplication/vendor/plugins/growlnotifier"]
-	path = WebAppApplication/vendor/plugins/growlnotifier
+[submodule "WebAppTemplate/vendor/plugins/growlnotifier"]
+	path = WebAppTemplate/vendor/plugins/growlnotifier
 	url = git://github.com/psychs/growlnotifier.git

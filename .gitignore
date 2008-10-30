@@ -2,7 +2,7 @@ build
 .DS_Store
 *.mode1v3
 *.pbxuser
-WebAppApplication/config/Info.plist
+WebAppTemplate/config/Info.plist
 pkg
 pkg/*
-WebApp/bundles/*.wabundle
+WebAppGenerator/bundles/*.wabundle
