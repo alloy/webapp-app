@@ -26,16 +26,16 @@ WebApp needs Rucola 0.5.1:
 == Install
 
 Note:
-* WeApp is the application which generates the single site browser applications.
-* WebAppApplication is the actual single site browser application template.
+* WebAppGenerator is the application which generates the single site browser applications.
+* WebAppTemplate is the actual single site browser application template.
 
 * Get the source: <tt>$ git clone git clone git://github.com/alloy/webapp-app.git && cd webapp-app/</tt>
 * Initialize and update the submodule(s): <tt>$ git submodule init && git submodule update</tt>
 
-=== WebAppApplication
+=== WebAppTemplate
 
 * Configure for, for instance, Campfire:
-  <tt>$ cd WebAppApplication && cp config/Info.plist.sample config/Info.plist</tt>
+  <tt>$ cd WebAppTemplate && cp config/Info.plist.sample config/Info.plist</tt>
 * In config/Info.plist change the following keys:
   * CFBundleIdentifier: Substitute CHANGEME with the name of your app.
   * WebAppURL: Substitute with the URL of the web app that you want to wrap.
@@ -43,7 +43,7 @@ Note:
 
 === WebApp
 
-WebApp needs a build of WebAppApplication prepared as an archive, simply run the deploy task: <tt>$ rake deploy</tt>
+WebAppGenerator needs a build of WebAppTemplate prepared as an archive, simply run the deploy task: <tt>$ rake deploy</tt>
 
 The deploy tasks will start the applications after building but before packaging to give you a chance to check
 if the build is really functioning. When you quit the application the packaging will continue.
