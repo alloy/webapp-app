@@ -29,7 +29,7 @@ Note:
 * WebAppGenerator is the application which generates the single site browser applications.
 * WebAppTemplate is the actual single site browser application template.
 
-* Get the source: <tt>$ git clone git clone git://github.com/alloy/webapp-app.git && cd webapp-app/</tt>
+* Get the source: <tt>$ git clone git://github.com/alloy/webapp-app.git && cd webapp-app/</tt>
 * Initialize and update the submodule(s): <tt>$ git submodule init && git submodule update</tt>
 
 === WebAppTemplate
