@@ -2,7 +2,8 @@ class WebAppBuilder
   attr_reader :name, :path, :full_path
   
   def initialize(name, url, path, bundle, icon = nil)
-    @name, @url, @path, @bundle, @icon, @full_path = name, url, path, bundle, icon, File.join(path, name) << '.app'
+    @name, @url, @path, @bundle, @icon = name, url, path, bundle, icon
+    @full_path = File.join(path, "#{name}.app")
   end
   
   def create_base_application

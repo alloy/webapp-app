@@ -29,8 +29,12 @@ describe 'WebAppBuilder' do
     plist['WebAppURL'].should == @url
   end
   
+  it "should have changed the name of the application in the InfoPlist.strings file" do
+    info_plist_strings.should.match /^CFBundleName = "#{@name}"/
+  end
+  
   it "should have created the correct InfoPlist.strings file" do
-    strings = File.read path_to('Resources/English.lproj/InfoPlist.strings')
+    strings = File.read(path_to('Resources/English.lproj/InfoPlist.strings'))
     copyright = "\"WebApp application\\nCopyright 2008 Eloy Duran <e.duran@superalloy.nl>.\""
     strings.should == "CFBundleName = \"WebAppTestApplication\";\nCFBundleGetInfoString = #{copyright};\nNSHumanReadableCopyright = #{copyright};"
   end
@@ -54,6 +58,10 @@ describe 'WebAppBuilder' do
   end
   
   private
+  
+  def info_plist_strings
+    File.read(path_to('Resources/English.lproj/InfoPlist.strings'))
+  end
   
   def path_to(file)
     File.join @builder.full_path, 'Contents', file
