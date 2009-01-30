@@ -30,7 +30,7 @@ Note:
 * WebAppTemplate is the actual single site browser application template.
 
 * Get the source: <tt>$ git clone git://github.com/alloy/webapp-app.git && cd webapp-app/</tt>
-* Initialize and update the growlnotifier[https://github.com/psychs/growlnotifier/tree] submodule: <tt>$ git submodule init && git submodule update</tt>
+* Initialize and update the growlnotifier[https://github.com/psychs/growlnotifier/tree] submodule: <tt>$ git submodule update --init</tt>
 
 === WebAppTemplate
 
